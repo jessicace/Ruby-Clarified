@@ -1,0 +1,45 @@
+<section id="method-i-take" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						take(n)               &rarr; new_ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns first <code>n</code> elements from the array.</p>
+
+<p>If a negative number is given, raises an ArgumentError.</p>
+
+<p>See also <a href="Array.html#method-i-drop">#drop</a></p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [<span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>, <span class="ruby-value">4</span>, <span class="ruby-value">5</span>, <span class="ruby-value">0</span>]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">take</span>(<span class="ruby-value">3</span>)             <span class="ruby-comment">#=&gt; [1, 2, 3]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="take-source">
+     			<pre>static VALUE
+rb_ary_take(VALUE obj, VALUE n)
+{
+    long len = NUM2LONG(n);
+    if (len &lt; 0) {
+        rb_raise(rb_eArgError, &quot;attempt to take negative size&quot;);
+    }
+    return rb_ary_subseq(obj, 0, len);
+}</pre>
+    		</div>
+      
+		</div>
+</section>

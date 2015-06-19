@@ -1,0 +1,84 @@
+<section id="method-i-combination" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						combination(n) { |c| block }    &rarr; ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						combination(n)                  &rarr; Enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>When invoked with a block, yields all combinations of length <code>n</code>
+of elements from the array and then returns the array itself.</p>
+
+<p>The implementation makes no guarantees about the order in which the
+combinations are yielded.</p>
+
+<p>If no block is given, an Enumerator is returned instead.</p>
+
+<p>Examples:</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [<span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>, <span class="ruby-value">4</span>]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">combination</span>(<span class="ruby-value">1</span>).<span class="ruby-identifier">to_a</span>  <span class="ruby-comment">#=&gt; [[1],[2],[3],[4]]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">combination</span>(<span class="ruby-value">2</span>).<span class="ruby-identifier">to_a</span>  <span class="ruby-comment">#=&gt; [[1,2],[1,3],[1,4],[2,3],[2,4],[3,4]]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">combination</span>(<span class="ruby-value">3</span>).<span class="ruby-identifier">to_a</span>  <span class="ruby-comment">#=&gt; [[1,2,3],[1,2,4],[1,3,4],[2,3,4]]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">combination</span>(<span class="ruby-value">4</span>).<span class="ruby-identifier">to_a</span>  <span class="ruby-comment">#=&gt; [[1,2,3,4]]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">combination</span>(<span class="ruby-value">0</span>).<span class="ruby-identifier">to_a</span>  <span class="ruby-comment">#=&gt; [[]] # one combination of length 0</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">combination</span>(<span class="ruby-value">5</span>).<span class="ruby-identifier">to_a</span>  <span class="ruby-comment">#=&gt; []   # no combinations of length 5</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="combination-source">
+     			<pre>static VALUE
+rb_ary_combination(VALUE ary, VALUE num)
+{
+    long i, n, len;
+
+    n = NUM2LONG(num);
+    RETURN_SIZED_ENUMERATOR(ary, 1, &amp;num, rb_ary_combination_size);
+    len = RARRAY_LEN(ary);
+    if (n &lt; 0 || len &lt; n) {
+        /* yield nothing */
+    }
+    else if (n == 0) {
+        rb_yield(rb_ary_new2(0));
+    }
+    else if (n == 1) {
+        for (i = 0; i &lt; len; i++) {
+            rb_yield(rb_ary_new3(1, RARRAY_AREF(ary, i)));
+        }
+    }
+    else {
+        VALUE ary0 = ary_make_shared_copy(ary); /* private defensive copy of ary */
+        volatile VALUE t0;
+        long *stack = ALLOCV_N(long, t0, n+1);
+
+        RBASIC_CLEAR_CLASS(ary0);
+        combinate0(len, n, stack, ary0);
+        ALLOCV_END(t0);
+        RBASIC_SET_CLASS_RAW(ary0, rb_cArray);
+    }
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

@@ -1,0 +1,46 @@
+<section id="method-c-try_convert" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						try_convert(obj) &rarr; array or nil
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Tries to convert <code>obj</code> into an array, using <code>to_ary</code>
+method.  Returns the converted array or <code>nil</code> if
+<code>obj</code> cannot be converted for any reason. This method can be
+used to check if an argument is an array.</p>
+
+<pre class="ruby"><span class="ruby-constant">Array</span>.<span class="ruby-identifier">try_convert</span>([<span class="ruby-value">1</span>])   <span class="ruby-comment">#=&gt; [1]</span>
+<span class="ruby-constant">Array</span>.<span class="ruby-identifier">try_convert</span>(<span class="ruby-string">&quot;1&quot;</span>)   <span class="ruby-comment">#=&gt; nil</span>
+
+<span class="ruby-keyword">if</span> <span class="ruby-identifier">tmp</span> = <span class="ruby-constant">Array</span>.<span class="ruby-identifier">try_convert</span>(<span class="ruby-identifier">arg</span>)
+  <span class="ruby-comment"># the argument is an array</span>
+<span class="ruby-keyword">elsif</span> <span class="ruby-identifier">tmp</span> = <span class="ruby-constant">String</span>.<span class="ruby-identifier">try_convert</span>(<span class="ruby-identifier">arg</span>)
+  <span class="ruby-comment"># the argument is a string</span>
+<span class="ruby-keyword">end</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="try_convert-source">
+     			<pre>static VALUE
+rb_ary_s_try_convert(VALUE dummy, VALUE ary)
+{
+    return rb_check_array_type(ary);
+}</pre>
+    		</div>
+      
+		</div>
+</section>

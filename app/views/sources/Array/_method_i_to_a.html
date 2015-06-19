@@ -1,0 +1,41 @@
+<section id="method-i-to_a" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						to_a     &rarr; ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns <code>self</code>.</p>
+
+<p>If called on a subclass of <a href="Array.html">Array</a>, converts the
+receiver to an <a href="Array.html">Array</a> object.</p>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="to_a-source">
+     			<pre>static VALUE
+rb_ary_to_a(VALUE ary)
+{
+    if (rb_obj_class(ary) != rb_cArray) {
+        VALUE dup = rb_ary_new2(RARRAY_LEN(ary));
+        rb_ary_replace(dup, ary);
+        return dup;
+    }
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

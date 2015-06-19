@@ -1,0 +1,45 @@
+<section id="method-i-inspect" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						inspect  &rarr; string
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						to_s     &rarr; string
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Creates a string representation of <code>self</code>.</p>
+
+<pre class="ruby">[ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span> ].<span class="ruby-identifier">to_s</span>     <span class="ruby-comment">#=&gt; &quot;[\&quot;a\&quot;, \&quot;b\&quot;, \&quot;c\&quot;]&quot;</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="inspect-source">
+     			<pre>static VALUE
+rb_ary_inspect(VALUE ary)
+{
+    if (RARRAY_LEN(ary) == 0) return rb_usascii_str_new2(&quot;[]&quot;);
+    return rb_exec_recursive(inspect_ary, ary, 0);
+}</pre>
+    		</div>
+      
+		</div>
+</section>

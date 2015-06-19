@@ -1,0 +1,87 @@
+<section id="method-i-chunk_while" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						chunk_while {|elt_before, elt_after| bool } &rarr; an_enumerator
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Creates an enumerator for each chunked elements. The beginnings of chunks
+are defined by the block.</p>
+
+<p>This method split each chunk using adjacent elements, <em>elt_before</em>
+and <em>elt_after</em>, in the receiver enumerator. This method split
+chunks between <em>elt_before</em> and <em>elt_after</em> where the block
+returns false.</p>
+
+<p>The block is called the length of the receiver enumerator minus one.</p>
+
+<p>The result enumerator yields the chunked elements as an array. So
+<code>each</code> method can be called as follows:</p>
+
+<pre>enum.chunk_while { |elt_before, elt_after| bool }.each { |ary| ... }</pre>
+
+<p>Other methods of the Enumerator class and <a
+href="Enumerable.html">Enumerable</a> module, such as <code>to_a</code>,
+<code>map</code>, etc., are also usable.</p>
+
+<p>For example, one-by-one increasing subsequence can be chunked as follows:</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [<span class="ruby-value">1</span>,<span class="ruby-value">2</span>,<span class="ruby-value">4</span>,<span class="ruby-value">9</span>,<span class="ruby-value">10</span>,<span class="ruby-value">11</span>,<span class="ruby-value">12</span>,<span class="ruby-value">15</span>,<span class="ruby-value">16</span>,<span class="ruby-value">19</span>,<span class="ruby-value">20</span>,<span class="ruby-value">21</span>]
+<span class="ruby-identifier">b</span> = <span class="ruby-identifier">a</span>.<span class="ruby-identifier">chunk_while</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">i</span>, <span class="ruby-identifier">j</span><span class="ruby-operator">|</span> <span class="ruby-identifier">i</span><span class="ruby-operator">+</span><span class="ruby-value">1</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">j</span> }
+<span class="ruby-identifier">p</span> <span class="ruby-identifier">b</span>.<span class="ruby-identifier">to_a</span> <span class="ruby-comment">#=&gt; [[1, 2], [4], [9, 10, 11, 12], [15, 16], [19, 20, 21]]</span>
+<span class="ruby-identifier">c</span> = <span class="ruby-identifier">b</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">3</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">a</span> <span class="ruby-operator">:</span> <span class="ruby-node">&quot;#{a.first}-#{a.last}&quot;</span> }
+<span class="ruby-identifier">p</span> <span class="ruby-identifier">c</span> <span class="ruby-comment">#=&gt; [[1, 2], [4], &quot;9-12&quot;, [15, 16], &quot;19-21&quot;]</span>
+<span class="ruby-identifier">d</span> = <span class="ruby-identifier">c</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;,&quot;</span>)
+<span class="ruby-identifier">p</span> <span class="ruby-identifier">d</span> <span class="ruby-comment">#=&gt; &quot;1,2,4,9-12,15,16,19-21&quot;</span>
+</pre>
+
+<p>Increasing (non-decreasing) subsequence can be chunked as follows:</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [<span class="ruby-value">0</span>, <span class="ruby-value">9</span>, <span class="ruby-value">2</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>, <span class="ruby-value">2</span>, <span class="ruby-value">7</span>, <span class="ruby-value">5</span>, <span class="ruby-value">9</span>, <span class="ruby-value">5</span>]
+<span class="ruby-identifier">p</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">chunk_while</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">i</span>, <span class="ruby-identifier">j</span><span class="ruby-operator">|</span> <span class="ruby-identifier">i</span> <span class="ruby-operator">&lt;=</span> <span class="ruby-identifier">j</span> }.<span class="ruby-identifier">to_a</span>
+<span class="ruby-comment">#=&gt; [[0, 9], [2, 2, 3], [2, 7], [5, 9], [5]]</span>
+</pre>
+
+<p>Adjacent evens and odds can be chunked as follows: (Enumerable#chunk is
+another way to do it.)</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [<span class="ruby-value">7</span>, <span class="ruby-value">5</span>, <span class="ruby-value">9</span>, <span class="ruby-value">2</span>, <span class="ruby-value">0</span>, <span class="ruby-value">7</span>, <span class="ruby-value">9</span>, <span class="ruby-value">4</span>, <span class="ruby-value">2</span>, <span class="ruby-value">0</span>]
+<span class="ruby-identifier">p</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">chunk_while</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">i</span>, <span class="ruby-identifier">j</span><span class="ruby-operator">|</span> <span class="ruby-identifier">i</span>.<span class="ruby-identifier">even?</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">j</span>.<span class="ruby-identifier">even?</span> }.<span class="ruby-identifier">to_a</span>
+<span class="ruby-comment">#=&gt; [[7, 5, 9], [2, 0], [7, 9], [4, 2, 0]]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="chunk_while-source">
+     			<pre>static VALUE
+enum_chunk_while(VALUE enumerable)
+{
+    VALUE enumerator;
+    VALUE pred;
+
+    pred = rb_block_proc();
+
+    enumerator = rb_obj_alloc(rb_cEnumerator);
+    rb_ivar_set(enumerator, rb_intern(&quot;slicewhen_enum&quot;), enumerable);
+    rb_ivar_set(enumerator, rb_intern(&quot;slicewhen_pred&quot;), pred);
+    rb_ivar_set(enumerator, rb_intern(&quot;slicewhen_inverted&quot;), Qtrue);
+
+    rb_block_call(enumerator, idInitialize, 0, 0, slicewhen_i, enumerator);
+    return enumerator;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

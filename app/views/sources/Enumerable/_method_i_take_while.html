@@ -1,0 +1,54 @@
+<section id="method-i-take_while" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						take_while { |arr| block } &rarr; array
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						take_while                 &rarr; an_enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Passes elements to the block until the block returns <code>nil</code> or
+<code>false</code>, then stops iterating and returns an array of all prior
+elements.</p>
+
+<p>If no block is given, an enumerator is returned instead.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [<span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>, <span class="ruby-value">4</span>, <span class="ruby-value">5</span>, <span class="ruby-value">0</span>]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">take_while</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">i</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">3</span> }   <span class="ruby-comment">#=&gt; [1, 2]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="take_while-source">
+     			<pre>static VALUE
+enum_take_while(VALUE obj)
+{
+    VALUE ary;
+
+    RETURN_ENUMERATOR(obj, 0, 0);
+    ary = rb_ary_new();
+    rb_block_call(obj, id_each, 0, 0, take_while_i, ary);
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

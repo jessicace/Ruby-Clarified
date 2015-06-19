@@ -1,0 +1,73 @@
+<section id="method-i-initialize_copy" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						initialize_copy(other_ary)   &rarr; ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Replaces the contents of <code>self</code> with the contents of
+<code>other_ary</code>, truncating or expanding if necessary.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span>, <span class="ruby-string">&quot;d&quot;</span>, <span class="ruby-string">&quot;e&quot;</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">replace</span>([ <span class="ruby-string">&quot;x&quot;</span>, <span class="ruby-string">&quot;y&quot;</span>, <span class="ruby-string">&quot;z&quot;</span> ])   <span class="ruby-comment">#=&gt; [&quot;x&quot;, &quot;y&quot;, &quot;z&quot;]</span>
+<span class="ruby-identifier">a</span>                              <span class="ruby-comment">#=&gt; [&quot;x&quot;, &quot;y&quot;, &quot;z&quot;]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="initialize_copy-source">
+     			<pre>VALUE
+rb_ary_replace(VALUE copy, VALUE orig)
+{
+    rb_ary_modify_check(copy);
+    orig = to_ary(orig);
+    if (copy == orig) return copy;
+
+    if (RARRAY_LEN(orig) &lt;= RARRAY_EMBED_LEN_MAX) {
+        VALUE shared = 0;
+
+        if (ARY_OWNS_HEAP_P(copy)) {
+            RARRAY_PTR_USE(copy, ptr, ruby_sized_xfree(ptr, ARY_HEAP_SIZE(copy)));
+        }
+        else if (ARY_SHARED_P(copy)) {
+            shared = ARY_SHARED(copy);
+            FL_UNSET_SHARED(copy);
+        }
+        FL_SET_EMBED(copy);
+        ary_memcpy(copy, 0, RARRAY_LEN(orig), RARRAY_CONST_PTR(orig));
+        if (shared) {
+            rb_ary_decrement_share(shared);
+        }
+        ARY_SET_LEN(copy, RARRAY_LEN(orig));
+    }
+    else {
+        VALUE shared = ary_make_shared(orig);
+        if (ARY_OWNS_HEAP_P(copy)) {
+            RARRAY_PTR_USE(copy, ptr, ruby_sized_xfree(ptr, ARY_HEAP_SIZE(copy)));
+        }
+        else {
+            rb_ary_unshare_safe(copy);
+        }
+        FL_UNSET_EMBED(copy);
+        ARY_SET_PTR(copy, RARRAY_CONST_PTR(orig));
+        ARY_SET_LEN(copy, RARRAY_LEN(orig));
+        rb_ary_set_shared(copy, shared);
+    }
+    return copy;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

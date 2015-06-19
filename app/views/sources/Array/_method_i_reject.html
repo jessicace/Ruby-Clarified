@@ -1,0 +1,52 @@
+<section id="method-i-reject" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						reject  {|item| block }  &rarr; new_ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						reject                   &rarr; Enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns a new array containing the items in <code>self</code> for which the
+given block is not <code>true</code>. The ordering of non-rejected elements
+is maintained.</p>
+
+<p>See also <a href="Array.html#method-i-delete_if">#delete_if</a></p>
+
+<p>If no block is given, an Enumerator is returned instead.</p>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="reject-source">
+     			<pre>static VALUE
+rb_ary_reject(VALUE ary)
+{
+    VALUE rejected_ary;
+
+    RETURN_SIZED_ENUMERATOR(ary, 0, 0, ary_enum_length);
+    rejected_ary = rb_ary_new();
+    ary_reject(ary, rejected_ary);
+    return rejected_ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

@@ -1,0 +1,62 @@
+<section id="method-i-select" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						select { |item| block } &rarr; new_ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						select                  &rarr; Enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns a new array containing all elements of <code>ary</code> for which
+the given <code>block</code> returns a true value.</p>
+
+<p>If no block is given, an Enumerator is returned instead.</p>
+
+<pre class="ruby">[<span class="ruby-value">1</span>,<span class="ruby-value">2</span>,<span class="ruby-value">3</span>,<span class="ruby-value">4</span>,<span class="ruby-value">5</span>].<span class="ruby-identifier">select</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">num</span><span class="ruby-operator">|</span>  <span class="ruby-identifier">num</span>.<span class="ruby-identifier">even?</span>  }   <span class="ruby-comment">#=&gt; [2, 4]</span>
+
+<span class="ruby-identifier">a</span> = <span class="ruby-node">%w{ a b c d e f }</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">select</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp">/[aeiou]/</span> }  <span class="ruby-comment">#=&gt; [&quot;a&quot;, &quot;e&quot;]</span>
+</pre>
+
+<p>See also <a href="Enumerable.html#method-i-select">Enumerable#select</a>.</p>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="select-source">
+     			<pre>static VALUE
+rb_ary_select(VALUE ary)
+{
+    VALUE result;
+    long i;
+
+    RETURN_SIZED_ENUMERATOR(ary, 0, 0, ary_enum_length);
+    result = rb_ary_new2(RARRAY_LEN(ary));
+    for (i = 0; i &lt; RARRAY_LEN(ary); i++) {
+        if (RTEST(rb_yield(RARRAY_AREF(ary, i)))) {
+            rb_ary_push(result, rb_ary_elt(ary, i));
+        }
+    }
+    return result;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

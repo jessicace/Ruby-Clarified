@@ -1,0 +1,196 @@
+<section id="method-i-slice_before" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						slice_before(pattern)                             &rarr; an_enumerator
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						slice_before { |elt| bool }                       &rarr; an_enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Creates an enumerator for each chunked elements. The beginnings of chunks
+are defined by <em>pattern</em> and the block.</p>
+
+<p>If <code><em>pattern</em> === <em>elt</em></code> returns <code>true</code>
+or the block returns <code>true</code> for the element, the element is
+beginning of a chunk.</p>
+
+<p>The <code>===</code> and <em>block</em> is called from the first element to
+the last element of <em>enum</em>.  The result for the first element is
+ignored.</p>
+
+<p>The result enumerator yields the chunked elements as an array. So
+<code>each</code> method can be called as follows:</p>
+
+<pre>enum.slice_before(pattern).each { |ary| ... }
+enum.slice_before { |elt| bool }.each { |ary| ... }</pre>
+
+<p>Other methods of the Enumerator class and <a
+href="Enumerable.html">Enumerable</a> module, such as map, etc., are also
+usable.</p>
+
+<p>For example, iteration over ChangeLog entries can be implemented as
+follows:</p>
+
+<pre class="ruby"><span class="ruby-comment"># iterate over ChangeLog entries.</span>
+<span class="ruby-identifier">open</span>(<span class="ruby-string">&quot;ChangeLog&quot;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">slice_before</span>(<span class="ruby-regexp">/\A\S/</span>).<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">pp</span> <span class="ruby-identifier">e</span> }
+}
+
+<span class="ruby-comment"># same as above.  block is used instead of pattern argument.</span>
+<span class="ruby-identifier">open</span>(<span class="ruby-string">&quot;ChangeLog&quot;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">slice_before</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span> <span class="ruby-regexp">/\A\S/</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">line</span> }.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">pp</span> <span class="ruby-identifier">e</span> }
+}
+</pre>
+
+<p>“svn proplist -R” produces multiline output for each file. They can be
+chunked as follows:</p>
+
+<pre class="ruby"><span class="ruby-constant">IO</span>.<span class="ruby-identifier">popen</span>([{<span class="ruby-string">&quot;LC_ALL&quot;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;C&quot;</span>}, <span class="ruby-string">&quot;svn&quot;</span>, <span class="ruby-string">&quot;proplist&quot;</span>, <span class="ruby-string">&quot;-R&quot;</span>]) { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">lines</span>.<span class="ruby-identifier">slice_before</span>(<span class="ruby-regexp">/\AProp/</span>).<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">lines</span><span class="ruby-operator">|</span> <span class="ruby-identifier">p</span> <span class="ruby-identifier">lines</span> }
+}
+<span class="ruby-comment">#=&gt; [&quot;Properties on &#39;.&#39;:\n&quot;, &quot;  svn:ignore\n&quot;, &quot;  svk:merge\n&quot;]</span>
+<span class="ruby-comment">#   [&quot;Properties on &#39;goruby.c&#39;:\n&quot;, &quot;  svn:eol-style\n&quot;]</span>
+<span class="ruby-comment">#   [&quot;Properties on &#39;complex.c&#39;:\n&quot;, &quot;  svn:mime-type\n&quot;, &quot;  svn:eol-style\n&quot;]</span>
+<span class="ruby-comment">#   [&quot;Properties on &#39;regparse.c&#39;:\n&quot;, &quot;  svn:eol-style\n&quot;]</span>
+<span class="ruby-comment">#   ...</span>
+</pre>
+
+<p>If the block needs to maintain state over multiple elements, local
+variables can be used. For example, three or more consecutive increasing
+numbers can be squashed as follows:</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [<span class="ruby-value">0</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>, <span class="ruby-value">4</span>, <span class="ruby-value">6</span>, <span class="ruby-value">7</span>, <span class="ruby-value">9</span>]
+<span class="ruby-identifier">prev</span> = <span class="ruby-identifier">a</span>[<span class="ruby-value">0</span>]
+<span class="ruby-identifier">p</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">slice_before</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">prev</span>, <span class="ruby-identifier">prev2</span> = <span class="ruby-identifier">e</span>, <span class="ruby-identifier">prev</span>
+  <span class="ruby-identifier">prev2</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">e</span>
+}.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">es</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">es</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&lt;=</span> <span class="ruby-value">2</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">es</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;,&quot;</span>) <span class="ruby-operator">:</span> <span class="ruby-node">&quot;#{es.first}-#{es.last}&quot;</span>
+}.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;,&quot;</span>)
+<span class="ruby-comment">#=&gt; &quot;0,2-4,6,7,9&quot;</span>
+</pre>
+
+<p>However local variables should be used carefully if the result enumerator
+is enumerated twice or more. The local variables should be initialized for
+each enumeration. Enumerator.new can be used to do it.</p>
+
+<pre class="ruby"><span class="ruby-comment"># Word wrapping.  This assumes all characters have same width.</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">wordwrap</span>(<span class="ruby-identifier">words</span>, <span class="ruby-identifier">maxwidth</span>)
+  <span class="ruby-constant">Enumerator</span>.<span class="ruby-identifier">new</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">y</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># cols is initialized in Enumerator.new.</span>
+    <span class="ruby-identifier">cols</span> = <span class="ruby-value">0</span>
+    <span class="ruby-identifier">words</span>.<span class="ruby-identifier">slice_before</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">w</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">cols</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">cols</span> <span class="ruby-operator">!=</span> <span class="ruby-value">0</span>
+      <span class="ruby-identifier">cols</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">w</span>.<span class="ruby-identifier">length</span>
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">maxwidth</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">cols</span>
+        <span class="ruby-identifier">cols</span> = <span class="ruby-identifier">w</span>.<span class="ruby-identifier">length</span>
+        <span class="ruby-keyword">true</span>
+      <span class="ruby-keyword">else</span>
+        <span class="ruby-keyword">false</span>
+      <span class="ruby-keyword">end</span>
+    }.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">ws</span><span class="ruby-operator">|</span> <span class="ruby-identifier">y</span>.<span class="ruby-identifier">yield</span> <span class="ruby-identifier">ws</span> }
+  }
+<span class="ruby-keyword">end</span>
+<span class="ruby-identifier">text</span> = (<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">20</span>).<span class="ruby-identifier">to_a</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot; &quot;</span>)
+<span class="ruby-identifier">enum</span> = <span class="ruby-identifier">wordwrap</span>(<span class="ruby-identifier">text</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp">/\s+/</span>), <span class="ruby-value">10</span>)
+<span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;-&quot;</span><span class="ruby-operator">*</span><span class="ruby-value">10</span>
+<span class="ruby-identifier">enum</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">ws</span><span class="ruby-operator">|</span> <span class="ruby-identifier">puts</span> <span class="ruby-identifier">ws</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot; &quot;</span>) } <span class="ruby-comment"># first enumeration.</span>
+<span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;-&quot;</span><span class="ruby-operator">*</span><span class="ruby-value">10</span>
+<span class="ruby-identifier">enum</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">ws</span><span class="ruby-operator">|</span> <span class="ruby-identifier">puts</span> <span class="ruby-identifier">ws</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot; &quot;</span>) } <span class="ruby-comment"># second enumeration generates same result as the first.</span>
+<span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;-&quot;</span><span class="ruby-operator">*</span><span class="ruby-value">10</span>
+<span class="ruby-comment">#=&gt; ----------</span>
+<span class="ruby-comment">#   1 2 3 4 5</span>
+<span class="ruby-comment">#   6 7 8 9 10</span>
+<span class="ruby-comment">#   11 12 13</span>
+<span class="ruby-comment">#   14 15 16</span>
+<span class="ruby-comment">#   17 18 19</span>
+<span class="ruby-comment">#   20</span>
+<span class="ruby-comment">#   ----------</span>
+<span class="ruby-comment">#   1 2 3 4 5</span>
+<span class="ruby-comment">#   6 7 8 9 10</span>
+<span class="ruby-comment">#   11 12 13</span>
+<span class="ruby-comment">#   14 15 16</span>
+<span class="ruby-comment">#   17 18 19</span>
+<span class="ruby-comment">#   20</span>
+<span class="ruby-comment">#   ----------</span>
+</pre>
+
+<p>mbox contains series of mails which start with Unix From line. So each mail
+can be extracted by slice before Unix From line.</p>
+
+<pre class="ruby"><span class="ruby-comment"># parse mbox</span>
+<span class="ruby-identifier">open</span>(<span class="ruby-string">&quot;mbox&quot;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">slice_before</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">line</span>.<span class="ruby-identifier">start_with?</span> <span class="ruby-string">&quot;From &quot;</span>
+  }.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">mail</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">unix_from</span> = <span class="ruby-identifier">mail</span>.<span class="ruby-identifier">shift</span>
+    <span class="ruby-identifier">i</span> = <span class="ruby-identifier">mail</span>.<span class="ruby-identifier">index</span>(<span class="ruby-string">&quot;\n&quot;</span>)
+    <span class="ruby-identifier">header</span> = <span class="ruby-identifier">mail</span>[<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-identifier">i</span>]
+    <span class="ruby-identifier">body</span> = <span class="ruby-identifier">mail</span>[(<span class="ruby-identifier">i</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>)<span class="ruby-operator">..</span><span class="ruby-value">-1</span>]
+    <span class="ruby-identifier">body</span>.<span class="ruby-identifier">pop</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">body</span>.<span class="ruby-identifier">last</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;\n&quot;</span>
+    <span class="ruby-identifier">fields</span> = <span class="ruby-identifier">header</span>.<span class="ruby-identifier">slice_before</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span> <span class="ruby-operator">!</span><span class="ruby-string">&quot; \t&quot;</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">line</span>[<span class="ruby-value">0</span>]) }.<span class="ruby-identifier">to_a</span>
+    <span class="ruby-identifier">p</span> <span class="ruby-identifier">unix_from</span>
+    <span class="ruby-identifier">pp</span> <span class="ruby-identifier">fields</span>
+    <span class="ruby-identifier">pp</span> <span class="ruby-identifier">body</span>
+  }
+}
+
+<span class="ruby-comment"># split mails in mbox (slice before Unix From line after an empty line)</span>
+<span class="ruby-identifier">open</span>(<span class="ruby-string">&quot;mbox&quot;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">slice_before</span>(<span class="ruby-identifier">emp</span><span class="ruby-operator">:</span> <span class="ruby-keyword">true</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">line</span>, <span class="ruby-identifier">h</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">prevemp</span> = <span class="ruby-identifier">h</span>[:<span class="ruby-identifier">emp</span>]
+    <span class="ruby-identifier">h</span>[:<span class="ruby-identifier">emp</span>] = <span class="ruby-identifier">line</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;\n&quot;</span>
+    <span class="ruby-identifier">prevemp</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">start_with?</span>(<span class="ruby-string">&quot;From &quot;</span>)
+  }.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">mail</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">mail</span>.<span class="ruby-identifier">pop</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">mail</span>.<span class="ruby-identifier">last</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;\n&quot;</span>
+    <span class="ruby-identifier">pp</span> <span class="ruby-identifier">mail</span>
+  }
+}
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="slice_before-source">
+     			<pre>static VALUE
+enum_slice_before(int argc, VALUE *argv, VALUE enumerable)
+{
+    VALUE enumerator;
+
+    if (rb_block_given_p()) {
+        if (argc != 0)
+            rb_error_arity(argc, 0, 0);
+        enumerator = rb_obj_alloc(rb_cEnumerator);
+        rb_ivar_set(enumerator, rb_intern(&quot;slicebefore_sep_pred&quot;), rb_block_proc());
+    }
+    else {
+        VALUE sep_pat;
+        rb_scan_args(argc, argv, &quot;1&quot;, &amp;sep_pat);
+        enumerator = rb_obj_alloc(rb_cEnumerator);
+        rb_ivar_set(enumerator, rb_intern(&quot;slicebefore_sep_pat&quot;), sep_pat);
+    }
+    rb_ivar_set(enumerator, rb_intern(&quot;slicebefore_enumerable&quot;), enumerable);
+    rb_block_call(enumerator, idInitialize, 0, 0, slicebefore_i, enumerator);
+    return enumerator;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

@@ -1,0 +1,35 @@
+<section id="method-i-frozen-3F" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						frozen?  &rarr; true or false
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Return <code>true</code> if this array is frozen (or temporarily frozen
+while being sorted). See also Object#frozen?</p>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="frozen-3F-source">
+     			<pre>static VALUE
+rb_ary_frozen_p(VALUE ary)
+{
+    if (OBJ_FROZEN(ary)) return Qtrue;
+    return Qfalse;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

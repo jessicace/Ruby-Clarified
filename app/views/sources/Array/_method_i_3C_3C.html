@@ -1,0 +1,44 @@
+<section id="method-i-3C-3C" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						ary &lt;&lt; obj            &rarr; ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Append—Pushes the given object on to the end of this array. This expression
+returns the array itself, so several appends may be chained together.</p>
+
+<pre class="ruby">[ <span class="ruby-value">1</span>, <span class="ruby-value">2</span> ] <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;c&quot;</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;d&quot;</span> <span class="ruby-operator">&lt;&lt;</span> [ <span class="ruby-value">3</span>, <span class="ruby-value">4</span> ]
+        <span class="ruby-comment">#=&gt;  [ 1, 2, &quot;c&quot;, &quot;d&quot;, [ 3, 4 ] ]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="3C-3C-source">
+     			<pre>VALUE
+rb_ary_push(VALUE ary, VALUE item)
+{
+    long idx = RARRAY_LEN(ary);
+    VALUE target_ary = ary_ensure_room_for_push(ary, 1);
+    RARRAY_PTR_USE(ary, ptr, {
+        RB_OBJ_WRITE(target_ary, &amp;ptr[idx], item);
+    });
+    ARY_SET_LEN(ary, idx + 1);
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

@@ -1,0 +1,45 @@
+<section id="method-i-any-3F" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						any? [{ |obj| block }]   &rarr; true or false
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>See also <a href="Enumerable.html#method-i-any-3F">Enumerable#any?</a></p>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="any-3F-source">
+     			<pre>static VALUE
+rb_ary_any_p(VALUE ary)
+{
+    long i, len = RARRAY_LEN(ary);
+    const VALUE *ptr = RARRAY_CONST_PTR(ary);
+
+    if (!len) return Qfalse;
+    if (!rb_block_given_p()) {
+        for (i = 0; i &lt; len; ++i) if (RTEST(ptr[i])) return Qtrue;
+    }
+    else {
+        for (i = 0; i &lt; RARRAY_LEN(ary); ++i) {
+            if (RTEST(rb_yield(RARRAY_AREF(ary, i)))) return Qtrue;
+        }
+    }
+    return Qfalse;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

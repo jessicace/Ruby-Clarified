@@ -1,0 +1,45 @@
+<section id="method-i-join" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						join(separator=$,)    &rarr; str
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns a string created by converting each element of the array to a
+string, separated by the given <code>separator</code>. If the
+<code>separator</code> is <code>nil</code>, it uses current $,. If both the
+<code>separator</code> and $, are nil, it uses empty string.</p>
+
+<pre class="ruby">[ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span> ].<span class="ruby-identifier">join</span>        <span class="ruby-comment">#=&gt; &quot;abc&quot;</span>
+[ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span> ].<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;-&quot;</span>)   <span class="ruby-comment">#=&gt; &quot;a-b-c&quot;</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="join-source">
+     			<pre>static VALUE
+rb_ary_join_m(int argc, VALUE *argv, VALUE ary)
+{
+    VALUE sep;
+
+    rb_scan_args(argc, argv, &quot;01&quot;, &amp;sep);
+    if (NIL_P(sep)) sep = rb_output_fs;
+
+    return rb_ary_join(ary, sep);
+}</pre>
+    		</div>
+      
+		</div>
+</section>

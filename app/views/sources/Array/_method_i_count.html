@@ -1,0 +1,86 @@
+<section id="method-i-count" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						count                   &rarr; int
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						count(obj)              &rarr; int
+          </span>
+
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						count { |item| block }  &rarr; int
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns the number of elements.</p>
+
+<p>If an argument is given, counts the number of elements which equal
+<code>obj</code> using <code>==</code>.</p>
+
+<p>If a block is given, counts the number of elements for which the block
+returns a true value.</p>
+
+<pre class="ruby"><span class="ruby-identifier">ary</span> = [<span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">4</span>, <span class="ruby-value">2</span>]
+<span class="ruby-identifier">ary</span>.<span class="ruby-identifier">count</span>                  <span class="ruby-comment">#=&gt; 4</span>
+<span class="ruby-identifier">ary</span>.<span class="ruby-identifier">count</span>(<span class="ruby-value">2</span>)               <span class="ruby-comment">#=&gt; 2</span>
+<span class="ruby-identifier">ary</span>.<span class="ruby-identifier">count</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span><span class="ruby-operator">%</span><span class="ruby-value">2</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span> } <span class="ruby-comment">#=&gt; 3</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="count-source">
+     			<pre>static VALUE
+rb_ary_count(int argc, VALUE *argv, VALUE ary)
+{
+    long i, n = 0;
+
+    if (argc == 0) {
+        VALUE v;
+
+        if (!rb_block_given_p())
+            return LONG2NUM(RARRAY_LEN(ary));
+
+        for (i = 0; i &lt; RARRAY_LEN(ary); i++) {
+            v = RARRAY_AREF(ary, i);
+            if (RTEST(rb_yield(v))) n++;
+        }
+    }
+    else {
+        VALUE obj;
+
+        rb_scan_args(argc, argv, &quot;1&quot;, &amp;obj);
+        if (rb_block_given_p()) {
+            rb_warn(&quot;given block not used&quot;);
+        }
+        for (i = 0; i &lt; RARRAY_LEN(ary); i++) {
+            if (rb_equal(RARRAY_AREF(ary, i), obj)) n++;
+        }
+    }
+
+    return LONG2NUM(n);
+}</pre>
+    		</div>
+      
+		</div>
+</section>

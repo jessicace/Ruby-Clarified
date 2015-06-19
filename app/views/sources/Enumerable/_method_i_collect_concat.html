@@ -1,0 +1,55 @@
+<section id="method-i-collect_concat" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						collect_concat { |obj| block } &rarr; array
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						collect_concat                 &rarr; an_enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns a new array with the concatenated results of running <em>block</em>
+once for every element in <em>enum</em>.</p>
+
+<p>If no block is given, an enumerator is returned instead.</p>
+
+<pre class="ruby">[<span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>, <span class="ruby-value">4</span>].<span class="ruby-identifier">flat_map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> [<span class="ruby-identifier">e</span>, <span class="ruby-operator">-</span><span class="ruby-identifier">e</span>] } <span class="ruby-comment">#=&gt; [1, -1, 2, -2, 3, -3, 4, -4]</span>
+[[<span class="ruby-value">1</span>, <span class="ruby-value">2</span>], [<span class="ruby-value">3</span>, <span class="ruby-value">4</span>]].<span class="ruby-identifier">flat_map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span> <span class="ruby-operator">+</span> [<span class="ruby-value">100</span>] } <span class="ruby-comment">#=&gt; [1, 2, 100, 3, 4, 100]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="collect_concat-source">
+     			<pre>static VALUE
+enum_flat_map(VALUE obj)
+{
+    VALUE ary;
+
+    RETURN_SIZED_ENUMERATOR(obj, 0, 0, enum_size);
+
+    ary = rb_ary_new();
+    rb_block_call(obj, id_each, 0, 0, flat_map_i, ary);
+
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

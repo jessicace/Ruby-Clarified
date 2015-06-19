@@ -1,0 +1,89 @@
+<section id="method-i-min" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						min                     &rarr; obj
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						min {| a,b | block }    &rarr; obj
+          </span>
+
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						min(n)                  &rarr; array
+          </span>
+
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						min(n) {| a,b | block } &rarr; array
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns the object in <em>enum</em> with the minimum value. The first form
+assumes all objects implement <code>Comparable</code>; the second uses the
+block to return <em>a &lt;=&gt; b</em>.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = <span class="ruby-node">%w(albatross dog horse)</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">min</span>                                   <span class="ruby-comment">#=&gt; &quot;albatross&quot;</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">min</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">b</span>.<span class="ruby-identifier">length</span> }  <span class="ruby-comment">#=&gt; &quot;dog&quot;</span>
+</pre>
+
+<p>If the <code>n</code> argument is given, minimum <code>n</code> elements
+are returned as an array.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = <span class="ruby-node">%w[albatross dog horse]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">min</span>(<span class="ruby-value">2</span>)                                  <span class="ruby-comment">#=&gt; [&quot;albatross&quot;, &quot;dog&quot;]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">min</span>(<span class="ruby-value">2</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">b</span>.<span class="ruby-identifier">length</span> }  <span class="ruby-comment">#=&gt; [&quot;dog&quot;, &quot;horse&quot;]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="min-source">
+     			<pre>static VALUE
+enum_min(int argc, VALUE *argv, VALUE obj)
+{
+    struct MEMO *memo = MEMO_NEW(Qundef, 0, 0);
+    VALUE result;
+    VALUE num;
+
+    rb_scan_args(argc, argv, &quot;01&quot;, &amp;num);
+
+    if (!NIL_P(num))
+       return nmin_run(obj, num, 0, 0);
+
+    if (rb_block_given_p()) {
+        rb_block_call(obj, id_each, 0, 0, min_ii, (VALUE)memo);
+    }
+    else {
+        rb_block_call(obj, id_each, 0, 0, min_i, (VALUE)memo);
+    }
+    result = memo-&gt;v1;
+    if (result == Qundef) return Qnil;
+    return result;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

@@ -1,0 +1,61 @@
+<section id="method-i-collect" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						collect { |item| block }  &rarr; new_ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						collect                   &rarr; Enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Invokes the given block once for each element of <code>self</code>.</p>
+
+<p>Creates a new array containing the values returned by the block.</p>
+
+<p>See also <a href="Enumerable.html#method-i-collect">Enumerable#collect</a>.</p>
+
+<p>If no block is given, an Enumerator is returned instead.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span>, <span class="ruby-string">&quot;d&quot;</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;!&quot;</span> }        <span class="ruby-comment">#=&gt; [&quot;a!&quot;, &quot;b!&quot;, &quot;c!&quot;, &quot;d!&quot;]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">map</span>.<span class="ruby-identifier">with_index</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">x</span>, <span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span> <span class="ruby-operator">*</span> <span class="ruby-identifier">i</span> } <span class="ruby-comment">#=&gt; [&quot;&quot;, &quot;b&quot;, &quot;cc&quot;, &quot;ddd&quot;]</span>
+<span class="ruby-identifier">a</span>                                <span class="ruby-comment">#=&gt; [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="collect-source">
+     			<pre>static VALUE
+rb_ary_collect(VALUE ary)
+{
+    long i;
+    VALUE collect;
+
+    RETURN_SIZED_ENUMERATOR(ary, 0, 0, ary_enum_length);
+    collect = rb_ary_new2(RARRAY_LEN(ary));
+    for (i = 0; i &lt; RARRAY_LEN(ary); i++) {
+        rb_ary_push(collect, rb_yield(RARRAY_AREF(ary, i)));
+    }
+    return collect;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

@@ -1,0 +1,57 @@
+<section id="method-i-take_while" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						take_while { |arr| block }  &rarr; new_ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						take_while                  &rarr; Enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Passes elements to the block until the block returns <code>nil</code> or
+<code>false</code>, then stops iterating and returns an array of all prior
+elements.</p>
+
+<p>If no block is given, an Enumerator is returned instead.</p>
+
+<p>See also <a href="Array.html#method-i-drop_while">#drop_while</a></p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [<span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>, <span class="ruby-value">4</span>, <span class="ruby-value">5</span>, <span class="ruby-value">0</span>]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">take_while</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">i</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">3</span> }  <span class="ruby-comment">#=&gt; [1, 2]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="take_while-source">
+     			<pre>static VALUE
+rb_ary_take_while(VALUE ary)
+{
+    long i;
+
+    RETURN_ENUMERATOR(ary, 0, 0);
+    for (i = 0; i &lt; RARRAY_LEN(ary); i++) {
+        if (!RTEST(rb_yield(RARRAY_AREF(ary, i)))) break;
+    }
+    return rb_ary_take(ary, LONG2FIX(i));
+}</pre>
+    		</div>
+      
+		</div>
+</section>

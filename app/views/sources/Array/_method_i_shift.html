@@ -1,0 +1,88 @@
+<section id="method-i-shift" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						shift    &rarr; obj or nil
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						shift(n) &rarr; new_ary
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Removes the first element of <code>self</code> and returns it (shifting all
+other elements down by one). Returns <code>nil</code> if the array is
+empty.</p>
+
+<p>If a number <code>n</code> is given, returns an array of the first
+<code>n</code> elements (or less) just like <code>array.slice!(0, n)</code>
+does. With <code>ary</code> containing only the remainder elements, not
+including what was shifted to <code>new_ary</code>. See also <a
+href="Array.html#method-i-unshift">#unshift</a> for the opposite effect.</p>
+
+<pre class="ruby"><span class="ruby-identifier">args</span> = [ <span class="ruby-string">&quot;-m&quot;</span>, <span class="ruby-string">&quot;-q&quot;</span>, <span class="ruby-string">&quot;filename&quot;</span> ]
+<span class="ruby-identifier">args</span>.<span class="ruby-identifier">shift</span>     <span class="ruby-comment">#=&gt; &quot;-m&quot;</span>
+<span class="ruby-identifier">args</span>           <span class="ruby-comment">#=&gt; [&quot;-q&quot;, &quot;filename&quot;]</span>
+
+<span class="ruby-identifier">args</span> = [ <span class="ruby-string">&quot;-m&quot;</span>, <span class="ruby-string">&quot;-q&quot;</span>, <span class="ruby-string">&quot;filename&quot;</span> ]
+<span class="ruby-identifier">args</span>.<span class="ruby-identifier">shift</span>(<span class="ruby-value">2</span>)  <span class="ruby-comment">#=&gt; [&quot;-m&quot;, &quot;-q&quot;]</span>
+<span class="ruby-identifier">args</span>           <span class="ruby-comment">#=&gt; [&quot;filename&quot;]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="shift-source">
+     			<pre>static VALUE
+rb_ary_shift_m(int argc, VALUE *argv, VALUE ary)
+{
+    VALUE result;
+    long n;
+
+    if (argc == 0) {
+        return rb_ary_shift(ary);
+    }
+
+    rb_ary_modify_check(ary);
+    result = ary_take_first_or_last(argc, argv, ary, ARY_TAKE_FIRST);
+    n = RARRAY_LEN(result);
+    if (ARY_SHARED_P(ary)) {
+        if (ARY_SHARED_OCCUPIED(ARY_SHARED(ary))) {
+          setup_occupied_shared:
+            ary_mem_clear(ary, 0, n);
+        }
+        ARY_INCREASE_PTR(ary, n);
+    }
+    else {
+        if (RARRAY_LEN(ary) &lt; ARY_DEFAULT_SIZE) {
+            RARRAY_PTR_USE(ary, ptr, {
+                MEMMOVE(ptr, ptr+n, VALUE, RARRAY_LEN(ary)-n);
+            }); /* WB: no new reference */
+        }
+        else {
+            ary_make_shared(ary);
+            goto setup_occupied_shared;
+        }
+    }
+    ARY_INCREASE_LEN(ary, -n);
+
+    return result;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

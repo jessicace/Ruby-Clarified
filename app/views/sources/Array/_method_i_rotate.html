@@ -1,0 +1,65 @@
+<section id="method-i-rotate" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						rotate(count=1)    &rarr; new_ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns a new array by rotating <code>self</code> so that the element at
+<code>count</code> is the first element of the new array.</p>
+
+<p>If <code>count</code> is negative then it rotates in the opposite
+direction, starting from the end of <code>self</code> where <code>-1</code>
+is the last element.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span>, <span class="ruby-string">&quot;d&quot;</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">rotate</span>         <span class="ruby-comment">#=&gt; [&quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;a&quot;]</span>
+<span class="ruby-identifier">a</span>                <span class="ruby-comment">#=&gt; [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">rotate</span>(<span class="ruby-value">2</span>)      <span class="ruby-comment">#=&gt; [&quot;c&quot;, &quot;d&quot;, &quot;a&quot;, &quot;b&quot;]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">rotate</span>(<span class="ruby-value">-3</span>)     <span class="ruby-comment">#=&gt; [&quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;a&quot;]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="rotate-source">
+     			<pre>static VALUE
+rb_ary_rotate_m(int argc, VALUE *argv, VALUE ary)
+{
+    VALUE rotated;
+    const VALUE *ptr;
+    long len, cnt = 1;
+
+    switch (argc) {
+      case 1: cnt = NUM2LONG(argv[0]);
+      case 0: break;
+      default: rb_scan_args(argc, argv, &quot;01&quot;, NULL);
+    }
+
+    len = RARRAY_LEN(ary);
+    rotated = rb_ary_new2(len);
+    if (len &gt; 0) {
+        cnt = rotate_count(cnt, len);
+        ptr = RARRAY_CONST_PTR(ary);
+        len -= cnt;
+        ary_memcpy(rotated, 0, len, ptr + cnt);
+        ary_memcpy(rotated, len, cnt, ptr);
+    }
+    ARY_SET_LEN(rotated, RARRAY_LEN(ary));
+    return rotated;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

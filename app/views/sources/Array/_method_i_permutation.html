@@ -1,0 +1,108 @@
+<section id="method-i-permutation" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						permutation { |p| block }          &rarr; ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						permutation                        &rarr; Enumerator
+          </span>
+
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						permutation(n) { |p| block }       &rarr; ary
+          </span>
+
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						permutation(n)                     &rarr; Enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>When invoked with a block, yield all permutations of length <code>n</code>
+of the elements of the array, then return the array itself.</p>
+
+<p>If <code>n</code> is not specified, yield all permutations of all elements.</p>
+
+<p>The implementation makes no guarantees about the order in which the
+permutations are yielded.</p>
+
+<p>If no block is given, an Enumerator is returned instead.</p>
+
+<p>Examples:</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [<span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">permutation</span>.<span class="ruby-identifier">to_a</span>    <span class="ruby-comment">#=&gt; [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">permutation</span>(<span class="ruby-value">1</span>).<span class="ruby-identifier">to_a</span> <span class="ruby-comment">#=&gt; [[1],[2],[3]]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">permutation</span>(<span class="ruby-value">2</span>).<span class="ruby-identifier">to_a</span> <span class="ruby-comment">#=&gt; [[1,2],[1,3],[2,1],[2,3],[3,1],[3,2]]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">permutation</span>(<span class="ruby-value">3</span>).<span class="ruby-identifier">to_a</span> <span class="ruby-comment">#=&gt; [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">permutation</span>(<span class="ruby-value">0</span>).<span class="ruby-identifier">to_a</span> <span class="ruby-comment">#=&gt; [[]] # one permutation of length 0</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">permutation</span>(<span class="ruby-value">4</span>).<span class="ruby-identifier">to_a</span> <span class="ruby-comment">#=&gt; []   # no permutations of length 4</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="permutation-source">
+     			<pre>static VALUE
+rb_ary_permutation(int argc, VALUE *argv, VALUE ary)
+{
+    VALUE num;
+    long r, n, i;
+
+    n = RARRAY_LEN(ary);                  /* Array length */
+    RETURN_SIZED_ENUMERATOR(ary, argc, argv, rb_ary_permutation_size);   /* Return enumerator if no block */
+    rb_scan_args(argc, argv, &quot;01&quot;, &amp;num);
+    r = NIL_P(num) ? n : NUM2LONG(num);   /* Permutation size from argument */
+
+    if (r &lt; 0 || n &lt; r) {
+        /* no permutations: yield nothing */
+    }
+    else if (r == 0) { /* exactly one permutation: the zero-length array */
+        rb_yield(rb_ary_new2(0));
+    }
+    else if (r == 1) { /* this is a special, easy case */
+        for (i = 0; i &lt; RARRAY_LEN(ary); i++) {
+            rb_yield(rb_ary_new3(1, RARRAY_AREF(ary, i)));
+        }
+    }
+    else {             /* this is the general case */
+        volatile VALUE t0;
+        long *p = (long*)ALLOCV(t0, r*sizeof(long)+n*sizeof(char));
+        char *used = (char*)(p + r);
+        VALUE ary0 = ary_make_shared_copy(ary); /* private defensive copy of ary */
+        RBASIC_CLEAR_CLASS(ary0);
+
+        MEMZERO(used, char, n); /* initialize array */
+
+        permute0(n, r, p, used, ary0); /* compute and yield permutations */
+        ALLOCV_END(t0);
+        RBASIC_SET_CLASS_RAW(ary0, rb_cArray);
+    }
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

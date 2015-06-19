@@ -1,0 +1,57 @@
+<section id="method-i-insert" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						insert(index, obj...)  &rarr; ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Inserts the given values before the element with the given
+<code>index</code>.</p>
+
+<p>Negative indices count backwards from the end of the array, where
+<code>-1</code> is the last element. If a negative index is used, the given
+values will be inserted after that element, so using an index of
+<code>-1</code> will insert the values at the end of the array.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = <span class="ruby-node">%w{ a b c d }</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">insert</span>(<span class="ruby-value">2</span>, <span class="ruby-value">99</span>)         <span class="ruby-comment">#=&gt; [&quot;a&quot;, &quot;b&quot;, 99, &quot;c&quot;, &quot;d&quot;]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">insert</span>(<span class="ruby-value">-2</span>, <span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>)   <span class="ruby-comment">#=&gt; [&quot;a&quot;, &quot;b&quot;, 99, &quot;c&quot;, 1, 2, 3, &quot;d&quot;]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="insert-source">
+     			<pre>static VALUE
+rb_ary_insert(int argc, VALUE *argv, VALUE ary)
+{
+    long pos;
+
+    rb_check_arity(argc, 1, UNLIMITED_ARGUMENTS);
+    rb_ary_modify_check(ary);
+    if (argc == 1) return ary;
+    pos = NUM2LONG(argv[0]);
+    if (pos == -1) {
+        pos = RARRAY_LEN(ary);
+    }
+    if (pos &lt; 0) {
+        pos++;
+    }
+    rb_ary_splice(ary, pos, 0, rb_ary_new4(argc - 1, argv + 1));
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

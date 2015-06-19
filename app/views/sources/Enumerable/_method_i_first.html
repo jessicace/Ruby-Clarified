@@ -1,0 +1,58 @@
+<section id="method-i-first" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						first       &rarr;  obj or nil
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						first(n)    &rarr;  an_array
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns the first element, or the first <code>n</code> elements, of the
+enumerable. If the enumerable is empty, the first form returns
+<code>nil</code>, and the second form returns an empty array.</p>
+
+<pre class="ruby"><span class="ruby-node">%w[foo bar baz]</span>.<span class="ruby-identifier">first</span>     <span class="ruby-comment">#=&gt; &quot;foo&quot;</span>
+<span class="ruby-node">%w[foo bar baz]</span>.<span class="ruby-identifier">first</span>(<span class="ruby-value">2</span>)  <span class="ruby-comment">#=&gt; [&quot;foo&quot;, &quot;bar&quot;]</span>
+<span class="ruby-node">%w[foo bar baz]</span>.<span class="ruby-identifier">first</span>(<span class="ruby-value">10</span>) <span class="ruby-comment">#=&gt; [&quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;]</span>
+[].<span class="ruby-identifier">first</span>                  <span class="ruby-comment">#=&gt; nil</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="first-source">
+     			<pre>static VALUE
+enum_first(int argc, VALUE *argv, VALUE obj)
+{
+    struct MEMO *memo;
+    rb_check_arity(argc, 0, 1);
+    if (argc &gt; 0) {
+        return enum_take(obj, argv[0]);
+    }
+    else {
+        memo = MEMO_NEW(Qnil, 0, 0);
+        rb_block_call(obj, id_each, 0, 0, first_i, (VALUE)memo);
+        return memo-&gt;v1;
+    }
+}</pre>
+    		</div>
+      
+		</div>
+</section>

@@ -1,0 +1,62 @@
+<section id="method-i-pop" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						pop    &rarr; obj or nil
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						pop(n) &rarr; new_ary
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Removes the last element from <code>self</code> and returns it, or
+<code>nil</code> if the array is empty.</p>
+
+<p>If a number <code>n</code> is given, returns an array of the last
+<code>n</code> elements (or less) just like <code>array.slice!(-n,
+n)</code> does. See also <a href="Array.html#method-i-push">#push</a> for
+the opposite effect.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span>, <span class="ruby-string">&quot;d&quot;</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">pop</span>     <span class="ruby-comment">#=&gt; &quot;d&quot;</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">pop</span>(<span class="ruby-value">2</span>)  <span class="ruby-comment">#=&gt; [&quot;b&quot;, &quot;c&quot;]</span>
+<span class="ruby-identifier">a</span>         <span class="ruby-comment">#=&gt; [&quot;a&quot;]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="pop-source">
+     			<pre>static VALUE
+rb_ary_pop_m(int argc, VALUE *argv, VALUE ary)
+{
+    VALUE result;
+
+    if (argc == 0) {
+        return rb_ary_pop(ary);
+    }
+
+    rb_ary_modify_check(ary);
+    result = ary_take_first_or_last(argc, argv, ary, ARY_TAKE_LAST);
+    ARY_INCREASE_LEN(ary, -RARRAY_LEN(result));
+    return result;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

@@ -1,0 +1,42 @@
+<section id="method-i-delete_at" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						delete_at(index)  &rarr; obj or nil
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Deletes the element at the specified <code>index</code>, returning that
+element, or <code>nil</code> if the <code>index</code> is out of range.</p>
+
+<p>See also <a href="Array.html#method-i-slice-21">#slice!</a></p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [<span class="ruby-string">&quot;ant&quot;</span>, <span class="ruby-string">&quot;bat&quot;</span>, <span class="ruby-string">&quot;cat&quot;</span>, <span class="ruby-string">&quot;dog&quot;</span>]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">delete_at</span>(<span class="ruby-value">2</span>)    <span class="ruby-comment">#=&gt; &quot;cat&quot;</span>
+<span class="ruby-identifier">a</span>                 <span class="ruby-comment">#=&gt; [&quot;ant&quot;, &quot;bat&quot;, &quot;dog&quot;]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">delete_at</span>(<span class="ruby-value">99</span>)   <span class="ruby-comment">#=&gt; nil</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="delete_at-source">
+     			<pre>static VALUE
+rb_ary_delete_at_m(VALUE ary, VALUE pos)
+{
+    return rb_ary_delete_at(ary, NUM2LONG(pos));
+}</pre>
+    		</div>
+      
+		</div>
+</section>

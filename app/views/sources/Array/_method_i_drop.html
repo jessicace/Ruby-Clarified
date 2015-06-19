@@ -1,0 +1,50 @@
+<section id="method-i-drop" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						drop(n)               &rarr; new_ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Drops first <code>n</code> elements from <code>ary</code> and returns the
+rest of the elements in an array.</p>
+
+<p>If a negative number is given, raises an ArgumentError.</p>
+
+<p>See also <a href="Array.html#method-i-take">#take</a></p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [<span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>, <span class="ruby-value">4</span>, <span class="ruby-value">5</span>, <span class="ruby-value">0</span>]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">drop</span>(<span class="ruby-value">3</span>)             <span class="ruby-comment">#=&gt; [4, 5, 0]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="drop-source">
+     			<pre>static VALUE
+rb_ary_drop(VALUE ary, VALUE n)
+{
+    VALUE result;
+    long pos = NUM2LONG(n);
+    if (pos &lt; 0) {
+        rb_raise(rb_eArgError, &quot;attempt to drop negative size&quot;);
+    }
+
+    result = rb_ary_subseq(ary, pos, RARRAY_LEN(ary));
+    if (result == Qnil) result = rb_ary_new();
+    return result;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

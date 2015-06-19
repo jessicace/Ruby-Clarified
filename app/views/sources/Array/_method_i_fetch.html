@@ -1,0 +1,86 @@
+<section id="method-i-fetch" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						fetch(index)                    &rarr; obj
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						fetch(index, default)           &rarr; obj
+          </span>
+
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						fetch(index) { |index| block }  &rarr; obj
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Tries to return the element at position <code>index</code>, but throws an
+IndexError exception if the referenced <code>index</code> lies outside of
+the array bounds.  This error can be prevented by supplying a second
+argument, which will act as a <code>default</code> value.</p>
+
+<p>Alternatively, if a block is given it will only be executed when an invalid
+<code>index</code> is referenced.  Negative values of <code>index</code>
+count from the end of the array.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-value">11</span>, <span class="ruby-value">22</span>, <span class="ruby-value">33</span>, <span class="ruby-value">44</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">1</span>)               <span class="ruby-comment">#=&gt; 22</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">-1</span>)              <span class="ruby-comment">#=&gt; 44</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">4</span>, <span class="ruby-string">&#39;cat&#39;</span>)        <span class="ruby-comment">#=&gt; &quot;cat&quot;</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">100</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{i} is out of bounds&quot;</span> }
+                         <span class="ruby-comment">#=&gt; &quot;100 is out of bounds&quot;</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="fetch-source">
+     			<pre>static VALUE
+rb_ary_fetch(int argc, VALUE *argv, VALUE ary)
+{
+    VALUE pos, ifnone;
+    long block_given;
+    long idx;
+
+    rb_scan_args(argc, argv, &quot;11&quot;, &amp;pos, &amp;ifnone);
+    block_given = rb_block_given_p();
+    if (block_given &amp;&amp; argc == 2) {
+        rb_warn(&quot;block supersedes default value argument&quot;);
+    }
+    idx = NUM2LONG(pos);
+
+    if (idx &lt; 0) {
+        idx +=  RARRAY_LEN(ary);
+    }
+    if (idx &lt; 0 || RARRAY_LEN(ary) &lt;= idx) {
+        if (block_given) return rb_yield(pos);
+        if (argc == 1) {
+            rb_raise(rb_eIndexError, &quot;index %ld outside of array bounds: %ld...%ld&quot;,
+                        idx - (idx &lt; 0 ? RARRAY_LEN(ary) : 0), -RARRAY_LEN(ary), RARRAY_LEN(ary));
+        }
+        return ifnone;
+    }
+    return RARRAY_AREF(ary, idx);
+}</pre>
+    		</div>
+      
+		</div>
+</section>

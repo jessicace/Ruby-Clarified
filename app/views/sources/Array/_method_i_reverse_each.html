@@ -1,0 +1,63 @@
+<section id="method-i-reverse_each" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						reverse_each { |item| block }  &rarr; ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						reverse_each                   &rarr; Enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Same as <a href="Array.html#method-i-each">#each</a>, but traverses
+<code>self</code> in reverse order.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">reverse_each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">print</span> <span class="ruby-identifier">x</span>, <span class="ruby-string">&quot; &quot;</span> }
+</pre>
+
+<p>produces:</p>
+
+<pre class="ruby"><span class="ruby-identifier">c</span> <span class="ruby-identifier">b</span> <span class="ruby-identifier">a</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="reverse_each-source">
+     			<pre>static VALUE
+rb_ary_reverse_each(VALUE ary)
+{
+    long len;
+
+    RETURN_SIZED_ENUMERATOR(ary, 0, 0, ary_enum_length);
+    len = RARRAY_LEN(ary);
+    while (len--) {
+        long nlen;
+        rb_yield(RARRAY_AREF(ary, len));
+        nlen = RARRAY_LEN(ary);
+        if (nlen &lt; len) {
+            len = nlen;
+        }
+    }
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

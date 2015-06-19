@@ -1,0 +1,89 @@
+<section id="method-i-2A" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						ary * int     &rarr; new_ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						ary * str     &rarr; new_string
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Repetition — With a String argument, equivalent to
+<code>ary.join(str)</code>.</p>
+
+<p>Otherwise, returns a new array built by concatenating the <code>int</code>
+copies of <code>self</code>.</p>
+
+<pre class="ruby">[ <span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span> ] <span class="ruby-operator">*</span> <span class="ruby-value">3</span>    <span class="ruby-comment">#=&gt; [ 1, 2, 3, 1, 2, 3, 1, 2, 3 ]</span>
+[ <span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span> ] <span class="ruby-operator">*</span> <span class="ruby-string">&quot;,&quot;</span>  <span class="ruby-comment">#=&gt; &quot;1,2,3&quot;</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="2A-source">
+     			<pre>static VALUE
+rb_ary_times(VALUE ary, VALUE times)
+{
+    VALUE ary2, tmp;
+    const VALUE *ptr;
+    long t, len;
+
+    tmp = rb_check_string_type(times);
+    if (!NIL_P(tmp)) {
+        return rb_ary_join(ary, tmp);
+    }
+
+    len = NUM2LONG(times);
+    if (len == 0) {
+        ary2 = ary_new(rb_obj_class(ary), 0);
+        goto out;
+    }
+    if (len &lt; 0) {
+        rb_raise(rb_eArgError, &quot;negative argument&quot;);
+    }
+    if (ARY_MAX_SIZE/len &lt; RARRAY_LEN(ary)) {
+        rb_raise(rb_eArgError, &quot;argument too big&quot;);
+    }
+    len *= RARRAY_LEN(ary);
+
+    ary2 = ary_new(rb_obj_class(ary), len);
+    ARY_SET_LEN(ary2, len);
+
+    ptr = RARRAY_CONST_PTR(ary);
+    t = RARRAY_LEN(ary);
+    if (0 &lt; t) {
+        ary_memcpy(ary2, 0, t, ptr);
+        while (t &lt;= len/2) {
+            ary_memcpy(ary2, t, t, RARRAY_CONST_PTR(ary2));
+            t *= 2;
+        }
+        if (t &lt; len) {
+            ary_memcpy(ary2, t, len-t, RARRAY_CONST_PTR(ary2));
+        }
+    }
+  out:
+    OBJ_INFECT(ary2, ary);
+
+    return ary2;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

@@ -1,0 +1,64 @@
+<section id="method-i-minmax_by" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						minmax_by { |obj| block } &rarr; [min, max]
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						minmax_by                 &rarr; an_enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns a two element array containing the objects in <em>enum</em> that
+correspond to the minimum and maximum values respectively from the given
+block.</p>
+
+<p>If no block is given, an enumerator is returned instead.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = <span class="ruby-node">%w(albatross dog horse)</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">minmax_by</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">length</span> }   <span class="ruby-comment">#=&gt; [&quot;dog&quot;, &quot;albatross&quot;]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="minmax_by-source">
+     			<pre>static VALUE
+enum_minmax_by(VALUE obj)
+{
+    VALUE memo;
+    struct minmax_by_t *m = NEW_MEMO_FOR(struct minmax_by_t, memo);
+
+    RETURN_SIZED_ENUMERATOR(obj, 0, 0, enum_size);
+
+    m-&gt;min_bv = Qundef;
+    m-&gt;max_bv = Qundef;
+    m-&gt;min = Qnil;
+    m-&gt;max = Qnil;
+    m-&gt;last_bv = Qundef;
+    m-&gt;last = Qundef;
+    rb_block_call(obj, id_each, 0, 0, minmax_by_i, memo);
+    if (m-&gt;last_bv != Qundef)
+        minmax_by_i_update(m-&gt;last_bv, m-&gt;last_bv, m-&gt;last, m-&gt;last, m);
+    m = MEMO_FOR(struct minmax_by_t, memo);
+    return rb_assoc_new(m-&gt;min, m-&gt;max);
+}</pre>
+    		</div>
+      
+		</div>
+</section>

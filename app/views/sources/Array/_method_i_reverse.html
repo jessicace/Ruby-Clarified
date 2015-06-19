@@ -1,0 +1,47 @@
+<section id="method-i-reverse" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						reverse    &rarr; new_ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns a new array containing <code>self</code>&#39;s elements in reverse
+order.</p>
+
+<pre class="ruby">[ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span> ].<span class="ruby-identifier">reverse</span>   <span class="ruby-comment">#=&gt; [&quot;c&quot;, &quot;b&quot;, &quot;a&quot;]</span>
+[ <span class="ruby-value">1</span> ].<span class="ruby-identifier">reverse</span>               <span class="ruby-comment">#=&gt; [1]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="reverse-source">
+     			<pre>static VALUE
+rb_ary_reverse_m(VALUE ary)
+{
+    long len = RARRAY_LEN(ary);
+    VALUE dup = rb_ary_new2(len);
+
+    if (len &gt; 0) {
+        const VALUE *p1 = RARRAY_CONST_PTR(ary);
+        VALUE *p2 = (VALUE *)RARRAY_CONST_PTR(dup) + len - 1;
+        do *p2-- = *p1++; while (--len &gt; 0);
+    }
+    ARY_SET_LEN(dup, RARRAY_LEN(ary));
+    return dup;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

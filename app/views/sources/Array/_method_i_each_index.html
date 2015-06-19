@@ -1,0 +1,58 @@
+<section id="method-i-each_index" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						each_index { |index| block }  &rarr; ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						each_index                    &rarr; Enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Same as <a href="Array.html#method-i-each">#each</a>, but passes the
+<code>index</code> of the element instead of the element itself.</p>
+
+<p>An Enumerator is returned if no block is given.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">each_index</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">print</span> <span class="ruby-identifier">x</span>, <span class="ruby-string">&quot; -- &quot;</span> }
+</pre>
+
+<p>produces:</p>
+
+<pre>0 -- 1 -- 2 --</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="each_index-source">
+     			<pre>static VALUE
+rb_ary_each_index(VALUE ary)
+{
+    long i;
+    RETURN_SIZED_ENUMERATOR(ary, 0, 0, ary_enum_length);
+
+    for (i=0; i&lt;RARRAY_LEN(ary); i++) {
+        rb_yield(LONG2NUM(i));
+    }
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

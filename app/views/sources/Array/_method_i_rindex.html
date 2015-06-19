@@ -1,0 +1,101 @@
+<section id="method-i-rindex" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						rindex(obj)             &rarr;  int or nil
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						rindex { |item| block } &rarr;  int or nil
+          </span>
+
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						rindex                  &rarr;  Enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns the <em>index</em> of the last object in <code>self</code>
+<code>==</code> to <code>obj</code>.</p>
+
+<p>If a block is given instead of an argument, returns the <em>index</em> of
+the first object for which the block returns <code>true</code>, starting
+from the last object.</p>
+
+<p>Returns <code>nil</code> if no match is found.</p>
+
+<p>See also <a href="Array.html#method-i-index">#index</a>.</p>
+
+<p>If neither block nor argument is given, an Enumerator is returned instead.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">rindex</span>(<span class="ruby-string">&quot;b&quot;</span>)             <span class="ruby-comment">#=&gt; 3</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">rindex</span>(<span class="ruby-string">&quot;z&quot;</span>)             <span class="ruby-comment">#=&gt; nil</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">rindex</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;b&quot;</span> } <span class="ruby-comment">#=&gt; 3</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="rindex-source">
+     			<pre>static VALUE
+rb_ary_rindex(int argc, VALUE *argv, VALUE ary)
+{
+    const VALUE *ptr;
+    VALUE val;
+    long i = RARRAY_LEN(ary), len;
+
+    if (argc == 0) {
+        RETURN_ENUMERATOR(ary, 0, 0);
+        while (i--) {
+            if (RTEST(rb_yield(RARRAY_AREF(ary, i))))
+                return LONG2NUM(i);
+            if (i &gt; (len = RARRAY_LEN(ary))) {
+                i = len;
+            }
+        }
+        return Qnil;
+    }
+    rb_check_arity(argc, 0, 1);
+    val = argv[0];
+    if (rb_block_given_p())
+        rb_warn(&quot;given block not used&quot;);
+    ptr = RARRAY_CONST_PTR(ary);
+    while (i--) {
+        VALUE e = ptr[i];
+        switch (rb_equal_opt(e, val)) {
+          case Qundef:
+            if (!rb_equal(e, val)) break;
+          case Qtrue:
+            return LONG2NUM(i);
+          case Qfalse:
+            continue;
+        }
+        if (i &gt; (len = RARRAY_LEN(ary))) {
+            i = len;
+        }
+        ptr = RARRAY_CONST_PTR(ary);
+    }
+    return Qnil;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

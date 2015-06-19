@@ -1,0 +1,90 @@
+<section id="method-i-repeated_combination" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						repeated_combination(n) { |c| block } &rarr; ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						repeated_combination(n)               &rarr; Enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>When invoked with a block, yields all repeated combinations of length
+<code>n</code> of elements from the array and then returns the array
+itself.</p>
+
+<p>The implementation makes no guarantees about the order in which the
+repeated combinations are yielded.</p>
+
+<p>If no block is given, an Enumerator is returned instead.</p>
+
+<p>Examples:</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [<span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">repeated_combination</span>(<span class="ruby-value">1</span>).<span class="ruby-identifier">to_a</span>  <span class="ruby-comment">#=&gt; [[1], [2], [3]]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">repeated_combination</span>(<span class="ruby-value">2</span>).<span class="ruby-identifier">to_a</span>  <span class="ruby-comment">#=&gt; [[1,1],[1,2],[1,3],[2,2],[2,3],[3,3]]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">repeated_combination</span>(<span class="ruby-value">3</span>).<span class="ruby-identifier">to_a</span>  <span class="ruby-comment">#=&gt; [[1,1,1],[1,1,2],[1,1,3],[1,2,2],[1,2,3],</span>
+                                <span class="ruby-comment">#    [1,3,3],[2,2,2],[2,2,3],[2,3,3],[3,3,3]]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">repeated_combination</span>(<span class="ruby-value">4</span>).<span class="ruby-identifier">to_a</span>  <span class="ruby-comment">#=&gt; [[1,1,1,1],[1,1,1,2],[1,1,1,3],[1,1,2,2],[1,1,2,3],</span>
+                                <span class="ruby-comment">#    [1,1,3,3],[1,2,2,2],[1,2,2,3],[1,2,3,3],[1,3,3,3],</span>
+                                <span class="ruby-comment">#    [2,2,2,2],[2,2,2,3],[2,2,3,3],[2,3,3,3],[3,3,3,3]]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">repeated_combination</span>(<span class="ruby-value">0</span>).<span class="ruby-identifier">to_a</span>  <span class="ruby-comment">#=&gt; [[]] # one combination of length 0</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="repeated_combination-source">
+     			<pre>static VALUE
+rb_ary_repeated_combination(VALUE ary, VALUE num)
+{
+    long n, i, len;
+
+    n = NUM2LONG(num);                 /* Combination size from argument */
+    RETURN_SIZED_ENUMERATOR(ary, 1, &amp;num, rb_ary_repeated_combination_size);   /* Return enumerator if no block */
+    len = RARRAY_LEN(ary);
+    if (n &lt; 0) {
+        /* yield nothing */
+    }
+    else if (n == 0) {
+        rb_yield(rb_ary_new2(0));
+    }
+    else if (n == 1) {
+        for (i = 0; i &lt; len; i++) {
+            rb_yield(rb_ary_new3(1, RARRAY_AREF(ary, i)));
+        }
+    }
+    else if (len == 0) {
+        /* yield nothing */
+    }
+    else {
+        volatile VALUE t0;
+        long *p = ALLOCV_N(long, t0, n);
+        VALUE ary0 = ary_make_shared_copy(ary); /* private defensive copy of ary */
+        RBASIC_CLEAR_CLASS(ary0);
+
+        rcombinate0(len, n, p, n, ary0); /* compute and yield repeated combinations */
+        ALLOCV_END(t0);
+        RBASIC_SET_CLASS_RAW(ary0, rb_cArray);
+    }
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

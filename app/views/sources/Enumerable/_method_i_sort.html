@@ -1,0 +1,58 @@
+<section id="method-i-sort" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						sort                  &rarr; array
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						sort { |a, b| block } &rarr; array
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns an array containing the items in <em>enum</em> sorted, either
+according to their own <code>&lt;=&gt;</code> method, or by using the
+results of the supplied block.  It is equivalent to calling <a
+href="Array.html#method-i-sort">Array#sort</a>- it converts the enum to an
+array when calling <a href="Array.html#method-i-sort">Array#sort</a> (which
+in turn calls <a href="Array.html#method-i-sort-21">Array#sort!</a>).</p>
+
+<h3 id="method-i-sort-label-Example+of+enum-23sort+without+block">Example of enum#sort without block<span><a href="#method-i-sort-label-Example+of+enum-23sort+without+block">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<pre class="ruby"><span class="ruby-node">%w(rhea kea flea)</span>.<span class="ruby-identifier">sort</span>          
+<span class="ruby-comment"># =&gt; [&quot;flea&quot;, &quot;kea&quot;, &quot;rhea&quot;]</span>
+</pre>
+
+<h3 id="method-i-sort-label-Example+of+enum-23sort+with+block">Example of enum#sort with block<span><a href="#method-i-sort-label-Example+of+enum-23sort+with+block">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<pre class="ruby">(<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">10</span>).<span class="ruby-identifier">sort</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span><span class="ruby-operator">|</span> <span class="ruby-identifier">b</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">a</span> }
+<span class="ruby-comment"># =&gt; [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="sort-source">
+     			<pre>static VALUE
+enum_sort(VALUE obj)
+{
+    return rb_ary_sort(enum_to_a(0, 0, obj));
+}</pre>
+    		</div>
+      
+		</div>
+</section>

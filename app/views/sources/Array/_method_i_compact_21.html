@@ -1,0 +1,57 @@
+<section id="method-i-compact-21" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						compact!    &rarr; ary  or  nil
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Removes <code>nil</code> elements from the array.</p>
+
+<p>Returns <code>nil</code> if no changes were made, otherwise returns the
+array.</p>
+
+<pre class="ruby">[ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-keyword">nil</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-keyword">nil</span>, <span class="ruby-string">&quot;c&quot;</span> ].<span class="ruby-identifier">compact!</span> <span class="ruby-comment">#=&gt; [ &quot;a&quot;, &quot;b&quot;, &quot;c&quot; ]</span>
+[ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span> ].<span class="ruby-identifier">compact!</span>           <span class="ruby-comment">#=&gt; nil</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="compact-21-source">
+     			<pre>static VALUE
+rb_ary_compact_bang(VALUE ary)
+{
+    VALUE *p, *t, *end;
+    long n;
+
+    rb_ary_modify(ary);
+    p = t = (VALUE *)RARRAY_CONST_PTR(ary); /* WB: no new reference */
+    end = p + RARRAY_LEN(ary);
+
+    while (t &lt; end) {
+        if (NIL_P(*t)) t++;
+        else *p++ = *t++;
+    }
+    n = p - RARRAY_CONST_PTR(ary);
+    if (RARRAY_LEN(ary) == n) {
+        return Qnil;
+    }
+    ary_resize_smaller(ary, n);
+
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

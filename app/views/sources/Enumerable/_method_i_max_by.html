@@ -1,0 +1,128 @@
+<section id="method-i-max_by" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						max_by {|obj| block }      &rarr; obj
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						max_by                     &rarr; an_enumerator
+          </span>
+
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						max_by(n) {|obj| block }   &rarr; obj
+          </span>
+
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						max_by(n)                  &rarr; an_enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns the object in <em>enum</em> that gives the maximum value from the
+given block.</p>
+
+<p>If no block is given, an enumerator is returned instead.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = <span class="ruby-node">%w(albatross dog horse)</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">max_by</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">length</span> }   <span class="ruby-comment">#=&gt; &quot;albatross&quot;</span>
+</pre>
+
+<p>If the <code>n</code> argument is given, minimum <code>n</code> elements
+are returned as an array.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = <span class="ruby-node">%w[albatross dog horse]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">max_by</span>(<span class="ruby-value">2</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">length</span> } <span class="ruby-comment">#=&gt; [&quot;albatross&quot;, &quot;horse&quot;]</span>
+</pre>
+
+<p>enum.max_by(n) can be used to implement weighted random sampling. Following
+example implements and use Enumerable#wsample.</p>
+
+<pre class="ruby"><span class="ruby-keyword">module</span> <span class="ruby-constant">Enumerable</span>
+  <span class="ruby-comment"># weighted random sampling.</span>
+  <span class="ruby-comment">#</span>
+  <span class="ruby-comment"># Pavlos S. Efraimidis, Paul G. Spirakis</span>
+  <span class="ruby-comment"># Weighted random sampling with a reservoir</span>
+  <span class="ruby-comment"># Information Processing Letters</span>
+  <span class="ruby-comment"># Volume 97, Issue 5 (16 March 2006)</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier">wsample</span>(<span class="ruby-identifier">n</span>)
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">max_by</span>(<span class="ruby-identifier">n</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">rand</span> <span class="ruby-operator">**</span> (<span class="ruby-value">1.0</span><span class="ruby-operator">/</span><span class="ruby-keyword">yield</span>(<span class="ruby-identifier">v</span>)) }
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+<span class="ruby-identifier">e</span> = (<span class="ruby-value">-20</span><span class="ruby-operator">..</span><span class="ruby-value">20</span>).<span class="ruby-identifier">to_a</span><span class="ruby-operator">*</span><span class="ruby-value">10000</span>
+<span class="ruby-identifier">a</span> = <span class="ruby-identifier">e</span>.<span class="ruby-identifier">wsample</span>(<span class="ruby-value">20000</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
+  <span class="ruby-constant">Math</span>.<span class="ruby-identifier">exp</span>(<span class="ruby-operator">-</span>(<span class="ruby-identifier">x</span><span class="ruby-operator">/</span><span class="ruby-value">5.0</span>)<span class="ruby-operator">**</span><span class="ruby-value">2</span>) <span class="ruby-comment"># normal distribution</span>
+}
+<span class="ruby-comment"># a is 20000 samples from e.</span>
+<span class="ruby-identifier">p</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">length</span> <span class="ruby-comment">#=&gt; 20000</span>
+<span class="ruby-identifier">h</span> = <span class="ruby-identifier">a</span>.<span class="ruby-identifier">group_by</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span> }
+<span class="ruby-value">-10</span>.<span class="ruby-identifier">upto</span>(<span class="ruby-value">10</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;*&quot;</span> <span class="ruby-operator">*</span> (<span class="ruby-identifier">h</span>[<span class="ruby-identifier">x</span>].<span class="ruby-identifier">length</span><span class="ruby-operator">/</span><span class="ruby-value">30.0</span>).<span class="ruby-identifier">to_i</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">h</span>[<span class="ruby-identifier">x</span>] }
+<span class="ruby-comment">#=&gt; *</span>
+<span class="ruby-comment">#   ***</span>
+<span class="ruby-comment">#   ******</span>
+<span class="ruby-comment">#   ***********</span>
+<span class="ruby-comment">#   ******************</span>
+<span class="ruby-comment">#   *****************************</span>
+<span class="ruby-comment">#   *****************************************</span>
+<span class="ruby-comment">#   ****************************************************</span>
+<span class="ruby-comment">#   ***************************************************************</span>
+<span class="ruby-comment">#   ********************************************************************</span>
+<span class="ruby-comment">#   ***********************************************************************</span>
+<span class="ruby-comment">#   ***********************************************************************</span>
+<span class="ruby-comment">#   **************************************************************</span>
+<span class="ruby-comment">#   ****************************************************</span>
+<span class="ruby-comment">#   ***************************************</span>
+<span class="ruby-comment">#   ***************************</span>
+<span class="ruby-comment">#   ******************</span>
+<span class="ruby-comment">#   ***********</span>
+<span class="ruby-comment">#   *******</span>
+<span class="ruby-comment">#   ***</span>
+<span class="ruby-comment">#   *</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="max_by-source">
+     			<pre>static VALUE
+enum_max_by(int argc, VALUE *argv, VALUE obj)
+{
+    struct MEMO *memo;
+    VALUE num;
+
+    rb_scan_args(argc, argv, &quot;01&quot;, &amp;num);
+
+    RETURN_SIZED_ENUMERATOR(obj, argc, argv, enum_size);
+
+    if (!NIL_P(num))
+        return nmin_run(obj, num, 1, 1);
+
+    memo = MEMO_NEW(Qundef, Qnil, 0);
+    rb_block_call(obj, id_each, 0, 0, max_by_i, (VALUE)memo);
+    return memo-&gt;v2;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

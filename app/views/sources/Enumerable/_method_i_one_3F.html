@@ -1,0 +1,49 @@
+<section id="method-i-one-3F" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						one? [{ |obj| block }]   &rarr; true or false
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Passes each element of the collection to the given block. The method
+returns <code>true</code> if the block returns <code>true</code> exactly
+once. If the block is not given, <code>one?</code> will return
+<code>true</code> only if exactly one of the collection members is true.</p>
+
+<pre class="ruby"><span class="ruby-node">%w{ant bear cat}</span>.<span class="ruby-identifier">one?</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">word</span><span class="ruby-operator">|</span> <span class="ruby-identifier">word</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">==</span> <span class="ruby-value">4</span> }  <span class="ruby-comment">#=&gt; true</span>
+<span class="ruby-node">%w{ant bear cat}</span>.<span class="ruby-identifier">one?</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">word</span><span class="ruby-operator">|</span> <span class="ruby-identifier">word</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">4</span> }   <span class="ruby-comment">#=&gt; false</span>
+<span class="ruby-node">%w{ant bear cat}</span>.<span class="ruby-identifier">one?</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">word</span><span class="ruby-operator">|</span> <span class="ruby-identifier">word</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">4</span> }   <span class="ruby-comment">#=&gt; false</span>
+[ <span class="ruby-keyword">nil</span>, <span class="ruby-keyword">true</span>, <span class="ruby-value">99</span> ].<span class="ruby-identifier">one?</span>                             <span class="ruby-comment">#=&gt; false</span>
+[ <span class="ruby-keyword">nil</span>, <span class="ruby-keyword">true</span>, <span class="ruby-keyword">false</span> ].<span class="ruby-identifier">one?</span>                          <span class="ruby-comment">#=&gt; true</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="one-3F-source">
+     			<pre>static VALUE
+enum_one(VALUE obj)
+{
+    struct MEMO *memo = MEMO_NEW(Qundef, 0, 0);
+    VALUE result;
+
+    rb_block_call(obj, id_each, 0, 0, ENUMFUNC(one), (VALUE)memo);
+    result = memo-&gt;v1;
+    if (result == Qundef) return Qfalse;
+    return result;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

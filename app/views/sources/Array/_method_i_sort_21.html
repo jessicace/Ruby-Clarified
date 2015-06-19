@@ -1,0 +1,126 @@
+<section id="method-i-sort-21" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						sort!                   &rarr; array
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						sort! { |a, b| block }  &rarr; array
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Sorts <code>self</code> in place.</p>
+
+<p>Comparisons for the sort will be done using the <code>&lt;=&gt;</code>
+operator, or using an optional code block.</p>
+
+<p>This method generates two new objects during every comparison.</p>
+
+<p>The block must implement a comparison between <code>a</code> and
+<code>b</code>.</p>
+<ul><li>
+<p>If a follows b, it returns <code>-1</code>.</p>
+</li><li>
+<p>If a and b are equivalent, it returns <code>0</code>.</p>
+</li><li>
+<p>If b follows a, it returns +<code>1</code>.</p>
+</li></ul>
+
+<h3 id="method-i-sort-21-label-Examples">Examples<span><a href="#method-i-sort-21-label-Examples">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<h4 id="method-i-sort-21-label-Default+sort-21">Default sort!<span><a href="#method-i-sort-21-label-Default+sort-21">&para;</a> <a href="#top">&uarr;</a></span></h4>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;d&quot;</span>, <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;e&quot;</span>, <span class="ruby-string">&quot;c&quot;</span>, <span class="ruby-string">&quot;b&quot;</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort!</span>
+<span class="ruby-comment">#=&gt; [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;]</span>
+</pre>
+
+<h4 id="method-i-sort-21-label-sort-21+with+optional+code+block++++++++++">sort! with optional code block          <span><a href="#method-i-sort-21-label-sort-21+with+optional+code+block++++++++++">&para;</a> <a href="#top">&uarr;</a></span></h4>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;d&quot;</span>, <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;e&quot;</span>, <span class="ruby-string">&quot;c&quot;</span>, <span class="ruby-string">&quot;b&quot;</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort!</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">x</span>,<span class="ruby-identifier">y</span><span class="ruby-operator">|</span> <span class="ruby-identifier">y</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">x</span> }  
+<span class="ruby-comment">#=&gt; [&quot;e&quot;, &quot;d&quot;, &quot;c&quot;, &quot;b&quot;, &quot;a&quot;]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="sort-21-source">
+     			<pre>VALUE
+rb_ary_sort_bang(VALUE ary)
+{
+    rb_ary_modify(ary);
+    assert(!ARY_SHARED_P(ary));
+    if (RARRAY_LEN(ary) &gt; 1) {
+        VALUE tmp = ary_make_substitution(ary); /* only array refers tmp */
+        struct ary_sort_data data;
+        long len = RARRAY_LEN(ary);
+
+        RBASIC_CLEAR_CLASS(tmp);
+        data.ary = tmp;
+        data.opt_methods = 0;
+        data.opt_inited = 0;
+        RARRAY_PTR_USE(tmp, ptr, {
+            ruby_qsort(ptr, len, sizeof(VALUE),
+                       rb_block_given_p()?sort_1:sort_2, &amp;data);
+        }); /* WB: no new reference */
+        rb_ary_modify(ary);
+        if (ARY_EMBED_P(tmp)) {
+            if (ARY_SHARED_P(ary)) { /* ary might be destructively operated in the given block */
+                rb_ary_unshare(ary);
+            }
+            FL_SET_EMBED(ary);
+            ary_memcpy(ary, 0, ARY_EMBED_LEN(tmp), ARY_EMBED_PTR(tmp));
+            ARY_SET_LEN(ary, ARY_EMBED_LEN(tmp));
+        }
+        else {
+            if (!ARY_EMBED_P(ary) &amp;&amp; ARY_HEAP_PTR(ary) == ARY_HEAP_PTR(tmp)) {
+                FL_UNSET_SHARED(ary);
+                ARY_SET_CAPA(ary, RARRAY_LEN(tmp));
+            }
+            else {
+                assert(!ARY_SHARED_P(tmp));
+                if (ARY_EMBED_P(ary)) {
+                    FL_UNSET_EMBED(ary);
+                }
+                else if (ARY_SHARED_P(ary)) {
+                    /* ary might be destructively operated in the given block */
+                    rb_ary_unshare(ary);
+                }
+                else {
+                    ruby_sized_xfree((void *)ARY_HEAP_PTR(ary), ARY_HEAP_SIZE(ary));
+                }
+                ARY_SET_PTR(ary, RARRAY_CONST_PTR(tmp));
+                ARY_SET_HEAP_LEN(ary, len);
+                ARY_SET_CAPA(ary, RARRAY_LEN(tmp));
+            }
+            /* tmp was lost ownership for the ptr */
+            FL_UNSET(tmp, FL_FREEZE);
+            FL_SET_EMBED(tmp);
+            ARY_SET_EMBED_LEN(tmp, 0);
+            FL_SET(tmp, FL_FREEZE);
+        }
+        /* tmp will be GC&#39;ed. */
+        RBASIC_SET_CLASS_RAW(tmp, rb_cArray); /* rb_cArray must be marked */
+    }
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

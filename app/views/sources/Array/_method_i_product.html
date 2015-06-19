@@ -1,0 +1,138 @@
+<section id="method-i-product" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						product(other_ary, ...)                &rarr; new_ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						product(other_ary, ...) { |p| block }  &rarr; ary
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns an array of all combinations of elements from all arrays.</p>
+
+<p>The length of the returned array is the product of the length of
+<code>self</code> and the argument arrays.</p>
+
+<p>If given a block, <a href="Array.html#method-i-product">product</a> will
+yield all combinations and return <code>self</code> instead.</p>
+
+<pre class="ruby">[<span class="ruby-value">1</span>,<span class="ruby-value">2</span>,<span class="ruby-value">3</span>].<span class="ruby-identifier">product</span>([<span class="ruby-value">4</span>,<span class="ruby-value">5</span>])     <span class="ruby-comment">#=&gt; [[1,4],[1,5],[2,4],[2,5],[3,4],[3,5]]</span>
+[<span class="ruby-value">1</span>,<span class="ruby-value">2</span>].<span class="ruby-identifier">product</span>([<span class="ruby-value">1</span>,<span class="ruby-value">2</span>])       <span class="ruby-comment">#=&gt; [[1,1],[1,2],[2,1],[2,2]]</span>
+[<span class="ruby-value">1</span>,<span class="ruby-value">2</span>].<span class="ruby-identifier">product</span>([<span class="ruby-value">3</span>,<span class="ruby-value">4</span>],[<span class="ruby-value">5</span>,<span class="ruby-value">6</span>]) <span class="ruby-comment">#=&gt; [[1,3,5],[1,3,6],[1,4,5],[1,4,6],</span>
+                           <span class="ruby-comment">#     [2,3,5],[2,3,6],[2,4,5],[2,4,6]]</span>
+[<span class="ruby-value">1</span>,<span class="ruby-value">2</span>].<span class="ruby-identifier">product</span>()            <span class="ruby-comment">#=&gt; [[1],[2]]</span>
+[<span class="ruby-value">1</span>,<span class="ruby-value">2</span>].<span class="ruby-identifier">product</span>([])          <span class="ruby-comment">#=&gt; []</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="product-source">
+     			<pre>static VALUE
+rb_ary_product(int argc, VALUE *argv, VALUE ary)
+{
+    int n = argc+1;    /* How many arrays we&#39;re operating on */
+    volatile VALUE t0 = tmpary(n);
+    volatile VALUE t1 = tmpbuf(n, sizeof(int));
+    VALUE *arrays = RARRAY_PTR(t0); /* The arrays we&#39;re computing the product of */
+    int *counters = (int*)RSTRING_PTR(t1); /* The current position in each one */
+    VALUE result = Qnil;      /* The array we&#39;ll be returning, when no block given */
+    long i,j;
+    long resultlen = 1;
+
+    RBASIC_CLEAR_CLASS(t0);
+    RBASIC_CLEAR_CLASS(t1);
+
+    /* initialize the arrays of arrays */
+    ARY_SET_LEN(t0, n);
+    arrays[0] = ary;
+    for (i = 1; i &lt; n; i++) arrays[i] = Qnil;
+    for (i = 1; i &lt; n; i++) arrays[i] = to_ary(argv[i-1]);
+
+    /* initialize the counters for the arrays */
+    for (i = 0; i &lt; n; i++) counters[i] = 0;
+
+    /* Otherwise, allocate and fill in an array of results */
+    if (rb_block_given_p()) {
+        /* Make defensive copies of arrays; exit if any is empty */
+        for (i = 0; i &lt; n; i++) {
+            if (RARRAY_LEN(arrays[i]) == 0) goto done;
+            arrays[i] = ary_make_shared_copy(arrays[i]);
+        }
+    }
+    else {
+        /* Compute the length of the result array; return [] if any is empty */
+        for (i = 0; i &lt; n; i++) {
+            long k = RARRAY_LEN(arrays[i]);
+            if (k == 0) {
+                result = rb_ary_new2(0);
+                goto done;
+            }
+            if (MUL_OVERFLOW_LONG_P(resultlen, k))
+                rb_raise(rb_eRangeError, &quot;too big to product&quot;);
+            resultlen *= k;
+        }
+        result = rb_ary_new2(resultlen);
+    }
+    for (;;) {
+        int m;
+        /* fill in one subarray */
+        VALUE subarray = rb_ary_new2(n);
+        for (j = 0; j &lt; n; j++) {
+            rb_ary_push(subarray, rb_ary_entry(arrays[j], counters[j]));
+        }
+
+        /* put it on the result array */
+        if (NIL_P(result)) {
+            FL_SET(t0, FL_USER5);
+            rb_yield(subarray);
+            if (! FL_TEST(t0, FL_USER5)) {
+                rb_raise(rb_eRuntimeError, &quot;product reentered&quot;);
+            }
+            else {
+                FL_UNSET(t0, FL_USER5);
+            }
+        }
+        else {
+            rb_ary_push(result, subarray);
+        }
+
+        /*
+         * Increment the last counter.  If it overflows, reset to 0
+         * and increment the one before it.
+         */
+        m = n-1;
+        counters[m]++;
+        while (counters[m] == RARRAY_LEN(arrays[m])) {
+            counters[m] = 0;
+            /* If the first counter overflows, we are done */
+            if (--m &lt; 0) goto done;
+            counters[m]++;
+        }
+    }
+done:
+    tmpary_discard(t0);
+    tmpbuf_discard(t1);
+
+    return NIL_P(result) ? ary : result;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

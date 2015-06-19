@@ -1,0 +1,43 @@
+<section id="method-i-push" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						push(obj, ... )   &rarr; ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Append — Pushes the given object(s) on to the end of this array. This
+expression returns the array itself, so several appends may be chained
+together. See also <a href="Array.html#method-i-pop">#pop</a> for the
+opposite effect.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">push</span>(<span class="ruby-string">&quot;d&quot;</span>, <span class="ruby-string">&quot;e&quot;</span>, <span class="ruby-string">&quot;f&quot;</span>)
+        <span class="ruby-comment">#=&gt; [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;, &quot;f&quot;]</span>
+[<span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>,].<span class="ruby-identifier">push</span>(<span class="ruby-value">4</span>).<span class="ruby-identifier">push</span>(<span class="ruby-value">5</span>)
+        <span class="ruby-comment">#=&gt; [1, 2, 3, 4, 5]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="push-source">
+     			<pre>static VALUE
+rb_ary_push_m(int argc, VALUE *argv, VALUE ary)
+{
+    return rb_ary_cat(ary, argv, argc);
+}</pre>
+    		</div>
+      
+		</div>
+</section>

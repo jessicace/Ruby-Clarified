@@ -1,0 +1,58 @@
+<section id="method-i-reject" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						reject { |obj| block } &rarr; array
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						reject                 &rarr; an_enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns an array for all elements of <code>enum</code> for which the given
+<code>block</code> returns false.</p>
+
+<p>If no block is given, an Enumerator is returned instead.</p>
+
+<pre class="ruby">(<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">10</span>).<span class="ruby-identifier">reject</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span>  <span class="ruby-identifier">i</span> <span class="ruby-operator">%</span> <span class="ruby-value">3</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span> }   <span class="ruby-comment">#=&gt; [1, 2, 4, 5, 7, 8, 10]</span>
+
+[<span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>, <span class="ruby-value">4</span>, <span class="ruby-value">5</span>].<span class="ruby-identifier">reject</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">num</span><span class="ruby-operator">|</span> <span class="ruby-identifier">num</span>.<span class="ruby-identifier">even?</span> } <span class="ruby-comment">#=&gt; [1, 3, 5]</span>
+</pre>
+
+<p>See also <a href="Enumerable.html#method-i-find_all">#find_all</a>.</p>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="reject-source">
+     			<pre>static VALUE
+enum_reject(VALUE obj)
+{
+    VALUE ary;
+
+    RETURN_SIZED_ENUMERATOR(obj, 0, 0, enum_size);
+
+    ary = rb_ary_new();
+    rb_block_call(obj, id_each, 0, 0, reject_i, ary);
+
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

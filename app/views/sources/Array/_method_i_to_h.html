@@ -1,0 +1,52 @@
+<section id="method-i-to_h" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						to_h     &rarr; hash
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns the result of interpreting <em>ary</em> as an array of <code>[key,
+value]</code> pairs.</p>
+
+<pre class="ruby">[[:<span class="ruby-identifier">foo</span>, :<span class="ruby-identifier">bar</span>], [<span class="ruby-value">1</span>, <span class="ruby-value">2</span>]].<span class="ruby-identifier">to_h</span>
+  <span class="ruby-comment"># =&gt; {:foo =&gt; :bar, 1 =&gt; 2}</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="to_h-source">
+     			<pre>static VALUE
+rb_ary_to_h(VALUE ary)
+{
+    long i;
+    VALUE hash = rb_hash_new();
+    for (i=0; i&lt;RARRAY_LEN(ary); i++) {
+        VALUE key_value_pair = rb_check_array_type(rb_ary_elt(ary, i));
+        if (NIL_P(key_value_pair)) {
+            rb_raise(rb_eTypeError, &quot;wrong element type %s at %ld (expected array)&quot;,
+                rb_builtin_class_name(rb_ary_elt(ary, i)), i);
+        }
+        if (RARRAY_LEN(key_value_pair) != 2) {
+            rb_raise(rb_eArgError, &quot;wrong array length at %ld (expected 2, was %ld)&quot;,
+                i, RARRAY_LEN(key_value_pair));
+        }
+        rb_hash_aset(hash, RARRAY_AREF(key_value_pair, 0), RARRAY_AREF(key_value_pair, 1));
+    }
+    return hash;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

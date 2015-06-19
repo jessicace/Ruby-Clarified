@@ -1,0 +1,41 @@
+<section id="method-i-to_h" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						to_h(*args)  &rarr; hash
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns the result of interpreting <em>enum</em> as a list of <code>[key,
+value]</code> pairs.</p>
+
+<pre class="ruby"><span class="ruby-operator">%</span>[<span class="ruby-identifier">hello</span> <span class="ruby-identifier">world</span>].<span class="ruby-identifier">each_with_index</span>.<span class="ruby-identifier">to_h</span>
+  <span class="ruby-comment"># =&gt; {:hello =&gt; 0, :world =&gt; 1}</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="to_h-source">
+     			<pre>static VALUE
+enum_to_h(int argc, VALUE *argv, VALUE obj)
+{
+    VALUE hash = rb_hash_new();
+    rb_block_call(obj, id_each, argc, argv, enum_to_h_i, hash);
+    OBJ_INFECT(hash, obj);
+    return hash;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

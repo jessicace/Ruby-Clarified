@@ -1,0 +1,80 @@
+<section id="method-i-shuffle-21" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						shuffle!              &rarr; ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						shuffle!(random: rng) &rarr; ary
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Shuffles elements in <code>self</code> in place.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span> ]           <span class="ruby-comment">#=&gt; [1, 2, 3]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">shuffle!</span>                <span class="ruby-comment">#=&gt; [2, 3, 1]</span>
+<span class="ruby-identifier">a</span>                         <span class="ruby-comment">#=&gt; [2, 3, 1]</span>
+</pre>
+
+<p>The optional <code>rng</code> argument will be used as the random number
+generator.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span>.<span class="ruby-identifier">shuffle!</span>(<span class="ruby-identifier">random</span><span class="ruby-operator">:</span> <span class="ruby-constant">Random</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">1</span>))  <span class="ruby-comment">#=&gt; [1, 3, 2]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="shuffle-21-source">
+     			<pre>static VALUE
+rb_ary_shuffle_bang(int argc, VALUE *argv, VALUE ary)
+{
+    VALUE opts, randgen = rb_cRandom;
+    long i, len;
+
+    if (OPTHASH_GIVEN_P(opts)) {
+        VALUE rnd;
+        ID keyword_ids[1];
+
+        keyword_ids[0] = id_random;
+        rb_get_kwargs(opts, keyword_ids, 0, 1, &amp;rnd);
+        if (rnd != Qundef) {
+            randgen = rnd;
+        }
+    }
+    rb_check_arity(argc, 0, 0);
+    rb_ary_modify(ary);
+    i = len = RARRAY_LEN(ary);
+    RARRAY_PTR_USE(ary, ptr, {
+        while (i) {
+            long j = RAND_UPTO(i);
+            VALUE tmp;
+            if (len != RARRAY_LEN(ary) || ptr != RARRAY_CONST_PTR(ary)) {
+                rb_raise(rb_eRuntimeError, &quot;modified during shuffle&quot;);
+            }
+            tmp = ptr[--i];
+            ptr[i] = ptr[j];
+            ptr[j] = tmp;
+        }
+    }); /* WB: no new reference */
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

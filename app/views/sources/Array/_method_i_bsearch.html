@@ -1,0 +1,91 @@
+<section id="method-i-bsearch" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						bsearch {|x| block }  &rarr; elem
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>By using binary search, finds a value from this array which meets the given
+condition in O(log n) where n is the size of the array.</p>
+
+<p>You can use this method in two use cases: a find-minimum mode and a
+find-any mode.  In either case, the elements of the array must be monotone
+(or sorted) with respect to the block.</p>
+
+<p>In find-minimum mode (this is a good choice for typical use case), the
+block must return true or false, and there must be an index i (0 &lt;= i
+&lt;= ary.size) so that:</p>
+<ul><li>
+<p>the block returns false for any element whose index is less than i, and</p>
+</li><li>
+<p>the block returns true for any element whose index is greater than or equal
+to i.</p>
+</li></ul>
+
+<p>This method returns the i-th element.  If i is equal to ary.size, it
+returns nil.</p>
+
+<pre class="ruby"><span class="ruby-identifier">ary</span> = [<span class="ruby-value">0</span>, <span class="ruby-value">4</span>, <span class="ruby-value">7</span>, <span class="ruby-value">10</span>, <span class="ruby-value">12</span>]
+<span class="ruby-identifier">ary</span>.<span class="ruby-identifier">bsearch</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span> <span class="ruby-operator">&gt;=</span>   <span class="ruby-value">4</span> } <span class="ruby-comment">#=&gt; 4</span>
+<span class="ruby-identifier">ary</span>.<span class="ruby-identifier">bsearch</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span> <span class="ruby-operator">&gt;=</span>   <span class="ruby-value">6</span> } <span class="ruby-comment">#=&gt; 7</span>
+<span class="ruby-identifier">ary</span>.<span class="ruby-identifier">bsearch</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span> <span class="ruby-operator">&gt;=</span>  <span class="ruby-value">-1</span> } <span class="ruby-comment">#=&gt; 0</span>
+<span class="ruby-identifier">ary</span>.<span class="ruby-identifier">bsearch</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">100</span> } <span class="ruby-comment">#=&gt; nil</span>
+</pre>
+
+<p>In find-any mode (this behaves like libc&#39;s bsearch(3)), the block must
+return a number, and there must be two indices i and j (0 &lt;= i &lt;= j
+&lt;= ary.size) so that:</p>
+<ul><li>
+<p>the block returns a positive number for <a href="k">ary</a> if 0 &lt;= k
+&lt; i,</p>
+</li><li>
+<p>the block returns zero for <a href="k">ary</a> if i &lt;= k &lt; j, and</p>
+</li><li>
+<p>the block returns a negative number for <a href="k">ary</a> if j &lt;= k
+&lt; ary.size.</p>
+</li></ul>
+
+<p>Under this condition, this method returns any element whose index is within
+i…j.  If i is equal to j (i.e., there is no element that satisfies the
+block), this method returns nil.</p>
+
+<pre class="ruby"><span class="ruby-identifier">ary</span> = [<span class="ruby-value">0</span>, <span class="ruby-value">4</span>, <span class="ruby-value">7</span>, <span class="ruby-value">10</span>, <span class="ruby-value">12</span>]
+<span class="ruby-comment"># try to find v such that 4 &lt;= v &lt; 8</span>
+<span class="ruby-identifier">ary</span>.<span class="ruby-identifier">bsearch</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-value">1</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">x</span> <span class="ruby-operator">/</span> <span class="ruby-value">4</span> } <span class="ruby-comment">#=&gt; 4 or 7</span>
+<span class="ruby-comment"># try to find v such that 8 &lt;= v &lt; 10</span>
+<span class="ruby-identifier">ary</span>.<span class="ruby-identifier">bsearch</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-value">4</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">x</span> <span class="ruby-operator">/</span> <span class="ruby-value">2</span> } <span class="ruby-comment">#=&gt; nil</span>
+</pre>
+
+<p>You must not mix the two modes at a time; the block must always return
+either true/false, or always return a number.  It is undefined which value
+is actually picked up at each iteration.</p>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="bsearch-source">
+     			<pre>static VALUE
+rb_ary_bsearch(VALUE ary)
+{
+    VALUE index_result = rb_ary_bsearch_index(ary);
+
+    if (FIXNUM_P(index_result)) {
+        return rb_ary_entry(ary, FIX2LONG(index_result));
+    }
+    return index_result;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

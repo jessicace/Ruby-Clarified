@@ -1,0 +1,69 @@
+<section id="method-i-3C-3D-3E" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						ary &lt;=&gt; other_ary   &rarr;  -1, 0, +1 or nil
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Comparison — Returns an integer (<code>-1</code>, <code>0</code>, or
+<code>+1</code>) if this array is less than, equal to, or greater than
+<code>other_ary</code>.</p>
+
+<p>Each object in each array is compared (using the &lt;=&gt; operator).</p>
+
+<p>Arrays are compared in an “element-wise” manner; the first element of
+<code>ary</code> is compared with the first one of <code>other_ary</code>
+using the &lt;=&gt; operator, then each of the second elements, etc… As
+soon as the result of any such comparison is non zero (i.e. the two
+corresponding elements are not equal), that result is returned for the
+whole array comparison.</p>
+
+<p>If all the elements are equal, then the result is based on a comparison of
+the array lengths. Thus, two arrays are “equal” according to
+Array#&lt;=&gt; if, and only if, they have the same length and the value of
+each element is equal to the value of the corresponding element in the
+other array.</p>
+
+<p><code>nil</code> is returned if the <code>other_ary</code> is not an array
+or if the comparison of two elements returned <code>nil</code>.</p>
+
+<pre class="ruby">[ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;c&quot;</span> ]    <span class="ruby-operator">&lt;=&gt;</span> [ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span> ]   <span class="ruby-comment">#=&gt; -1</span>
+[ <span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>, <span class="ruby-value">4</span>, <span class="ruby-value">5</span>, <span class="ruby-value">6</span> ] <span class="ruby-operator">&lt;=&gt;</span> [ <span class="ruby-value">1</span>, <span class="ruby-value">2</span> ]            <span class="ruby-comment">#=&gt; +1</span>
+[ <span class="ruby-value">1</span>, <span class="ruby-value">2</span> ]             <span class="ruby-operator">&lt;=&gt;</span> [ <span class="ruby-value">1</span>, :<span class="ruby-identifier">two</span> ]         <span class="ruby-comment">#=&gt; nil</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="3C-3D-3E-source">
+     			<pre>VALUE
+rb_ary_cmp(VALUE ary1, VALUE ary2)
+{
+    long len;
+    VALUE v;
+
+    ary2 = rb_check_array_type(ary2);
+    if (NIL_P(ary2)) return Qnil;
+    if (ary1 == ary2) return INT2FIX(0);
+    v = rb_exec_recursive_paired(recursive_cmp, ary1, ary2, ary2);
+    if (v != Qundef) return v;
+    len = RARRAY_LEN(ary1) - RARRAY_LEN(ary2);
+    if (len == 0) return INT2FIX(0);
+    if (len &gt; 0) return INT2FIX(1);
+    return INT2FIX(-1);
+}</pre>
+    		</div>
+      
+		</div>
+</section>

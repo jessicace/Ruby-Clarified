@@ -1,0 +1,81 @@
+<section id="method-i-delete" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						delete(obj)            &rarr; item or nil
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						delete(obj) { block }  &rarr; item or result of block
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Deletes all items from <code>self</code> that are equal to
+<code>obj</code>.</p>
+
+<p>Returns the last deleted item, or <code>nil</code> if no matching item is
+found.</p>
+
+<p>If the optional code block is given, the result of the block is returned if
+the item is not found.  (To remove <code>nil</code> elements and get an
+informative return value, use <a
+href="Array.html#method-i-compact-21">#compact!</a>)</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-string">&quot;b&quot;</span>)                   <span class="ruby-comment">#=&gt; &quot;b&quot;</span>
+<span class="ruby-identifier">a</span>                               <span class="ruby-comment">#=&gt; [&quot;a&quot;, &quot;c&quot;]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-string">&quot;z&quot;</span>)                   <span class="ruby-comment">#=&gt; nil</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-string">&quot;z&quot;</span>) { <span class="ruby-string">&quot;not found&quot;</span> }   <span class="ruby-comment">#=&gt; &quot;not found&quot;</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="delete-source">
+     			<pre>VALUE
+rb_ary_delete(VALUE ary, VALUE item)
+{
+    VALUE v = item;
+    long i1, i2;
+
+    for (i1 = i2 = 0; i1 &lt; RARRAY_LEN(ary); i1++) {
+        VALUE e = RARRAY_AREF(ary, i1);
+
+        if (rb_equal(e, item)) {
+            v = e;
+            continue;
+        }
+        if (i1 != i2) {
+            rb_ary_store(ary, i2, e);
+        }
+        i2++;
+    }
+    if (RARRAY_LEN(ary) == i2) {
+        if (rb_block_given_p()) {
+            return rb_yield(item);
+        }
+        return Qnil;
+    }
+
+    ary_resize_smaller(ary, i2);
+
+    return v;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

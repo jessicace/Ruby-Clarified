@@ -1,0 +1,103 @@
+<section id="method-i-5B-5D-3D" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						ary[index]         = obj                      &rarr;  obj
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						ary[start, length] = obj or other_ary or nil  &rarr;  obj or other_ary or nil
+          </span>
+
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						ary[range]         = obj or other_ary or nil  &rarr;  obj or other_ary or nil
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Element Assignment — Sets the element at <code>index</code>, or replaces a
+subarray from the <code>start</code> index for <code>length</code>
+elements, or replaces a subarray specified by the <code>range</code> of
+indices.</p>
+
+<p>If indices are greater than the current capacity of the array, the array
+grows automatically.  Elements are inserted into the array at
+<code>start</code> if <code>length</code> is zero.</p>
+
+<p>Negative indices will count backward from the end of the array.  For
+<code>start</code> and <code>range</code> cases the starting index is just
+before an element.</p>
+
+<p>An IndexError is raised if a negative index points past the beginning of
+the array.</p>
+
+<p>See also <a href="Array.html#method-i-push">#push</a>, and <a
+href="Array.html#method-i-unshift">#unshift</a>.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>
+<span class="ruby-identifier">a</span>[<span class="ruby-value">4</span>] = <span class="ruby-string">&quot;4&quot;</span>;                 <span class="ruby-comment">#=&gt; [nil, nil, nil, nil, &quot;4&quot;]</span>
+<span class="ruby-identifier">a</span>[<span class="ruby-value">0</span>, <span class="ruby-value">3</span>] = [ <span class="ruby-string">&#39;a&#39;</span>, <span class="ruby-string">&#39;b&#39;</span>, <span class="ruby-string">&#39;c&#39;</span> ] <span class="ruby-comment">#=&gt; [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, nil, &quot;4&quot;]</span>
+<span class="ruby-identifier">a</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">2</span>] = [ <span class="ruby-value">1</span>, <span class="ruby-value">2</span> ]          <span class="ruby-comment">#=&gt; [&quot;a&quot;, 1, 2, nil, &quot;4&quot;]</span>
+<span class="ruby-identifier">a</span>[<span class="ruby-value">0</span>, <span class="ruby-value">2</span>] = <span class="ruby-string">&quot;?&quot;</span>               <span class="ruby-comment">#=&gt; [&quot;?&quot;, 2, nil, &quot;4&quot;]</span>
+<span class="ruby-identifier">a</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">2</span>] = <span class="ruby-string">&quot;A&quot;</span>               <span class="ruby-comment">#=&gt; [&quot;A&quot;, &quot;4&quot;]</span>
+<span class="ruby-identifier">a</span>[<span class="ruby-value">-1</span>]   = <span class="ruby-string">&quot;Z&quot;</span>               <span class="ruby-comment">#=&gt; [&quot;A&quot;, &quot;Z&quot;]</span>
+<span class="ruby-identifier">a</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>] = <span class="ruby-keyword">nil</span>              <span class="ruby-comment">#=&gt; [&quot;A&quot;, nil]</span>
+<span class="ruby-identifier">a</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>] = []               <span class="ruby-comment">#=&gt; [&quot;A&quot;]</span>
+<span class="ruby-identifier">a</span>[<span class="ruby-value">0</span>, <span class="ruby-value">0</span>] = [ <span class="ruby-value">1</span>, <span class="ruby-value">2</span> ]          <span class="ruby-comment">#=&gt; [1, 2, &quot;A&quot;]</span>
+<span class="ruby-identifier">a</span>[<span class="ruby-value">3</span>, <span class="ruby-value">0</span>] = <span class="ruby-string">&quot;B&quot;</span>               <span class="ruby-comment">#=&gt; [1, 2, &quot;A&quot;, &quot;B&quot;]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="5B-5D-3D-source">
+     			<pre>static VALUE
+rb_ary_aset(int argc, VALUE *argv, VALUE ary)
+{
+    long offset, beg, len;
+
+    if (argc == 3) {
+        rb_ary_modify_check(ary);
+        beg = NUM2LONG(argv[0]);
+        len = NUM2LONG(argv[1]);
+        rb_ary_splice(ary, beg, len, argv[2]);
+        return argv[2];
+    }
+    rb_check_arity(argc, 2, 2);
+    rb_ary_modify_check(ary);
+    if (FIXNUM_P(argv[0])) {
+        offset = FIX2LONG(argv[0]);
+        goto fixnum;
+    }
+    if (rb_range_beg_len(argv[0], &amp;beg, &amp;len, RARRAY_LEN(ary), 1)) {
+        /* check if idx is Range */
+        rb_ary_splice(ary, beg, len, argv[1]);
+        return argv[1];
+    }
+
+    offset = NUM2LONG(argv[0]);
+fixnum:
+    rb_ary_store(ary, offset, argv[1]);
+    return argv[1];
+}</pre>
+    		</div>
+      
+		</div>
+</section>

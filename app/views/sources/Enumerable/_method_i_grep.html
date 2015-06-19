@@ -1,0 +1,56 @@
+<section id="method-i-grep" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						grep(pattern)                  &rarr; array
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						grep(pattern) { |obj| block }  &rarr; array
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns an array of every element in <em>enum</em> for which <code>Pattern
+=== element</code>. If the optional <em>block</em> is supplied, each
+matching element is passed to it, and the block&#39;s result is stored in
+the output array.</p>
+
+<pre class="ruby">(<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">100</span>).<span class="ruby-identifier">grep</span> <span class="ruby-value">38</span><span class="ruby-operator">..</span><span class="ruby-value">44</span>   <span class="ruby-comment">#=&gt; [38, 39, 40, 41, 42, 43, 44]</span>
+<span class="ruby-identifier">c</span> = <span class="ruby-constant">IO</span>.<span class="ruby-identifier">constants</span>
+<span class="ruby-identifier">c</span>.<span class="ruby-identifier">grep</span>(<span class="ruby-regexp">/SEEK/</span>)         <span class="ruby-comment">#=&gt; [:SEEK_SET, :SEEK_CUR, :SEEK_END]</span>
+<span class="ruby-identifier">res</span> = <span class="ruby-identifier">c</span>.<span class="ruby-identifier">grep</span>(<span class="ruby-regexp">/SEEK/</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-constant">IO</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">v</span>) }
+<span class="ruby-identifier">res</span>                    <span class="ruby-comment">#=&gt; [0, 1, 2]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="grep-source">
+     			<pre>static VALUE
+enum_grep(VALUE obj, VALUE pat)
+{
+    VALUE ary = rb_ary_new();
+    struct MEMO *memo = MEMO_NEW(pat, ary, Qtrue);
+
+    rb_block_call(obj, id_each, 0, 0, rb_block_given_p() ? grep_iter_i : grep_i, (VALUE)memo);
+
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

@@ -1,0 +1,38 @@
+<section id="method-i-empty-3F" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						empty?   &rarr; true or false
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns <code>true</code> if <code>self</code> contains no elements.</p>
+
+<pre class="ruby">[].<span class="ruby-identifier">empty?</span>   <span class="ruby-comment">#=&gt; true</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="empty-3F-source">
+     			<pre>static VALUE
+rb_ary_empty_p(VALUE ary)
+{
+    if (RARRAY_LEN(ary) == 0)
+        return Qtrue;
+    return Qfalse;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

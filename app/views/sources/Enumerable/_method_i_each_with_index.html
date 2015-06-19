@@ -1,0 +1,57 @@
+<section id="method-i-each_with_index" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						each_with_index(*args) { |obj, i| block } &rarr;  enum
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						each_with_index(*args)                    &rarr;  an_enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Calls <em>block</em> with two arguments, the item and its index, for each
+item in <em>enum</em>.  Given arguments are passed through to each().</p>
+
+<p>If no block is given, an enumerator is returned instead.</p>
+
+<pre class="ruby"><span class="ruby-identifier">hash</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>
+<span class="ruby-node">%w(cat dog wombat)</span>.<span class="ruby-identifier">each_with_index</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">item</span>, <span class="ruby-identifier">index</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">hash</span>[<span class="ruby-identifier">item</span>] = <span class="ruby-identifier">index</span>
+}
+<span class="ruby-identifier">hash</span>   <span class="ruby-comment">#=&gt; {&quot;cat&quot;=&gt;0, &quot;dog&quot;=&gt;1, &quot;wombat&quot;=&gt;2}</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="each_with_index-source">
+     			<pre>static VALUE
+enum_each_with_index(int argc, VALUE *argv, VALUE obj)
+{
+    struct MEMO *memo;
+
+    RETURN_SIZED_ENUMERATOR(obj, argc, argv, enum_size);
+
+    memo = MEMO_NEW(0, 0, 0);
+    rb_block_call(obj, id_each, argc, argv, each_with_index_i, (VALUE)memo);
+    return obj;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

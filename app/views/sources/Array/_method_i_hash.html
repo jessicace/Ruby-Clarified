@@ -1,0 +1,49 @@
+<section id="method-i-hash" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						hash   &rarr; fixnum
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Compute a hash-code for this array.</p>
+
+<p>Two arrays with the same content will have the same hash code (and will
+compare using <a href="Array.html#method-i-eql-3F">eql?</a>).</p>
+
+<p>See also Object#hash.</p>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="hash-source">
+     			<pre>static VALUE
+rb_ary_hash(VALUE ary)
+{
+    long i;
+    st_index_t h;
+    VALUE n;
+
+    h = rb_hash_start(RARRAY_LEN(ary));
+    h = rb_hash_uint(h, (st_index_t)rb_ary_hash);
+    for (i=0; i&lt;RARRAY_LEN(ary); i++) {
+        n = rb_hash(RARRAY_AREF(ary, i));
+        h = rb_hash_uint(h, NUM2LONG(n));
+    }
+    h = rb_hash_end(h);
+    return LONG2FIX(h);
+}</pre>
+    		</div>
+      
+		</div>
+</section>

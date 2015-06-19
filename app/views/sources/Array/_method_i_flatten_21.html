@@ -1,0 +1,72 @@
+<section id="method-i-flatten-21" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						flatten!        &rarr; ary or nil
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						flatten!(level) &rarr; ary or nil
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Flattens <code>self</code> in place.</p>
+
+<p>Returns <code>nil</code> if no modifications were made (i.e., the array
+contains no subarrays.)</p>
+
+<p>The optional <code>level</code> argument determines the level of recursion
+to flatten.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-value">1</span>, <span class="ruby-value">2</span>, [<span class="ruby-value">3</span>, [<span class="ruby-value">4</span>, <span class="ruby-value">5</span>] ] ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">flatten!</span>   <span class="ruby-comment">#=&gt; [1, 2, 3, 4, 5]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">flatten!</span>   <span class="ruby-comment">#=&gt; nil</span>
+<span class="ruby-identifier">a</span>            <span class="ruby-comment">#=&gt; [1, 2, 3, 4, 5]</span>
+<span class="ruby-identifier">a</span> = [ <span class="ruby-value">1</span>, <span class="ruby-value">2</span>, [<span class="ruby-value">3</span>, [<span class="ruby-value">4</span>, <span class="ruby-value">5</span>] ] ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">flatten!</span>(<span class="ruby-value">1</span>) <span class="ruby-comment">#=&gt; [1, 2, 3, [4, 5]]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="flatten-21-source">
+     			<pre>static VALUE
+rb_ary_flatten_bang(int argc, VALUE *argv, VALUE ary)
+{
+    int mod = 0, level = -1;
+    VALUE result, lv;
+
+    rb_scan_args(argc, argv, &quot;01&quot;, &amp;lv);
+    rb_ary_modify_check(ary);
+    if (!NIL_P(lv)) level = NUM2INT(lv);
+    if (level == 0) return Qnil;
+
+    result = flatten(ary, level, &amp;mod);
+    if (mod == 0) {
+        ary_discard(result);
+        return Qnil;
+    }
+    if (!(mod = ARY_EMBED_P(result))) rb_obj_freeze(result);
+    rb_ary_replace(ary, result);
+    if (mod) ARY_SET_EMBED_LEN(result, 0);
+
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

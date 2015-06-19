@@ -1,0 +1,46 @@
+<section id="method-i-concat" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						concat(other_ary)   &rarr; ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Appends the elements of <code>other_ary</code> to <code>self</code>.</p>
+
+<pre class="ruby">[ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span> ].<span class="ruby-identifier">concat</span>( [<span class="ruby-string">&quot;c&quot;</span>, <span class="ruby-string">&quot;d&quot;</span>] ) <span class="ruby-comment">#=&gt; [ &quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot; ]</span>
+<span class="ruby-identifier">a</span> = [ <span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">concat</span>( [ <span class="ruby-value">4</span>, <span class="ruby-value">5</span> ] )
+<span class="ruby-identifier">a</span>                                 <span class="ruby-comment">#=&gt; [ 1, 2, 3, 4, 5 ]</span>
+</pre>
+
+<p>See also Array#+.</p>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="concat-source">
+     			<pre>VALUE
+rb_ary_concat(VALUE x, VALUE y)
+{
+    rb_ary_modify_check(x);
+    y = to_ary(y);
+    if (RARRAY_LEN(y) &gt; 0) {
+        rb_ary_splice(x, RARRAY_LEN(x), 0, y);
+    }
+    return x;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

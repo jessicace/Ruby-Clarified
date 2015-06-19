@@ -1,0 +1,43 @@
+<section id="method-i-include-3F" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						include?(obj)     &rarr; true or false
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns <code>true</code> if any member of <em>enum</em> equals
+<em>obj</em>. Equality is tested using <code>==</code>.</p>
+
+<pre class="ruby"><span class="ruby-constant">IO</span>.<span class="ruby-identifier">constants</span>.<span class="ruby-identifier">include?</span> :<span class="ruby-constant">SEEK_SET</span>          <span class="ruby-comment">#=&gt; true</span>
+<span class="ruby-constant">IO</span>.<span class="ruby-identifier">constants</span>.<span class="ruby-identifier">include?</span> :<span class="ruby-constant">SEEK_NO_FURTHER</span>   <span class="ruby-comment">#=&gt; false</span>
+<span class="ruby-constant">IO</span>.<span class="ruby-identifier">constants</span>.<span class="ruby-identifier">member?</span> :<span class="ruby-constant">SEEK_SET</span>          <span class="ruby-comment">#=&gt; true</span>
+<span class="ruby-constant">IO</span>.<span class="ruby-identifier">constants</span>.<span class="ruby-identifier">member?</span> :<span class="ruby-constant">SEEK_NO_FURTHER</span>   <span class="ruby-comment">#=&gt; false</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="include-3F-source">
+     			<pre>static VALUE
+enum_member(VALUE obj, VALUE val)
+{
+    struct MEMO *memo = MEMO_NEW(val, Qfalse, 0);
+
+    rb_block_call(obj, id_each, 0, 0, member_i, (VALUE)memo);
+    return memo-&gt;v2;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

@@ -1,0 +1,58 @@
+<section id="method-i-7C" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						ary | other_ary     &rarr; new_ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Set Union — Returns a new array by joining <code>ary</code> with
+<code>other_ary</code>, excluding any duplicates and preserving the order
+from the original array.</p>
+
+<p>It compares elements using their <a
+href="Array.html#method-i-hash">hash</a> and <a
+href="Array.html#method-i-eql-3F">eql?</a> methods for efficiency.</p>
+
+<pre class="ruby">[ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span> ] <span class="ruby-operator">|</span> [ <span class="ruby-string">&quot;c&quot;</span>, <span class="ruby-string">&quot;d&quot;</span>, <span class="ruby-string">&quot;a&quot;</span> ]    <span class="ruby-comment">#=&gt; [ &quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot; ]</span>
+</pre>
+
+<p>See also <a href="Array.html#method-i-uniq">#uniq</a>.</p>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="7C-source">
+     			<pre>static VALUE
+rb_ary_or(VALUE ary1, VALUE ary2)
+{
+    VALUE hash, ary3;
+    long i;
+
+    ary2 = to_ary(ary2);
+    hash = ary_make_hash(ary1);
+
+    for (i=0; i&lt;RARRAY_LEN(ary2); i++) {
+        VALUE elt = RARRAY_AREF(ary2, i);
+        if (!st_update(RHASH_TBL_RAW(hash), (st_data_t)elt, ary_hash_orset, (st_data_t)elt)) {
+            RB_OBJ_WRITTEN(hash, Qundef, elt);
+        }
+    }
+    ary3 = rb_hash_values(hash);
+    ary_recycle_hash(hash);
+    return ary3;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

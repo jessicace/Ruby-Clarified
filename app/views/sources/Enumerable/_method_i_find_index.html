@@ -1,0 +1,76 @@
+<section id="method-i-find_index" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						find_index(value)          &rarr; int or nil
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						find_index { |obj| block } &rarr; int or nil
+          </span>
+
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						find_index                 &rarr; an_enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Compares each entry in <em>enum</em> with <em>value</em> or passes to
+<em>block</em>.  Returns the index for the first for which the evaluated
+value is non-false.  If no object matches, returns <code>nil</code></p>
+
+<p>If neither block nor argument is given, an enumerator is returned instead.</p>
+
+<pre class="ruby">(<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">10</span>).<span class="ruby-identifier">find_index</span>  { <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">i</span> <span class="ruby-operator">%</span> <span class="ruby-value">5</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span> <span class="ruby-keyword">and</span> <span class="ruby-identifier">i</span> <span class="ruby-operator">%</span> <span class="ruby-value">7</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span> }  <span class="ruby-comment">#=&gt; nil</span>
+(<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">100</span>).<span class="ruby-identifier">find_index</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">i</span> <span class="ruby-operator">%</span> <span class="ruby-value">5</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span> <span class="ruby-keyword">and</span> <span class="ruby-identifier">i</span> <span class="ruby-operator">%</span> <span class="ruby-value">7</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span> }  <span class="ruby-comment">#=&gt; 34</span>
+(<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">100</span>).<span class="ruby-identifier">find_index</span>(<span class="ruby-value">50</span>)                                <span class="ruby-comment">#=&gt; 49</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="find_index-source">
+     			<pre>static VALUE
+enum_find_index(int argc, VALUE *argv, VALUE obj)
+{
+    struct MEMO *memo;  /* [return value, current index, ] */
+    VALUE condition_value = Qnil;
+    rb_block_call_func *func;
+
+    if (argc == 0) {
+        RETURN_ENUMERATOR(obj, 0, 0);
+        func = find_index_iter_i;
+    }
+    else {
+        rb_scan_args(argc, argv, &quot;1&quot;, &amp;condition_value);
+        if (rb_block_given_p()) {
+            rb_warn(&quot;given block not used&quot;);
+        }
+        func = find_index_i;
+    }
+
+    memo = MEMO_NEW(Qnil, condition_value, 0);
+    rb_block_call(obj, id_each, 0, 0, func, (VALUE)memo);
+    return memo-&gt;v1;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

@@ -1,0 +1,59 @@
+<section id="method-i-select-21" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						select!  {|item| block } &rarr; ary or nil
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						select!                  &rarr; Enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Invokes the given block passing in successive elements from
+<code>self</code>, deleting elements for which the block returns a
+<code>false</code> value.</p>
+
+<p>The array may not be changed instantly every time the block is called.</p>
+
+<p>If changes were made, it will return <code>self</code>, otherwise it
+returns <code>nil</code>.</p>
+
+<p>See also <a href="Array.html#method-i-keep_if">#keep_if</a></p>
+
+<p>If no block is given, an Enumerator is returned instead.</p>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="select-21-source">
+     			<pre>static VALUE
+rb_ary_select_bang(VALUE ary)
+{
+    struct select_bang_arg args;
+
+    RETURN_SIZED_ENUMERATOR(ary, 0, 0, ary_enum_length);
+    rb_ary_modify(ary);
+
+    args.ary = ary;
+    args.len[0] = args.len[1] = 0;
+    return rb_ensure(select_bang_i, (VALUE)&amp;args, select_bang_ensure, (VALUE)&amp;args);
+}</pre>
+    		</div>
+      
+		</div>
+</section>

@@ -1,0 +1,102 @@
+<section id="method-i-slice" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						slice(index)          &rarr; obj     or nil
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						slice(start, length)  &rarr; new_ary or nil
+          </span>
+
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						slice(range)          &rarr; new_ary or nil
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Element Reference — Returns the element at <code>index</code>, or returns a
+subarray starting at the <code>start</code> index and continuing for
+<code>length</code> elements, or returns a subarray specified by
+<code>range</code> of indices.</p>
+
+<p>Negative indices count backward from the end of the array (-1 is the last
+element).  For <code>start</code> and <code>range</code> cases the starting
+index is just before an element.  Additionally, an empty array is returned
+when the starting index for an element range is at the end of the array.</p>
+
+<p>Returns <code>nil</code> if the index (or starting index) are out of range.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span>, <span class="ruby-string">&quot;d&quot;</span>, <span class="ruby-string">&quot;e&quot;</span> ]
+<span class="ruby-identifier">a</span>[<span class="ruby-value">2</span>] <span class="ruby-operator">+</span>  <span class="ruby-identifier">a</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">+</span> <span class="ruby-identifier">a</span>[<span class="ruby-value">1</span>]    <span class="ruby-comment">#=&gt; &quot;cab&quot;</span>
+<span class="ruby-identifier">a</span>[<span class="ruby-value">6</span>]                   <span class="ruby-comment">#=&gt; nil</span>
+<span class="ruby-identifier">a</span>[<span class="ruby-value">1</span>, <span class="ruby-value">2</span>]                <span class="ruby-comment">#=&gt; [ &quot;b&quot;, &quot;c&quot; ]</span>
+<span class="ruby-identifier">a</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">3</span>]                <span class="ruby-comment">#=&gt; [ &quot;b&quot;, &quot;c&quot;, &quot;d&quot; ]</span>
+<span class="ruby-identifier">a</span>[<span class="ruby-value">4</span><span class="ruby-operator">..</span><span class="ruby-value">7</span>]                <span class="ruby-comment">#=&gt; [ &quot;e&quot; ]</span>
+<span class="ruby-identifier">a</span>[<span class="ruby-value">6</span><span class="ruby-operator">..</span><span class="ruby-value">10</span>]               <span class="ruby-comment">#=&gt; nil</span>
+<span class="ruby-identifier">a</span>[<span class="ruby-value">-3</span>, <span class="ruby-value">3</span>]               <span class="ruby-comment">#=&gt; [ &quot;c&quot;, &quot;d&quot;, &quot;e&quot; ]</span>
+<span class="ruby-comment"># special cases</span>
+<span class="ruby-identifier">a</span>[<span class="ruby-value">5</span>]                   <span class="ruby-comment">#=&gt; nil</span>
+<span class="ruby-identifier">a</span>[<span class="ruby-value">6</span>, <span class="ruby-value">1</span>]                <span class="ruby-comment">#=&gt; nil</span>
+<span class="ruby-identifier">a</span>[<span class="ruby-value">5</span>, <span class="ruby-value">1</span>]                <span class="ruby-comment">#=&gt; []</span>
+<span class="ruby-identifier">a</span>[<span class="ruby-value">5</span><span class="ruby-operator">..</span><span class="ruby-value">10</span>]               <span class="ruby-comment">#=&gt; []</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="slice-source">
+     			<pre>VALUE
+rb_ary_aref(int argc, const VALUE *argv, VALUE ary)
+{
+    VALUE arg;
+    long beg, len;
+
+    if (argc == 2) {
+        beg = NUM2LONG(argv[0]);
+        len = NUM2LONG(argv[1]);
+        if (beg &lt; 0) {
+            beg += RARRAY_LEN(ary);
+        }
+        return rb_ary_subseq(ary, beg, len);
+    }
+    if (argc != 1) {
+        rb_scan_args(argc, argv, &quot;11&quot;, NULL, NULL);
+    }
+    arg = argv[0];
+    /* special case - speeding up */
+    if (FIXNUM_P(arg)) {
+        return rb_ary_entry(ary, FIX2LONG(arg));
+    }
+    /* check if idx is Range */
+    switch (rb_range_beg_len(arg, &amp;beg, &amp;len, RARRAY_LEN(ary), 0)) {
+      case Qfalse:
+        break;
+      case Qnil:
+        return Qnil;
+      default:
+        return rb_ary_subseq(ary, beg, len);
+    }
+    return rb_ary_entry(ary, NUM2LONG(arg));
+}</pre>
+    		</div>
+      
+		</div>
+</section>

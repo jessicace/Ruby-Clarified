@@ -1,0 +1,51 @@
+<section id="method-i-unshift" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						unshift(obj, ...)  &rarr; ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Prepends objects to the front of <code>self</code>, moving other elements
+upwards. See also <a href="Array.html#method-i-shift">#shift</a> for the
+opposite effect.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span>, <span class="ruby-string">&quot;d&quot;</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">unshift</span>(<span class="ruby-string">&quot;a&quot;</span>)   <span class="ruby-comment">#=&gt; [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">unshift</span>(<span class="ruby-value">1</span>, <span class="ruby-value">2</span>)  <span class="ruby-comment">#=&gt; [ 1, 2, &quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="unshift-source">
+     			<pre>static VALUE
+rb_ary_unshift_m(int argc, VALUE *argv, VALUE ary)
+{
+    long len = RARRAY_LEN(ary);
+    VALUE target_ary;
+
+    if (argc == 0) {
+        rb_ary_modify_check(ary);
+        return ary;
+    }
+
+    target_ary = ary_ensure_room_for_unshift(ary, argc);
+    ary_memcpy0(ary, 0, argc, argv, target_ary);
+    ARY_SET_LEN(ary, len + argc);
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

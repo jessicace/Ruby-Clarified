@@ -1,0 +1,59 @@
+<section id="method-i-each" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						each { |item| block }  &rarr; ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						each                   &rarr; Enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Calls the given block once for each element in <code>self</code>, passing
+that element as a parameter.  Returns the array itself.</p>
+
+<p>If no block is given, an Enumerator is returned.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">print</span> <span class="ruby-identifier">x</span>, <span class="ruby-string">&quot; -- &quot;</span> }
+</pre>
+
+<p>produces:</p>
+
+<pre>a -- b -- c --</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="each-source">
+     			<pre>VALUE
+rb_ary_each(VALUE array)
+{
+    long i;
+    volatile VALUE ary = array;
+
+    RETURN_SIZED_ENUMERATOR(ary, 0, 0, ary_enum_length);
+    for (i=0; i&lt;RARRAY_LEN(ary); i++) {
+        rb_yield(RARRAY_AREF(ary, i));
+    }
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

@@ -1,0 +1,40 @@
+<section id="method-i-compact" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						compact     &rarr; new_ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns a copy of <code>self</code> with all <code>nil</code> elements
+removed.</p>
+
+<pre class="ruby">[ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-keyword">nil</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-keyword">nil</span>, <span class="ruby-string">&quot;c&quot;</span>, <span class="ruby-keyword">nil</span> ].<span class="ruby-identifier">compact</span>
+                  <span class="ruby-comment">#=&gt; [ &quot;a&quot;, &quot;b&quot;, &quot;c&quot; ]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="compact-source">
+     			<pre>static VALUE
+rb_ary_compact(VALUE ary)
+{
+    ary = rb_ary_dup(ary);
+    rb_ary_compact_bang(ary);
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

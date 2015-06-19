@@ -1,0 +1,52 @@
+<section id="method-i-keep_if" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						keep_if { |item| block } &rarr; ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						keep_if                  &rarr; Enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Deletes every element of <code>self</code> for which the given block
+evaluates to <code>false</code>.</p>
+
+<p>See also <a href="Array.html#method-i-select-21">#select!</a></p>
+
+<p>If no block is given, an Enumerator is returned instead.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = <span class="ruby-node">%w{ a b c d e f }</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">keep_if</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp">/[aeiou]/</span> }  <span class="ruby-comment">#=&gt; [&quot;a&quot;, &quot;e&quot;]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="keep_if-source">
+     			<pre>static VALUE
+rb_ary_keep_if(VALUE ary)
+{
+    RETURN_SIZED_ENUMERATOR(ary, 0, 0, ary_enum_length);
+    rb_ary_select_bang(ary);
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

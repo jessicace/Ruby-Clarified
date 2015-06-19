@@ -1,0 +1,50 @@
+<section id="method-i-take" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						take(n)               &rarr; array
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns first n elements from <em>enum</em>.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [<span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>, <span class="ruby-value">4</span>, <span class="ruby-value">5</span>, <span class="ruby-value">0</span>]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">take</span>(<span class="ruby-value">3</span>)             <span class="ruby-comment">#=&gt; [1, 2, 3]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">take</span>(<span class="ruby-value">30</span>)            <span class="ruby-comment">#=&gt; [1, 2, 3, 4, 5, 0]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="take-source">
+     			<pre>static VALUE
+enum_take(VALUE obj, VALUE n)
+{
+    struct MEMO *memo;
+    VALUE result;
+    long len = NUM2LONG(n);
+
+    if (len &lt; 0) {
+        rb_raise(rb_eArgError, &quot;attempt to take negative size&quot;);
+    }
+
+    if (len == 0) return rb_ary_new2(0);
+    result = rb_ary_new2(len);
+    memo = MEMO_NEW(result, 0, len);
+    rb_block_call(obj, id_each, 0, 0, take_i, (VALUE)memo);
+    return result;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

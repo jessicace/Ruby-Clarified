@@ -1,0 +1,45 @@
+<section id="method-i-none-3F" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						none? [{ |obj| block }]   &rarr; true or false
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Passes each element of the collection to the given block. The method
+returns <code>true</code> if the block never returns <code>true</code> for
+all elements. If the block is not given, <code>none?</code> will return
+<code>true</code> only if none of the collection members is true.</p>
+
+<pre class="ruby"><span class="ruby-node">%w{ant bear cat}</span>.<span class="ruby-identifier">none?</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">word</span><span class="ruby-operator">|</span> <span class="ruby-identifier">word</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">==</span> <span class="ruby-value">5</span> } <span class="ruby-comment">#=&gt; true</span>
+<span class="ruby-node">%w{ant bear cat}</span>.<span class="ruby-identifier">none?</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">word</span><span class="ruby-operator">|</span> <span class="ruby-identifier">word</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">4</span> } <span class="ruby-comment">#=&gt; false</span>
+[].<span class="ruby-identifier">none?</span>                                           <span class="ruby-comment">#=&gt; true</span>
+[<span class="ruby-keyword">nil</span>].<span class="ruby-identifier">none?</span>                                        <span class="ruby-comment">#=&gt; true</span>
+[<span class="ruby-keyword">nil</span>, <span class="ruby-keyword">false</span>].<span class="ruby-identifier">none?</span>                                 <span class="ruby-comment">#=&gt; true</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="none-3F-source">
+     			<pre>static VALUE
+enum_none(VALUE obj)
+{
+    struct MEMO *memo = MEMO_NEW(Qtrue, 0, 0);
+    rb_block_call(obj, id_each, 0, 0, ENUMFUNC(none), (VALUE)memo);
+    return memo-&gt;v1;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

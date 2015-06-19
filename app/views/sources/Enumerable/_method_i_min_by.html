@@ -1,0 +1,83 @@
+<section id="method-i-min_by" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						min_by {|obj| block }      &rarr; obj
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						min_by                     &rarr; an_enumerator
+          </span>
+
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						min_by(n) {|obj| block }   &rarr; array
+          </span>
+
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						min_by(n)                  &rarr; an_enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns the object in <em>enum</em> that gives the minimum value from the
+given block.</p>
+
+<p>If no block is given, an enumerator is returned instead.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = <span class="ruby-node">%w(albatross dog horse)</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">min_by</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">length</span> }   <span class="ruby-comment">#=&gt; &quot;dog&quot;</span>
+</pre>
+
+<p>If the <code>n</code> argument is given, minimum <code>n</code> elements
+are returned as an array.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = <span class="ruby-node">%w[albatross dog horse]</span>
+<span class="ruby-identifier">p</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">min_by</span>(<span class="ruby-value">2</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">length</span> } <span class="ruby-comment">#=&gt; [&quot;dog&quot;, &quot;horse&quot;]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="min_by-source">
+     			<pre>static VALUE
+enum_min_by(int argc, VALUE *argv, VALUE obj)
+{
+    struct MEMO *memo;
+    VALUE num;
+
+    rb_scan_args(argc, argv, &quot;01&quot;, &amp;num);
+
+    RETURN_SIZED_ENUMERATOR(obj, argc, argv, enum_size);
+
+    if (!NIL_P(num))
+        return nmin_run(obj, num, 1, 0);
+
+    memo = MEMO_NEW(Qundef, Qnil, 0);
+    rb_block_call(obj, id_each, 0, 0, min_by_i, (VALUE)memo);
+    return memo-&gt;v2;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

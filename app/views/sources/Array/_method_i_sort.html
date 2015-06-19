@@ -1,0 +1,98 @@
+<section id="method-i-sort" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						sort                   &rarr; new_array
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						sort { |a, b| block }  &rarr; new_array
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p><code>Array#sort</code> works in the same way as <code>Array#sort!</code>,
+however, it first creates a duplicate of the array, and returns the altered
+duplicate  rather than altering the array the method was called on.</p>
+
+<h3 id="method-i-sort-label-Default+sort">Default sort<span><a href="#method-i-sort-label-Default+sort">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;d&quot;</span>, <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;e&quot;</span>, <span class="ruby-string">&quot;c&quot;</span>, <span class="ruby-string">&quot;b&quot;</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span>                    
+<span class="ruby-comment"># =&gt; [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;]</span>
+<span class="ruby-identifier">a</span>
+<span class="ruby-comment"># =&gt; [ &quot;d&quot;, &quot;a&quot;, &quot;e&quot;, &quot;c&quot;, &quot;b&quot; ]</span>
+</pre>
+
+<h3 id="method-i-sort-label-sort+with+block">sort with block<span><a href="#method-i-sort-label-sort+with+block">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;d&quot;</span>, <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;e&quot;</span>, <span class="ruby-string">&quot;c&quot;</span>, <span class="ruby-string">&quot;b&quot;</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">x</span>,<span class="ruby-identifier">y</span><span class="ruby-operator">|</span> <span class="ruby-identifier">y</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">x</span> }  
+<span class="ruby-comment"># =&gt; [&quot;e&quot;, &quot;d&quot;, &quot;c&quot;, &quot;b&quot;, &quot;a&quot;]</span>
+<span class="ruby-identifier">a</span>
+<span class="ruby-comment"># =&gt; [ &quot;d&quot;, &quot;a&quot;, &quot;e&quot;, &quot;c&quot;, &quot;b&quot; ]</span>
+</pre>
+
+<h3 id="method-i-sort-label-Non-trivial+key+comparison">Non-trivial key comparison<span><a href="#method-i-sort-label-Non-trivial+key+comparison">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<p>The following code sorts some files on modification time using the basic
+<code>sort</code> method.</p>
+
+<pre class="ruby"><span class="ruby-identifier">files</span> = <span class="ruby-constant">Dir</span>[<span class="ruby-string">&quot;*&quot;</span>]
+<span class="ruby-identifier">sorted</span> = <span class="ruby-identifier">files</span>.<span class="ruby-identifier">sort</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span><span class="ruby-operator">|</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">a</span>).<span class="ruby-identifier">mtime</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">b</span>).<span class="ruby-identifier">mtime</span> }
+<span class="ruby-identifier">sorted</span>   <span class="ruby-comment">#=&gt; [&quot;mon&quot;, &quot;tues&quot;, &quot;wed&quot;, &quot;thurs&quot;]</span>
+</pre>
+
+<p>This sort is inefficient: it generates two new <code>File</code> objects
+during every comparison.</p>
+
+<h3 id="method-i-sort-label-Sort+using+Kernel-23Test">Sort using Kernel#Test<span><a href="#method-i-sort-label-Sort+using+Kernel-23Test">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<p>This sort uses Kernel#Test to generate the modification times directly,
+rather than generating the two new <code>File</code> objects.</p>
+
+<pre class="ruby"><span class="ruby-identifier">files</span> = <span class="ruby-constant">Dir</span>[<span class="ruby-string">&quot;*&quot;</span>]
+<span class="ruby-identifier">sorted</span> = <span class="ruby-identifier">files</span>.<span class="ruby-identifier">sort</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">test</span>(<span class="ruby-value">?M</span>, <span class="ruby-identifier">a</span>) <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">test</span>(<span class="ruby-value">?M</span>, <span class="ruby-identifier">b</span>)
+}
+<span class="ruby-identifier">sorted</span>   
+<span class="ruby-comment"># =&gt; [&quot;mon&quot;, &quot;tues&quot;, &quot;wed&quot;, &quot;thurs&quot;]</span>
+</pre>
+
+<p>This still generates many unnecessary <code>Time</code> objects.</p>
+
+<h3 id="method-i-sort-label-Sort+implementing+the+Schwartzian+Transform">Sort implementing the Schwartzian Transform<span><a href="#method-i-sort-label-Sort+implementing+the+Schwartzian+Transform">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<pre class="ruby"><span class="ruby-identifier">sorted</span> = <span class="ruby-constant">Dir</span>[<span class="ruby-string">&quot;*&quot;</span>].<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> [<span class="ruby-identifier">test</span>(<span class="ruby-value">?M</span>, <span class="ruby-identifier">f</span>), <span class="ruby-identifier">f</span>]}.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>[<span class="ruby-value">1</span>] }
+<span class="ruby-identifier">sorted</span>   
+<span class="ruby-comment"># =&gt; [&quot;mon&quot;, &quot;tues&quot;, &quot;wed&quot;, &quot;thurs&quot;]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="sort-source">
+     			<pre>VALUE
+rb_ary_sort(VALUE ary)
+{
+    ary = rb_ary_dup(ary);
+    rb_ary_sort_bang(ary);
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

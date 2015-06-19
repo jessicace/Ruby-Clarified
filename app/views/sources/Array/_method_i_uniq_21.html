@@ -1,0 +1,87 @@
+<section id="method-i-uniq-21" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						uniq!                &rarr; ary or nil
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						uniq! { |item| ... } &rarr; ary or nil
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Removes duplicate elements from <code>self</code>.</p>
+
+<p>If a block is given, it will use the return value of the block for
+comparison.</p>
+
+<p>It compares values using their <a href="Array.html#method-i-hash">hash</a>
+and <a href="Array.html#method-i-eql-3F">eql?</a> methods for efficiency.</p>
+
+<p><code>self</code> is traversed in order, and the first occurrence is kept.</p>
+
+<p>Returns <code>nil</code> if no changes are made (that is, no duplicates are
+found).</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">uniq!</span>   <span class="ruby-comment"># =&gt; [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]</span>
+
+<span class="ruby-identifier">b</span> = [ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span> ]
+<span class="ruby-identifier">b</span>.<span class="ruby-identifier">uniq!</span>   <span class="ruby-comment"># =&gt; nil</span>
+
+<span class="ruby-identifier">c</span> = [[<span class="ruby-string">&quot;student&quot;</span>,<span class="ruby-string">&quot;sam&quot;</span>], [<span class="ruby-string">&quot;student&quot;</span>,<span class="ruby-string">&quot;george&quot;</span>], [<span class="ruby-string">&quot;teacher&quot;</span>,<span class="ruby-string">&quot;matz&quot;</span>]]
+<span class="ruby-identifier">c</span>.<span class="ruby-identifier">uniq!</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">first</span> } <span class="ruby-comment"># =&gt; [[&quot;student&quot;, &quot;sam&quot;], [&quot;teacher&quot;, &quot;matz&quot;]]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="uniq-21-source">
+     			<pre>static VALUE
+rb_ary_uniq_bang(VALUE ary)
+{
+    VALUE hash;
+    long hash_size;
+
+    rb_ary_modify_check(ary);
+    if (RARRAY_LEN(ary) &lt;= 1)
+        return Qnil;
+    if (rb_block_given_p())
+        hash = ary_make_hash_by(ary);
+    else
+        hash = ary_make_hash(ary);
+
+    hash_size = RHASH_SIZE(hash);
+    if (RARRAY_LEN(ary) == hash_size) {
+        return Qnil;
+    }
+    rb_ary_modify_check(ary);
+    ARY_SET_LEN(ary, 0);
+    if (ARY_SHARED_P(ary) &amp;&amp; !ARY_EMBED_P(ary)) {
+        rb_ary_unshare(ary);
+        FL_SET_EMBED(ary);
+    }
+    ary_resize_capa(ary, hash_size);
+    st_foreach(rb_hash_tbl_raw(hash), push_value, ary);
+    ary_recycle_hash(hash);
+
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

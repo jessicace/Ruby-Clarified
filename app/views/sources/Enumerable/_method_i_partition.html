@@ -1,0 +1,54 @@
+<section id="method-i-partition" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						partition { |obj| block } &rarr; [ true_array, false_array ]
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						partition                 &rarr; an_enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns two arrays, the first containing the elements of <em>enum</em> for
+which the block evaluates to true, the second containing the rest.</p>
+
+<p>If no block is given, an enumerator is returned instead.</p>
+
+<pre class="ruby">(<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">6</span>).<span class="ruby-identifier">partition</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">even?</span> }  <span class="ruby-comment">#=&gt; [[2, 4, 6], [1, 3, 5]]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="partition-source">
+     			<pre>static VALUE
+enum_partition(VALUE obj)
+{
+    struct MEMO *memo;
+
+    RETURN_SIZED_ENUMERATOR(obj, 0, 0, enum_size);
+
+    memo = MEMO_NEW(rb_ary_new(), rb_ary_new(), 0);
+    rb_block_call(obj, id_each, 0, 0, partition_i, (VALUE)memo);
+
+    return rb_assoc_new(memo-&gt;v1, memo-&gt;v2);
+}</pre>
+    		</div>
+      
+		</div>
+</section>

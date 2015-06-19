@@ -1,0 +1,56 @@
+<section id="method-i-drop_while" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						drop_while { |arr| block }  &rarr; array
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						drop_while                  &rarr; an_enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Drops elements up to, but not including, the first element for which the
+block returns <code>nil</code> or <code>false</code> and returns an array
+containing the remaining elements.</p>
+
+<p>If no block is given, an enumerator is returned instead.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [<span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>, <span class="ruby-value">4</span>, <span class="ruby-value">5</span>, <span class="ruby-value">0</span>]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">drop_while</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">i</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">3</span> }   <span class="ruby-comment">#=&gt; [3, 4, 5, 0]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="drop_while-source">
+     			<pre>static VALUE
+enum_drop_while(VALUE obj)
+{
+    VALUE result;
+    struct MEMO *memo;
+
+    RETURN_ENUMERATOR(obj, 0, 0);
+    result = rb_ary_new();
+    memo = MEMO_NEW(result, 0, FALSE);
+    rb_block_call(obj, id_each, 0, 0, drop_while_i, (VALUE)memo);
+    return result;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

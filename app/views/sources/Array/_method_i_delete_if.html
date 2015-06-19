@@ -1,0 +1,55 @@
+<section id="method-i-delete_if" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						delete_if { |item| block }  &rarr; ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						delete_if                   &rarr; Enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Deletes every element of <code>self</code> for which block evaluates to
+<code>true</code>.</p>
+
+<p>The array is changed instantly every time the block is called, not after
+the iteration is over.</p>
+
+<p>See also <a href="Array.html#method-i-reject-21">#reject!</a></p>
+
+<p>If no block is given, an Enumerator is returned instead.</p>
+
+<pre class="ruby"><span class="ruby-identifier">scores</span> = [ <span class="ruby-value">97</span>, <span class="ruby-value">42</span>, <span class="ruby-value">75</span> ]
+<span class="ruby-identifier">scores</span>.<span class="ruby-identifier">delete_if</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">score</span><span class="ruby-operator">|</span> <span class="ruby-identifier">score</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">80</span> }   <span class="ruby-comment">#=&gt; [97]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="delete_if-source">
+     			<pre>static VALUE
+rb_ary_delete_if(VALUE ary)
+{
+    RETURN_SIZED_ENUMERATOR(ary, 0, 0, ary_enum_length);
+    ary_reject_bang(ary);
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

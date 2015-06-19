@@ -1,0 +1,62 @@
+<section id="method-i-reverse_each" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						reverse_each(*args) { |item| block } &rarr;  enum
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						reverse_each(*args)                  &rarr;  an_enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Builds a temporary array and traverses that array in reverse order.</p>
+
+<p>If no block is given, an enumerator is returned instead.</p>
+
+<pre>  (1..3).reverse_each { |v| p v }
+
+produces:
+
+  3
+  2
+  1</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="reverse_each-source">
+     			<pre>static VALUE
+enum_reverse_each(int argc, VALUE *argv, VALUE obj)
+{
+    VALUE ary;
+    long i;
+
+    RETURN_SIZED_ENUMERATOR(obj, argc, argv, enum_size);
+
+    ary = enum_to_a(argc, argv, obj);
+
+    for (i = RARRAY_LEN(ary); --i &gt;= 0; ) {
+        rb_yield(RARRAY_AREF(ary, i));
+    }
+
+    return obj;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

@@ -1,0 +1,80 @@
+<section id="method-i-cycle" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						cycle(n=nil) { |obj| block }  &rarr;  nil
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						cycle(n=nil)                  &rarr;  an_enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Calls <em>block</em> for each element of <em>enum</em> repeatedly
+<em>n</em> times or forever if none or <code>nil</code> is given.  If a
+non-positive number is given or the collection is empty, does nothing. 
+Returns <code>nil</code> if the loop has finished without getting
+interrupted.</p>
+
+<p><a href="Enumerable.html#method-i-cycle">#cycle</a> saves elements in an
+internal array so changes to <em>enum</em> after the first pass have no
+effect.</p>
+
+<p>If no block is given, an enumerator is returned instead.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [<span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span>]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">cycle</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">puts</span> <span class="ruby-identifier">x</span> }  <span class="ruby-comment"># print, a, b, c, a, b, c,.. forever.</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">cycle</span>(<span class="ruby-value">2</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">puts</span> <span class="ruby-identifier">x</span> }  <span class="ruby-comment"># print, a, b, c, a, b, c.</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="cycle-source">
+     			<pre>static VALUE
+enum_cycle(int argc, VALUE *argv, VALUE obj)
+{
+    VALUE ary;
+    VALUE nv = Qnil;
+    long n, i, len;
+
+    rb_scan_args(argc, argv, &quot;01&quot;, &amp;nv);
+
+    RETURN_SIZED_ENUMERATOR(obj, argc, argv, enum_cycle_size);
+    if (NIL_P(nv)) {
+        n = -1;
+    }
+    else {
+        n = NUM2LONG(nv);
+        if (n &lt;= 0) return Qnil;
+    }
+    ary = rb_ary_new();
+    RBASIC_CLEAR_CLASS(ary);
+    rb_block_call(obj, id_each, 0, 0, cycle_i, ary);
+    len = RARRAY_LEN(ary);
+    if (len == 0) return Qnil;
+    while (n &lt; 0 || 0 &lt; --n) {
+        for (i=0; i&lt;len; i++) {
+            rb_yield(RARRAY_AREF(ary, i));
+        }
+    }
+    return Qnil;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

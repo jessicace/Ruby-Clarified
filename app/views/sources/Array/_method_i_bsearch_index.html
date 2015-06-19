@@ -1,0 +1,82 @@
+<section id="method-i-bsearch_index" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						bsearch_index {|x| block }  &rarr; int or nil
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>By using binary search, finds an index of a value from this array which
+meets the given condition in O(log n) where n is the size of the array.</p>
+
+<p>It supports two modes, depending on the nature of the block and they are
+exactly the same as in the case of <a
+href="Array.html#method-i-bsearch">bsearch</a> method with the only
+difference being that this method returns the index of the element instead
+of the element itself. For more details consult the documentation for <a
+href="Array.html#method-i-bsearch">bsearch</a>.</p>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="bsearch_index-source">
+     			<pre>static VALUE
+rb_ary_bsearch_index(VALUE ary)
+{
+    long low = 0, high = RARRAY_LEN(ary), mid;
+    int smaller = 0, satisfied = 0;
+    VALUE v, val;
+
+    RETURN_ENUMERATOR(ary, 0, 0);
+    while (low &lt; high) {
+        mid = low + ((high - low) / 2);
+        val = rb_ary_entry(ary, mid);
+        v = rb_yield(val);
+        if (FIXNUM_P(v)) {
+            if (v == INT2FIX(0)) return INT2FIX(mid);
+            smaller = (SIGNED_VALUE)v &lt; 0; /* Fixnum preserves its sign-bit */
+        }
+        else if (v == Qtrue) {
+            satisfied = 1;
+            smaller = 1;
+        }
+        else if (v == Qfalse || v == Qnil) {
+            smaller = 0;
+        }
+        else if (rb_obj_is_kind_of(v, rb_cNumeric)) {
+            const VALUE zero = INT2FIX(0);
+            switch (rb_cmpint(rb_funcallv(v, id_cmp, 1, &amp;zero), v, zero)) {
+              case 0: return INT2FIX(mid);
+              case 1: smaller = 1; break;
+              case -1: smaller = 0;
+            }
+        }
+        else {
+            rb_raise(rb_eTypeError, &quot;wrong argument type %&quot;PRIsVALUE
+                     &quot; (must be numeric, true, false or nil)&quot;,
+                     rb_obj_class(v));
+        }
+        if (smaller) {
+            high = mid;
+        }
+        else {
+            low = mid + 1;
+        }
+    }
+    if (!satisfied) return Qnil;
+    return INT2FIX(low);
+}</pre>
+    		</div>
+      
+		</div>
+</section>

@@ -1,0 +1,48 @@
+<section id="method-i-clear" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						clear    &rarr; ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Removes all elements from <code>self</code>.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span>, <span class="ruby-string">&quot;d&quot;</span>, <span class="ruby-string">&quot;e&quot;</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">clear</span>    <span class="ruby-comment">#=&gt; [ ]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="clear-source">
+     			<pre>VALUE
+rb_ary_clear(VALUE ary)
+{
+    rb_ary_modify_check(ary);
+    ARY_SET_LEN(ary, 0);
+    if (ARY_SHARED_P(ary)) {
+        if (!ARY_EMBED_P(ary)) {
+            rb_ary_unshare(ary);
+            FL_SET_EMBED(ary);
+        }
+    }
+    else if (ARY_DEFAULT_SIZE * 2 &lt; ARY_CAPA(ary)) {
+        ary_resize_capa(ary, ARY_DEFAULT_SIZE * 2);
+    }
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

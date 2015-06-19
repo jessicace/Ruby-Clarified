@@ -1,0 +1,80 @@
+<section id="method-i-count" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						count                 &rarr; int
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						count(item)           &rarr; int
+          </span>
+
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						count { |obj| block } &rarr; int
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns the number of items in <code>enum</code> through enumeration. If an
+argument is given, the number of items in <code>enum</code> that are equal
+to <code>item</code> are counted.  If a block is given, it counts the
+number of elements yielding a true value.</p>
+
+<pre class="ruby"><span class="ruby-identifier">ary</span> = [<span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">4</span>, <span class="ruby-value">2</span>]
+<span class="ruby-identifier">ary</span>.<span class="ruby-identifier">count</span>               <span class="ruby-comment">#=&gt; 4</span>
+<span class="ruby-identifier">ary</span>.<span class="ruby-identifier">count</span>(<span class="ruby-value">2</span>)            <span class="ruby-comment">#=&gt; 2</span>
+<span class="ruby-identifier">ary</span>.<span class="ruby-identifier">count</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span><span class="ruby-operator">%</span><span class="ruby-value">2</span><span class="ruby-operator">==</span><span class="ruby-value">0</span> } <span class="ruby-comment">#=&gt; 3</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="count-source">
+     			<pre>static VALUE
+enum_count(int argc, VALUE *argv, VALUE obj)
+{
+    VALUE item = Qnil;
+    struct MEMO *memo;
+    rb_block_call_func *func;
+
+    if (argc == 0) {
+        if (rb_block_given_p()) {
+            func = count_iter_i;
+        }
+        else {
+            func = count_all_i;
+        }
+    }
+    else {
+        rb_scan_args(argc, argv, &quot;1&quot;, &amp;item);
+        if (rb_block_given_p()) {
+            rb_warn(&quot;given block not used&quot;);
+        }
+        func = count_i;
+    }
+
+    memo = MEMO_NEW(item, 0, 0);
+    rb_block_call(obj, id_each, 0, 0, func, (VALUE)memo);
+    return INT2NUM(memo-&gt;u3.cnt);
+}</pre>
+    		</div>
+      
+		</div>
+</section>

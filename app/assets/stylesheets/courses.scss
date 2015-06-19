@@ -1,0 +1,43 @@
+// Place all the styles related to the courses controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+$heading-font: 'Courier New';
+$body-font: Palatino, serif;
+$primary-color: #B50015;
+$background-color: #202020;
+
+body {
+		font-family: $body-font;
+		background-color: $background-color;
+		font-size: 1em;
+		color: $primary-color;
+}
+
+h1, h2 {
+		font-family: $heading-font;
+		font-weight: 400;
+		font-size: 3em;
+}
+
+nav {
+		margin-top: 10%;
+		ul {
+				list-style-type: none;
+				padding: 0;
+				margin: 0;
+				letter-spacing: 0.15em;
+				text-transform: uppercase;
+				li {
+				padding-top: 5px;
+				}
+		}
+}
+
+.centred {
+		text-align: center;
+}
+
+code {
+		font-family: 'Courier New';
+}

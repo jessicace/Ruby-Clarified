@@ -1,0 +1,57 @@
+<section id="method-i-last" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						last     &rarr;  obj or nil
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						last(n)  &rarr;  new_ary
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns the last element(s) of <code>self</code>. If the array is empty,
+the first form returns <code>nil</code>.</p>
+
+<p>See also <a href="Array.html#method-i-first">#first</a> for the opposite
+effect.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;w&quot;</span>, <span class="ruby-string">&quot;x&quot;</span>, <span class="ruby-string">&quot;y&quot;</span>, <span class="ruby-string">&quot;z&quot;</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">last</span>     <span class="ruby-comment">#=&gt; &quot;z&quot;</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">last</span>(<span class="ruby-value">2</span>)  <span class="ruby-comment">#=&gt; [&quot;y&quot;, &quot;z&quot;]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="last-source">
+     			<pre>VALUE
+rb_ary_last(int argc, const VALUE *argv, VALUE ary)
+{
+    if (argc == 0) {
+        long len = RARRAY_LEN(ary);
+        if (len == 0) return Qnil;
+        return RARRAY_AREF(ary, len-1);
+    }
+    else {
+        return ary_take_first_or_last(argc, argv, ary, ARY_TAKE_LAST);
+    }
+}</pre>
+    		</div>
+      
+		</div>
+</section>

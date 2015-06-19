@@ -1,0 +1,67 @@
+<section id="method-i-each_cons" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						each_cons(n) { ... } &rarr;  nil
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						each_cons(n)         &rarr;  an_enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Iterates the given block for each array of consecutive &lt;n&gt; elements. 
+If no block is given, returns an enumerator.</p>
+
+<p>e.g.:</p>
+
+<pre class="ruby">(<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">10</span>).<span class="ruby-identifier">each_cons</span>(<span class="ruby-value">3</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">p</span> <span class="ruby-identifier">a</span> }
+<span class="ruby-comment"># outputs below</span>
+[<span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>]
+[<span class="ruby-value">2</span>, <span class="ruby-value">3</span>, <span class="ruby-value">4</span>]
+[<span class="ruby-value">3</span>, <span class="ruby-value">4</span>, <span class="ruby-value">5</span>]
+[<span class="ruby-value">4</span>, <span class="ruby-value">5</span>, <span class="ruby-value">6</span>]
+[<span class="ruby-value">5</span>, <span class="ruby-value">6</span>, <span class="ruby-value">7</span>]
+[<span class="ruby-value">6</span>, <span class="ruby-value">7</span>, <span class="ruby-value">8</span>]
+[<span class="ruby-value">7</span>, <span class="ruby-value">8</span>, <span class="ruby-value">9</span>]
+[<span class="ruby-value">8</span>, <span class="ruby-value">9</span>, <span class="ruby-value">10</span>]
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="each_cons-source">
+     			<pre>static VALUE
+enum_each_cons(VALUE obj, VALUE n)
+{
+    long size = NUM2LONG(n);
+    struct MEMO *memo;
+    int arity;
+
+    if (size &lt;= 0) rb_raise(rb_eArgError, &quot;invalid size&quot;);
+    RETURN_SIZED_ENUMERATOR(obj, 1, &amp;n, enum_each_cons_size);
+    arity = rb_block_arity();
+    if (enum_size_over_p(obj, size)) return Qnil;
+    memo = MEMO_NEW(rb_ary_new2(size), dont_recycle_block_arg(arity), size);
+    rb_block_call(obj, id_each, 0, 0, each_cons_i, (VALUE)memo);
+
+    return Qnil;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

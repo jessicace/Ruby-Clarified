@@ -1,0 +1,45 @@
+<section id="method-i-entries" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						entries(*args)   &rarr; array
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns an array containing the items in <em>enum</em>.</p>
+
+<pre class="ruby">(<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">7</span>).<span class="ruby-identifier">to_a</span>                       <span class="ruby-comment">#=&gt; [1, 2, 3, 4, 5, 6, 7]</span>
+{ <span class="ruby-string">&#39;a&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-value">1</span>, <span class="ruby-string">&#39;b&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-value">2</span>, <span class="ruby-string">&#39;c&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-value">3</span> }.<span class="ruby-identifier">to_a</span>   <span class="ruby-comment">#=&gt; [[&quot;a&quot;, 1], [&quot;b&quot;, 2], [&quot;c&quot;, 3]]</span>
+
+<span class="ruby-identifier">require</span> <span class="ruby-string">&#39;prime&#39;</span>
+<span class="ruby-constant">Prime</span>.<span class="ruby-identifier">entries</span> <span class="ruby-value">10</span>                  <span class="ruby-comment">#=&gt; [2, 3, 5, 7]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="entries-source">
+     			<pre>static VALUE
+enum_to_a(int argc, VALUE *argv, VALUE obj)
+{
+    VALUE ary = rb_ary_new();
+
+    rb_block_call(obj, id_each, argc, argv, collect_all, ary);
+    OBJ_INFECT(ary, obj);
+
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

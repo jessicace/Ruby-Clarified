@@ -1,0 +1,107 @@
+<section id="method-i-slice-21" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						slice!(index)         &rarr; obj or nil
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						slice!(start, length) &rarr; new_ary or nil
+          </span>
+
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						slice!(range)         &rarr; new_ary or nil
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Deletes the element(s) given by an <code>index</code> (optionally up to
+<code>length</code> elements) or by a <code>range</code>.</p>
+
+<p>Returns the deleted object (or objects), or <code>nil</code> if the
+<code>index</code> is out of range.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-value">1</span>)     <span class="ruby-comment">#=&gt; &quot;b&quot;</span>
+<span class="ruby-identifier">a</span>               <span class="ruby-comment">#=&gt; [&quot;a&quot;, &quot;c&quot;]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-value">-1</span>)    <span class="ruby-comment">#=&gt; &quot;c&quot;</span>
+<span class="ruby-identifier">a</span>               <span class="ruby-comment">#=&gt; [&quot;a&quot;]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-value">100</span>)   <span class="ruby-comment">#=&gt; nil</span>
+<span class="ruby-identifier">a</span>               <span class="ruby-comment">#=&gt; [&quot;a&quot;]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="slice-21-source">
+     			<pre>static VALUE
+rb_ary_slice_bang(int argc, VALUE *argv, VALUE ary)
+{
+    VALUE arg1, arg2;
+    long pos, len, orig_len;
+
+    rb_ary_modify_check(ary);
+    if (argc == 2) {
+        pos = NUM2LONG(argv[0]);
+        len = NUM2LONG(argv[1]);
+      delete_pos_len:
+        if (len &lt; 0) return Qnil;
+        orig_len = RARRAY_LEN(ary);
+        if (pos &lt; 0) {
+            pos += orig_len;
+            if (pos &lt; 0) return Qnil;
+        }
+        else if (orig_len &lt; pos) return Qnil;
+        if (orig_len &lt; pos + len) {
+            len = orig_len - pos;
+        }
+        if (len == 0) return rb_ary_new2(0);
+        arg2 = rb_ary_new4(len, RARRAY_CONST_PTR(ary)+pos);
+        RBASIC_SET_CLASS(arg2, rb_obj_class(ary));
+        rb_ary_splice(ary, pos, len, Qundef);
+        return arg2;
+    }
+
+    if (argc != 1) {
+        /* error report */
+        rb_scan_args(argc, argv, &quot;11&quot;, NULL, NULL);
+    }
+    arg1 = argv[0];
+
+    if (!FIXNUM_P(arg1)) {
+        switch (rb_range_beg_len(arg1, &amp;pos, &amp;len, RARRAY_LEN(ary), 0)) {
+          case Qtrue:
+            /* valid range */
+            goto delete_pos_len;
+          case Qnil:
+            /* invalid range */
+            return Qnil;
+          default:
+            /* not a range */
+            break;
+        }
+    }
+
+    return rb_ary_delete_at(ary, NUM2LONG(arg1));
+}</pre>
+    		</div>
+      
+		</div>
+</section>

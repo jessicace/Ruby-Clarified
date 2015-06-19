@@ -1,0 +1,53 @@
+<section id="method-i-include-3F" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						include?(object)   &rarr; true or false
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns <code>true</code> if the given <code>object</code> is present in
+<code>self</code> (that is, if any element <code>==</code>
+<code>object</code>), otherwise returns <code>false</code>.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;b&quot;</span>)   <span class="ruby-comment">#=&gt; true</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;z&quot;</span>)   <span class="ruby-comment">#=&gt; false</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="include-3F-source">
+     			<pre>VALUE
+rb_ary_includes(VALUE ary, VALUE item)
+{
+    long i;
+    VALUE e;
+
+    for (i=0; i&lt;RARRAY_LEN(ary); i++) {
+        e = RARRAY_AREF(ary, i);
+        switch (rb_equal_opt(e, item)) {
+          case Qundef:
+            if (rb_equal(e, item)) return Qtrue;
+            break;
+          case Qtrue:
+            return Qtrue;
+        }
+    }
+    return Qfalse;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

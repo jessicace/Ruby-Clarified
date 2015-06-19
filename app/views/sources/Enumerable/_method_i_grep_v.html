@@ -1,0 +1,53 @@
+<section id="method-i-grep_v" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						grep_v(pattern)                  &rarr; array
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						grep_v(pattern) { |obj| block }  &rarr; array
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Inversed version of <a href="Enumerable.html#method-i-grep">#grep</a>.
+Returns an array of every element in <em>enum</em> for which not
+<code>Pattern === element</code>.</p>
+
+<pre class="ruby">(<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">10</span>).<span class="ruby-identifier">grep_v</span> <span class="ruby-value">2</span><span class="ruby-operator">..</span><span class="ruby-value">5</span>   <span class="ruby-comment">#=&gt; [1, 6, 7, 8, 9, 10]</span>
+<span class="ruby-identifier">res</span> =(<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">10</span>).<span class="ruby-identifier">grep_v</span>(<span class="ruby-value">2</span><span class="ruby-operator">..</span><span class="ruby-value">5</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-operator">*</span> <span class="ruby-value">2</span> }
+<span class="ruby-identifier">res</span>                    <span class="ruby-comment">#=&gt; [2, 12, 14, 16, 18, 20]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="grep_v-source">
+     			<pre>static VALUE
+enum_grep_v(VALUE obj, VALUE pat)
+{
+    VALUE ary = rb_ary_new();
+    struct MEMO *memo = MEMO_NEW(pat, ary, Qfalse);
+
+    rb_block_call(obj, id_each, 0, 0, rb_block_given_p() ? grep_iter_i : grep_i, (VALUE)memo);
+
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

@@ -1,0 +1,69 @@
+<section id="method-i-minmax" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						minmax                  &rarr; [min, max]
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						minmax { |a, b| block } &rarr; [min, max]
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns a two element array which contains the minimum and the maximum
+value in the enumerable.  The first form assumes all objects implement
+<code>Comparable</code>; the second uses the block to return <em>a
+&lt;=&gt; b</em>.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = <span class="ruby-node">%w(albatross dog horse)</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">minmax</span>                                  <span class="ruby-comment">#=&gt; [&quot;albatross&quot;, &quot;horse&quot;]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">minmax</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">b</span>.<span class="ruby-identifier">length</span> } <span class="ruby-comment">#=&gt; [&quot;dog&quot;, &quot;albatross&quot;]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="minmax-source">
+     			<pre>static VALUE
+enum_minmax(VALUE obj)
+{
+    struct MEMO *memo = MEMO_NEW(Qundef, Qundef, Qundef);
+    struct minmax_t *m = (struct minmax_t *)&amp;memo-&gt;v1;
+    VALUE ary = rb_ary_new3(2, Qnil, Qnil);
+
+    m-&gt;min = Qundef;
+    m-&gt;last = Qundef;
+    if (rb_block_given_p()) {
+        rb_block_call(obj, id_each, 0, 0, minmax_ii, (VALUE)memo);
+        if (m-&gt;last != Qundef)
+            minmax_ii_update(m-&gt;last, m-&gt;last, m);
+    }
+    else {
+        rb_block_call(obj, id_each, 0, 0, minmax_i, (VALUE)memo);
+        if (m-&gt;last != Qundef)
+            minmax_i_update(m-&gt;last, m-&gt;last, m);
+    }
+    if (m-&gt;min != Qundef) {
+        rb_ary_store(ary, 0, m-&gt;min);
+        rb_ary_store(ary, 1, m-&gt;max);
+    }
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

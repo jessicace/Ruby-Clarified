@@ -1,0 +1,88 @@
+<section id="method-i-slice_after" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						slice_after(pattern)       &rarr; an_enumerator
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						slice_after { |elt| bool } &rarr; an_enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Creates an enumerator for each chunked elements. The ends of chunks are
+defined by <em>pattern</em> and the block.</p>
+
+<p>If <code><em>pattern</em> === <em>elt</em></code> returns <code>true</code>
+or the block returns <code>true</code> for the element, the element is end
+of a chunk.</p>
+
+<p>The <code>===</code> and <em>block</em> is called from the first element to
+the last element of <em>enum</em>.</p>
+
+<p>The result enumerator yields the chunked elements as an array. So
+<code>each</code> method can be called as follows:</p>
+
+<pre>enum.slice_after(pattern).each { |ary| ... }
+enum.slice_after { |elt| bool }.each { |ary| ... }</pre>
+
+<p>Other methods of the Enumerator class and <a
+href="Enumerable.html">Enumerable</a> module, such as <code>map</code>,
+etc., are also usable.</p>
+
+<p>For example, continuation lines (lines end with backslash) can be
+concatenated as follows:</p>
+
+<pre class="ruby"><span class="ruby-identifier">lines</span> = [<span class="ruby-string">&quot;foo\n&quot;</span>, <span class="ruby-string">&quot;bar\\\n&quot;</span>, <span class="ruby-string">&quot;baz\n&quot;</span>, <span class="ruby-string">&quot;\n&quot;</span>, <span class="ruby-string">&quot;qux\n&quot;</span>]
+<span class="ruby-identifier">e</span> = <span class="ruby-identifier">lines</span>.<span class="ruby-identifier">slice_after</span>(<span class="ruby-regexp">/(?&lt;!\)\n\z/</span>)
+<span class="ruby-identifier">p</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">to_a</span>
+<span class="ruby-comment">#=&gt; [[&quot;foo\n&quot;], [&quot;bar\\\n&quot;, &quot;baz\n&quot;], [&quot;\n&quot;], [&quot;qux\n&quot;]]</span>
+<span class="ruby-identifier">p</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">ll</span><span class="ruby-operator">|</span> <span class="ruby-identifier">ll</span>[<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-value">-1</span>].<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span> <span class="ruby-identifier">l</span>.<span class="ruby-identifier">sub</span>(<span class="ruby-regexp">/\\n\z/</span>, <span class="ruby-string">&quot;&quot;</span>) }.<span class="ruby-identifier">join</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">ll</span>.<span class="ruby-identifier">last</span> }
+<span class="ruby-comment">#=&gt;[&quot;foo\n&quot;, &quot;barbaz\n&quot;, &quot;\n&quot;, &quot;qux\n&quot;]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="slice_after-source">
+     			<pre>static VALUE
+enum_slice_after(int argc, VALUE *argv, VALUE enumerable)
+{
+    VALUE enumerator;
+    VALUE pat = Qnil, pred = Qnil;
+
+    if (rb_block_given_p()) {
+        if (0 &lt; argc)
+            rb_raise(rb_eArgError, &quot;both pattern and block are given&quot;);
+        pred = rb_block_proc();
+    }
+    else {
+        rb_scan_args(argc, argv, &quot;1&quot;, &amp;pat);
+    }
+
+    enumerator = rb_obj_alloc(rb_cEnumerator);
+    rb_ivar_set(enumerator, rb_intern(&quot;sliceafter_enum&quot;), enumerable);
+    rb_ivar_set(enumerator, rb_intern(&quot;sliceafter_pat&quot;), pat);
+    rb_ivar_set(enumerator, rb_intern(&quot;sliceafter_pred&quot;), pred);
+
+    rb_block_call(enumerator, idInitialize, 0, 0, sliceafter_i, enumerator);
+    return enumerator;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

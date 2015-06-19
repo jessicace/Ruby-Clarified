@@ -1,0 +1,45 @@
+<section id="method-i-values_at" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						values_at(selector, ...)  &rarr; new_ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns an array containing the elements in <code>self</code> corresponding
+to the given <code>selector</code>(s).</p>
+
+<p>The selectors may be either integer indices or ranges.</p>
+
+<p>See also <a href="Array.html#method-i-select">#select</a>.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = <span class="ruby-node">%w{ a b c d e f }</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">values_at</span>(<span class="ruby-value">1</span>, <span class="ruby-value">3</span>, <span class="ruby-value">5</span>)          <span class="ruby-comment"># =&gt; [&quot;b&quot;, &quot;d&quot;, &quot;f&quot;]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">values_at</span>(<span class="ruby-value">1</span>, <span class="ruby-value">3</span>, <span class="ruby-value">5</span>, <span class="ruby-value">7</span>)       <span class="ruby-comment"># =&gt; [&quot;b&quot;, &quot;d&quot;, &quot;f&quot;, nil]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">values_at</span>(<span class="ruby-value">-1</span>, <span class="ruby-value">-2</span>, <span class="ruby-value">-2</span>, <span class="ruby-value">-7</span>)   <span class="ruby-comment"># =&gt; [&quot;f&quot;, &quot;e&quot;, &quot;e&quot;, nil]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">values_at</span>(<span class="ruby-value">4</span><span class="ruby-operator">..</span><span class="ruby-value">6</span>, <span class="ruby-value">3</span><span class="ruby-operator">...</span><span class="ruby-value">6</span>)      <span class="ruby-comment"># =&gt; [&quot;e&quot;, &quot;f&quot;, nil, &quot;d&quot;, &quot;e&quot;, &quot;f&quot;]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="values_at-source">
+     			<pre>static VALUE
+rb_ary_values_at(int argc, VALUE *argv, VALUE ary)
+{
+    return rb_get_values_at(ary, RARRAY_LEN(ary), argc, argv, rb_ary_entry);
+}</pre>
+    		</div>
+      
+		</div>
+</section>

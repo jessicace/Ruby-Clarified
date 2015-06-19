@@ -1,0 +1,65 @@
+<section id="method-i-each_entry" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						each_entry { |obj| block }  &rarr; enum
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						each_entry                  &rarr; an_enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Calls <em>block</em> once for each element in <code>self</code>, passing
+that element as a parameter, converting multiple values from yield to an
+array.</p>
+
+<p>If no block is given, an enumerator is returned instead.</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Foo</span>
+  <span class="ruby-identifier">include</span> <span class="ruby-constant">Enumerable</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier">each</span>
+    <span class="ruby-keyword">yield</span> <span class="ruby-value">1</span>
+    <span class="ruby-keyword">yield</span> <span class="ruby-value">1</span>, <span class="ruby-value">2</span>
+    <span class="ruby-keyword">yield</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+<span class="ruby-constant">Foo</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">each_entry</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span> <span class="ruby-identifier">p</span> <span class="ruby-identifier">o</span> }
+</pre>
+
+<p>produces:</p>
+
+<pre class="ruby"><span class="ruby-value">1</span>
+[<span class="ruby-value">1</span>, <span class="ruby-value">2</span>]
+<span class="ruby-keyword">nil</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="each_entry-source">
+     			<pre>static VALUE
+enum_each_entry(int argc, VALUE *argv, VALUE obj)
+{
+    RETURN_SIZED_ENUMERATOR(obj, argc, argv, enum_size);
+    rb_block_call(obj, id_each, argc, argv, each_val_i, 0);
+    return obj;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

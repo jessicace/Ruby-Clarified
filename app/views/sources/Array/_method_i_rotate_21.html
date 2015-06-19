@@ -1,0 +1,53 @@
+<section id="method-i-rotate-21" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						rotate!(count=1)   &rarr; ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Rotates <code>self</code> in place so that the element at
+<code>count</code> comes first, and returns <code>self</code>.</p>
+
+<p>If <code>count</code> is negative then it rotates in the opposite
+direction, starting from the end of the array where <code>-1</code> is the
+last element.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span>, <span class="ruby-string">&quot;d&quot;</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">rotate!</span>        <span class="ruby-comment">#=&gt; [&quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;a&quot;]</span>
+<span class="ruby-identifier">a</span>                <span class="ruby-comment">#=&gt; [&quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;a&quot;]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">rotate!</span>(<span class="ruby-value">2</span>)     <span class="ruby-comment">#=&gt; [&quot;d&quot;, &quot;a&quot;, &quot;b&quot;, &quot;c&quot;]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">rotate!</span>(<span class="ruby-value">-3</span>)    <span class="ruby-comment">#=&gt; [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="rotate-21-source">
+     			<pre>static VALUE
+rb_ary_rotate_bang(int argc, VALUE *argv, VALUE ary)
+{
+    long n = 1;
+
+    switch (argc) {
+      case 1: n = NUM2LONG(argv[0]);
+      case 0: break;
+      default: rb_scan_args(argc, argv, &quot;01&quot;, NULL);
+    }
+    rb_ary_rotate(ary, n);
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

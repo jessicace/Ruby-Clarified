@@ -1,0 +1,84 @@
+<section id="method-i-repeated_permutation" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						repeated_permutation(n) { |p| block } &rarr; ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						repeated_permutation(n)               &rarr; Enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>When invoked with a block, yield all repeated permutations of length
+<code>n</code> of the elements of the array, then return the array itself.</p>
+
+<p>The implementation makes no guarantees about the order in which the
+repeated permutations are yielded.</p>
+
+<p>If no block is given, an Enumerator is returned instead.</p>
+
+<p>Examples:</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [<span class="ruby-value">1</span>, <span class="ruby-value">2</span>]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">repeated_permutation</span>(<span class="ruby-value">1</span>).<span class="ruby-identifier">to_a</span>  <span class="ruby-comment">#=&gt; [[1], [2]]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">repeated_permutation</span>(<span class="ruby-value">2</span>).<span class="ruby-identifier">to_a</span>  <span class="ruby-comment">#=&gt; [[1,1],[1,2],[2,1],[2,2]]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">repeated_permutation</span>(<span class="ruby-value">3</span>).<span class="ruby-identifier">to_a</span>  <span class="ruby-comment">#=&gt; [[1,1,1],[1,1,2],[1,2,1],[1,2,2],</span>
+                                <span class="ruby-comment">#    [2,1,1],[2,1,2],[2,2,1],[2,2,2]]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">repeated_permutation</span>(<span class="ruby-value">0</span>).<span class="ruby-identifier">to_a</span>  <span class="ruby-comment">#=&gt; [[]] # one permutation of length 0</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="repeated_permutation-source">
+     			<pre>static VALUE
+rb_ary_repeated_permutation(VALUE ary, VALUE num)
+{
+    long r, n, i;
+
+    n = RARRAY_LEN(ary);                  /* Array length */
+    RETURN_SIZED_ENUMERATOR(ary, 1, &amp;num, rb_ary_repeated_permutation_size);      /* Return Enumerator if no block */
+    r = NUM2LONG(num);                    /* Permutation size from argument */
+
+    if (r &lt; 0) {
+        /* no permutations: yield nothing */
+    }
+    else if (r == 0) { /* exactly one permutation: the zero-length array */
+        rb_yield(rb_ary_new2(0));
+    }
+    else if (r == 1) { /* this is a special, easy case */
+        for (i = 0; i &lt; RARRAY_LEN(ary); i++) {
+            rb_yield(rb_ary_new3(1, RARRAY_AREF(ary, i)));
+        }
+    }
+    else {             /* this is the general case */
+        volatile VALUE t0;
+        long *p = ALLOCV_N(long, t0, r * sizeof(long));
+        VALUE ary0 = ary_make_shared_copy(ary); /* private defensive copy of ary */
+        RBASIC_CLEAR_CLASS(ary0);
+
+        rpermute0(n, r, p, ary0); /* compute and yield repeated permutations */
+        ALLOCV_END(t0);
+        RBASIC_SET_CLASS_RAW(ary0, rb_cArray);
+    }
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

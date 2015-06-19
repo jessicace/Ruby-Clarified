@@ -1,0 +1,90 @@
+<section id="method-i-zip" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						zip(arg, ...)                  &rarr; an_array_of_array
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						zip(arg, ...) { |arr| block }  &rarr; nil
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Takes one element from <em>enum</em> and merges corresponding elements from
+each <em>args</em>.  This generates a sequence of <em>n</em>-element
+arrays, where <em>n</em> is one more than the count of arguments.  The
+length of the resulting sequence will be <code>enum#size</code>.  If the
+size of any argument is less than <code>enum#size</code>, <code>nil</code>
+values are supplied. If a block is given, it is invoked for each output
+array, otherwise an array of arrays is returned.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-value">4</span>, <span class="ruby-value">5</span>, <span class="ruby-value">6</span> ]
+<span class="ruby-identifier">b</span> = [ <span class="ruby-value">7</span>, <span class="ruby-value">8</span>, <span class="ruby-value">9</span> ]
+
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">zip</span>(<span class="ruby-identifier">b</span>)                 <span class="ruby-comment">#=&gt; [[4, 7], [5, 8], [6, 9]]</span>
+[<span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>].<span class="ruby-identifier">zip</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)      <span class="ruby-comment">#=&gt; [[1, 4, 7], [2, 5, 8], [3, 6, 9]]</span>
+[<span class="ruby-value">1</span>, <span class="ruby-value">2</span>].<span class="ruby-identifier">zip</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)         <span class="ruby-comment">#=&gt; [[1, 4, 7], [2, 5, 8]]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">zip</span>([<span class="ruby-value">1</span>, <span class="ruby-value">2</span>], [<span class="ruby-value">8</span>])       <span class="ruby-comment">#=&gt; [[4, 1, 8], [5, 2, nil], [6, nil, nil]]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="zip-source">
+     			<pre>static VALUE
+enum_zip(int argc, VALUE *argv, VALUE obj)
+{
+    int i;
+    ID conv;
+    struct MEMO *memo;
+    VALUE result = Qnil;
+    VALUE args = rb_ary_new4(argc, argv);
+    int allary = TRUE;
+
+    argv = RARRAY_PTR(args);
+    for (i=0; i&lt;argc; i++) {
+        VALUE ary = rb_check_array_type(argv[i]);
+        if (NIL_P(ary)) {
+            allary = FALSE;
+            break;
+        }
+        argv[i] = ary;
+    }
+    if (!allary) {
+        CONST_ID(conv, &quot;to_enum&quot;);
+        for (i=0; i&lt;argc; i++) {
+            if (!rb_respond_to(argv[i], id_each)) {
+                rb_raise(rb_eTypeError, &quot;wrong argument type %s (must respond to :each)&quot;,
+                    rb_obj_classname(argv[i]));
+            }
+            argv[i] = rb_funcall(argv[i], conv, 1, ID2SYM(id_each));
+        }
+    }
+    if (!rb_block_given_p()) {
+        result = rb_ary_new();
+    }
+
+    /* TODO: use NODE_DOT2 as memo(v, v, -) */
+    memo = MEMO_NEW(result, args, 0);
+    rb_block_call(obj, id_each, 0, 0, allary ? zip_ary : zip_i, (VALUE)memo);
+
+    return result;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

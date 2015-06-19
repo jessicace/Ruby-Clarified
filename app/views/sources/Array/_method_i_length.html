@@ -1,0 +1,38 @@
+<section id="method-i-length" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						length &rarr; int
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns the number of elements in <code>self</code>. May be zero.</p>
+
+<pre class="ruby">[ <span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>, <span class="ruby-value">4</span>, <span class="ruby-value">5</span> ].<span class="ruby-identifier">length</span>   <span class="ruby-comment">#=&gt; 5</span>
+[].<span class="ruby-identifier">length</span>                  <span class="ruby-comment">#=&gt; 0</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="length-source">
+     			<pre>static VALUE
+rb_ary_length(VALUE ary)
+{
+    long len = RARRAY_LEN(ary);
+    return LONG2NUM(len);
+}</pre>
+    		</div>
+      
+		</div>
+</section>

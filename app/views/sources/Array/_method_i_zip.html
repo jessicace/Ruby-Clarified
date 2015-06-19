@@ -1,0 +1,110 @@
+<section id="method-i-zip" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						zip(arg, ...)                  &rarr; new_ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						zip(arg, ...) { |arr| block }  &rarr; nil
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Converts any arguments to arrays, then merges elements of <code>self</code>
+with corresponding elements from each argument.</p>
+
+<p>This generates a sequence of <code>ary.size</code> <em>n</em>-element
+arrays, where <em>n</em> is one more than the count of arguments.</p>
+
+<p>If the size of any argument is less than the size of the initial array,
+<code>nil</code> values are supplied.</p>
+
+<p>If a block is given, it is invoked for each output <code>array</code>,
+otherwise an array of arrays is returned.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-value">4</span>, <span class="ruby-value">5</span>, <span class="ruby-value">6</span> ]
+<span class="ruby-identifier">b</span> = [ <span class="ruby-value">7</span>, <span class="ruby-value">8</span>, <span class="ruby-value">9</span> ]
+[<span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>].<span class="ruby-identifier">zip</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)   <span class="ruby-comment">#=&gt; [[1, 4, 7], [2, 5, 8], [3, 6, 9]]</span>
+[<span class="ruby-value">1</span>, <span class="ruby-value">2</span>].<span class="ruby-identifier">zip</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>)      <span class="ruby-comment">#=&gt; [[1, 4, 7], [2, 5, 8]]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">zip</span>([<span class="ruby-value">1</span>, <span class="ruby-value">2</span>], [<span class="ruby-value">8</span>])    <span class="ruby-comment">#=&gt; [[4, 1, 8], [5, 2, nil], [6, nil, nil]]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="zip-source">
+     			<pre>static VALUE
+rb_ary_zip(int argc, VALUE *argv, VALUE ary)
+{
+    int i, j;
+    long len = RARRAY_LEN(ary);
+    VALUE result = Qnil;
+
+    for (i=0; i&lt;argc; i++) {
+        argv[i] = take_items(argv[i], len);
+    }
+
+    if (rb_block_given_p()) {
+        int arity = rb_block_arity();
+
+        if (arity &gt; 1) {
+            VALUE work, *tmp;
+
+            tmp = ALLOCV_N(VALUE, work, argc+1);
+
+            for (i=0; i&lt;RARRAY_LEN(ary); i++) {
+                tmp[0] = RARRAY_AREF(ary, i);
+                for (j=0; j&lt;argc; j++) {
+                    tmp[j+1] = rb_ary_elt(argv[j], i);
+                }
+                rb_yield_values2(argc+1, tmp);
+            }
+
+            if (work) ALLOCV_END(work);
+        }
+        else {
+            for (i=0; i&lt;RARRAY_LEN(ary); i++) {
+                VALUE tmp = rb_ary_new2(argc+1);
+
+                rb_ary_push(tmp, RARRAY_AREF(ary, i));
+                for (j=0; j&lt;argc; j++) {
+                    rb_ary_push(tmp, rb_ary_elt(argv[j], i));
+                }
+                rb_yield(tmp);
+            }
+        }
+    }
+    else {
+        result = rb_ary_new_capa(len);
+
+        for (i=0; i&lt;len; i++) {
+            VALUE tmp = rb_ary_new_capa(argc+1);
+
+            rb_ary_push(tmp, RARRAY_AREF(ary, i));
+            for (j=0; j&lt;argc; j++) {
+                rb_ary_push(tmp, rb_ary_elt(argv[j], i));
+            }
+            rb_ary_push(result, tmp);
+        }
+    }
+
+    return result;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

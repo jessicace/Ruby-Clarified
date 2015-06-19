@@ -1,0 +1,40 @@
+<section id="method-i-at" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						at(index)   &rarr;   obj  or nil
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns the element at <code>index</code>. A negative index counts from the
+end of <code>self</code>. Returns <code>nil</code> if the index is out of
+range. See also <a href="Array.html#method-i-5B-5D">#[]</a>.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span>, <span class="ruby-string">&quot;d&quot;</span>, <span class="ruby-string">&quot;e&quot;</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">at</span>(<span class="ruby-value">0</span>)     <span class="ruby-comment">#=&gt; &quot;a&quot;</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">at</span>(<span class="ruby-value">-1</span>)    <span class="ruby-comment">#=&gt; &quot;e&quot;</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="at-source">
+     			<pre>static VALUE
+rb_ary_at(VALUE ary, VALUE pos)
+{
+    return rb_ary_entry(ary, NUM2LONG(pos));
+}</pre>
+    		</div>
+      
+		</div>
+</section>

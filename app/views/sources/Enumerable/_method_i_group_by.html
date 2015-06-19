@@ -1,0 +1,56 @@
+<section id="method-i-group_by" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						group_by { |obj| block } &rarr; a_hash
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						group_by                 &rarr; an_enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Groups the collection by result of the block.  Returns a hash where the
+keys are the evaluated result from the block and the values are arrays of
+elements in the collection that correspond to the key.</p>
+
+<p>If no block is given an enumerator is returned.</p>
+
+<pre class="ruby">(<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">6</span>).<span class="ruby-identifier">group_by</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">i</span><span class="ruby-operator">%</span><span class="ruby-value">3</span> }   <span class="ruby-comment">#=&gt; {0=&gt;[3, 6], 1=&gt;[1, 4], 2=&gt;[2, 5]}</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="group_by-source">
+     			<pre>static VALUE
+enum_group_by(VALUE obj)
+{
+    VALUE hash;
+
+    RETURN_SIZED_ENUMERATOR(obj, 0, 0, enum_size);
+
+    hash = rb_hash_new();
+    rb_block_call(obj, id_each, 0, 0, group_by_i, hash);
+    OBJ_INFECT(hash, obj);
+
+    return hash;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

@@ -1,0 +1,63 @@
+<section id="method-i-detect" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						detect(ifnone = nil) { |obj| block } &rarr; obj or nil
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						detect(ifnone = nil)                 &rarr; an_enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Passes each entry in <em>enum</em> to <em>block</em>. Returns the first for
+which <em>block</em> is not false.  If no object matches, calls
+<em>ifnone</em> and returns its result when it is specified, or returns
+<code>nil</code> otherwise.</p>
+
+<p>If no block is given, an enumerator is returned instead.</p>
+
+<pre class="ruby">(<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">10</span>).<span class="ruby-identifier">detect</span>   { <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">i</span> <span class="ruby-operator">%</span> <span class="ruby-value">5</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span> <span class="ruby-keyword">and</span> <span class="ruby-identifier">i</span> <span class="ruby-operator">%</span> <span class="ruby-value">7</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span> }   <span class="ruby-comment">#=&gt; nil</span>
+(<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">100</span>).<span class="ruby-identifier">find</span>    { <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">i</span> <span class="ruby-operator">%</span> <span class="ruby-value">5</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span> <span class="ruby-keyword">and</span> <span class="ruby-identifier">i</span> <span class="ruby-operator">%</span> <span class="ruby-value">7</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span> }   <span class="ruby-comment">#=&gt; 35</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="detect-source">
+     			<pre>static VALUE
+enum_find(int argc, VALUE *argv, VALUE obj)
+{
+    struct MEMO *memo;
+    VALUE if_none;
+
+    rb_scan_args(argc, argv, &quot;01&quot;, &amp;if_none);
+    RETURN_ENUMERATOR(obj, argc, argv);
+    memo = MEMO_NEW(Qundef, 0, 0);
+    rb_block_call(obj, id_each, 0, 0, find_i, (VALUE)memo);
+    if (memo-&gt;u3.cnt) {
+        return memo-&gt;v1;
+    }
+    if (!NIL_P(if_none)) {
+        return rb_funcallv(if_none, id_call, 0, 0);
+    }
+    return Qnil;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

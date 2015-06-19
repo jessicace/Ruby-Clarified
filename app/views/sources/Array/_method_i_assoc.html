@@ -1,0 +1,57 @@
+<section id="method-i-assoc" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						assoc(obj)   &rarr; element_ary  or  nil
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Searches through an array whose elements are also arrays comparing
+<code>obj</code> with the first element of each contained array using
+<code>obj.==</code>.</p>
+
+<p>Returns the first contained array that matches (that is, the first
+associated array), or <code>nil</code> if no match is found.</p>
+
+<p>See also <a href="Array.html#method-i-rassoc">#rassoc</a></p>
+
+<pre class="ruby"><span class="ruby-identifier">s1</span> = [ <span class="ruby-string">&quot;colors&quot;</span>, <span class="ruby-string">&quot;red&quot;</span>, <span class="ruby-string">&quot;blue&quot;</span>, <span class="ruby-string">&quot;green&quot;</span> ]
+<span class="ruby-identifier">s2</span> = [ <span class="ruby-string">&quot;letters&quot;</span>, <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span> ]
+<span class="ruby-identifier">s3</span> = <span class="ruby-string">&quot;foo&quot;</span>
+<span class="ruby-identifier">a</span>  = [ <span class="ruby-identifier">s1</span>, <span class="ruby-identifier">s2</span>, <span class="ruby-identifier">s3</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">assoc</span>(<span class="ruby-string">&quot;letters&quot;</span>)  <span class="ruby-comment">#=&gt; [ &quot;letters&quot;, &quot;a&quot;, &quot;b&quot;, &quot;c&quot; ]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">assoc</span>(<span class="ruby-string">&quot;foo&quot;</span>)      <span class="ruby-comment">#=&gt; nil</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="assoc-source">
+     			<pre>VALUE
+rb_ary_assoc(VALUE ary, VALUE key)
+{
+    long i;
+    VALUE v;
+
+    for (i = 0; i &lt; RARRAY_LEN(ary); ++i) {
+        v = rb_check_array_type(RARRAY_AREF(ary, i));
+        if (!NIL_P(v) &amp;&amp; RARRAY_LEN(v) &gt; 0 &amp;&amp;
+            rb_equal(RARRAY_AREF(v, 0), key))
+            return v;
+    }
+    return Qnil;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

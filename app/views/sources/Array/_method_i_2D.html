@@ -1,0 +1,58 @@
+<section id="method-i-2D" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						ary - other_ary    &rarr; new_ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p><a href="Array.html">Array</a> Difference</p>
+
+<p>Returns a new array that is a copy of the original array, removing any
+items that also appear in <code>other_ary</code>. The order is preserved
+from the original array.</p>
+
+<p>It compares elements using their <a
+href="Array.html#method-i-hash">hash</a> and <a
+href="Array.html#method-i-eql-3F">eql?</a> methods for efficiency.</p>
+
+<pre class="ruby">[ <span class="ruby-value">1</span>, <span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>, <span class="ruby-value">3</span>, <span class="ruby-value">4</span>, <span class="ruby-value">5</span> ] <span class="ruby-operator">-</span> [ <span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">4</span> ]  <span class="ruby-comment">#=&gt;  [ 3, 3, 5 ]</span>
+</pre>
+
+<p>If you need set-like behavior, see the library class Set.</p>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="2D-source">
+     			<pre>static VALUE
+rb_ary_diff(VALUE ary1, VALUE ary2)
+{
+    VALUE ary3;
+    VALUE hash;
+    long i;
+
+    hash = ary_make_hash(to_ary(ary2));
+    ary3 = rb_ary_new();
+
+    for (i=0; i&lt;RARRAY_LEN(ary1); i++) {
+        if (st_lookup(rb_hash_tbl_raw(hash), RARRAY_AREF(ary1, i), 0)) continue;
+        rb_ary_push(ary3, rb_ary_elt(ary1, i));
+    }
+    ary_recycle_hash(hash);
+    return ary3;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

@@ -1,0 +1,51 @@
+<section id="method-i-reject-21" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						reject! { |item| block }  &rarr; ary or nil
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						reject!                   &rarr; Enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Equivalent to <a href="Array.html#method-i-delete_if">#delete_if</a>,
+deleting elements from <code>self</code> for which the block evaluates to
+<code>true</code>, but returns <code>nil</code> if no changes were made.</p>
+
+<p>The array may not be changed instantly every time the block is called.</p>
+
+<p>See also <a href="Enumerable.html#method-i-reject">Enumerable#reject</a>
+and <a href="Array.html#method-i-delete_if">#delete_if</a>.</p>
+
+<p>If no block is given, an Enumerator is returned instead.</p>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="reject-21-source">
+     			<pre>static VALUE
+rb_ary_reject_bang(VALUE ary)
+{
+    RETURN_SIZED_ENUMERATOR(ary, 0, 0, ary_enum_length);
+    return ary_reject_bang(ary);
+}</pre>
+    		</div>
+      
+		</div>
+</section>

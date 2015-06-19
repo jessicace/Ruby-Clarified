@@ -1,0 +1,114 @@
+<section id="method-i-reduce" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						reduce(initial, sym) &rarr; obj
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						reduce(sym)          &rarr; obj
+          </span>
+
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						reduce(initial) { |memo, obj| block }  &rarr; obj
+          </span>
+
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						reduce          { |memo, obj| block }  &rarr; obj
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Combines all elements of <em>enum</em> by applying a binary operation,
+specified by a block or a symbol that names a method or operator.</p>
+
+<p>If you specify a block, then for each element in <em>enum</em> the block is
+passed an accumulator value (<em>memo</em>) and the element. If you specify
+a symbol instead, then each element in the collection will be passed to the
+named method of <em>memo</em>. In either case, the result becomes the new
+value for <em>memo</em>. At the end of the iteration, the final value of
+<em>memo</em> is the return value for the method.</p>
+
+<p>If you do not explicitly specify an <em>initial</em> value for
+<em>memo</em>, then the first element of collection is used as the initial
+value of <em>memo</em>.</p>
+
+<pre class="ruby"><span class="ruby-comment"># Sum some numbers</span>
+(<span class="ruby-value">5</span><span class="ruby-operator">..</span><span class="ruby-value">10</span>).<span class="ruby-identifier">reduce</span>(:<span class="ruby-operator">+</span>)                             <span class="ruby-comment">#=&gt; 45</span>
+<span class="ruby-comment"># Same using a block and inject</span>
+(<span class="ruby-value">5</span><span class="ruby-operator">..</span><span class="ruby-value">10</span>).<span class="ruby-identifier">inject</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">sum</span>, <span class="ruby-identifier">n</span><span class="ruby-operator">|</span> <span class="ruby-identifier">sum</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">n</span> }            <span class="ruby-comment">#=&gt; 45</span>
+<span class="ruby-comment"># Multiply some numbers</span>
+(<span class="ruby-value">5</span><span class="ruby-operator">..</span><span class="ruby-value">10</span>).<span class="ruby-identifier">reduce</span>(<span class="ruby-value">1</span>, :<span class="ruby-operator">*</span>)                          <span class="ruby-comment">#=&gt; 151200</span>
+<span class="ruby-comment"># Same using a block</span>
+(<span class="ruby-value">5</span><span class="ruby-operator">..</span><span class="ruby-value">10</span>).<span class="ruby-identifier">inject</span>(<span class="ruby-value">1</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">product</span>, <span class="ruby-identifier">n</span><span class="ruby-operator">|</span> <span class="ruby-identifier">product</span> <span class="ruby-operator">*</span> <span class="ruby-identifier">n</span> } <span class="ruby-comment">#=&gt; 151200</span>
+<span class="ruby-comment"># find the longest word</span>
+<span class="ruby-identifier">longest</span> = <span class="ruby-node">%w{ cat sheep bear }</span>.<span class="ruby-identifier">inject</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">memo</span>, <span class="ruby-identifier">word</span><span class="ruby-operator">|</span>
+   <span class="ruby-identifier">memo</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">word</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">memo</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">word</span>
+<span class="ruby-keyword">end</span>
+<span class="ruby-identifier">longest</span>                                        <span class="ruby-comment">#=&gt; &quot;sheep&quot;</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="reduce-source">
+     			<pre>static VALUE
+enum_inject(int argc, VALUE *argv, VALUE obj)
+{
+    struct MEMO *memo;
+    VALUE init, op;
+    rb_block_call_func *iter = inject_i;
+    ID id;
+
+    switch (rb_scan_args(argc, argv, &quot;02&quot;, &amp;init, &amp;op)) {
+      case 0:
+        init = Qundef;
+        break;
+      case 1:
+        if (rb_block_given_p()) {
+            break;
+        }
+        id = rb_check_id(&amp;init);
+        op = id ? ID2SYM(id) : init;
+        init = Qundef;
+        iter = inject_op_i;
+        break;
+      case 2:
+        if (rb_block_given_p()) {
+            rb_warning(&quot;given block not used&quot;);
+        }
+        id = rb_check_id(&amp;op);
+        if (id) op = ID2SYM(id);
+        iter = inject_op_i;
+        break;
+    }
+    memo = MEMO_NEW(init, Qnil, op);
+    rb_block_call(obj, id_each, 0, 0, iter, (VALUE)memo);
+    if (memo-&gt;v1 == Qundef) return Qnil;
+    return memo-&gt;v1;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

@@ -1,0 +1,136 @@
+<section id="method-i-chunk" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						chunk { |elt| ... }                       &rarr; an_enumerator
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Enumerates over the items, chunking them together based on the return value
+of the block.</p>
+
+<p>Consecutive elements which return the same block value are chunked
+together.</p>
+
+<p>For example, consecutive even numbers and odd numbers can be chunked as
+follows.</p>
+
+<pre class="ruby">[<span class="ruby-value">3</span>, <span class="ruby-value">1</span>, <span class="ruby-value">4</span>, <span class="ruby-value">1</span>, <span class="ruby-value">5</span>, <span class="ruby-value">9</span>, <span class="ruby-value">2</span>, <span class="ruby-value">6</span>, <span class="ruby-value">5</span>, <span class="ruby-value">3</span>, <span class="ruby-value">5</span>].<span class="ruby-identifier">chunk</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">n</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">n</span>.<span class="ruby-identifier">even?</span>
+}.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">even</span>, <span class="ruby-identifier">ary</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">p</span> [<span class="ruby-identifier">even</span>, <span class="ruby-identifier">ary</span>]
+}
+<span class="ruby-comment">#=&gt; [false, [3, 1]]</span>
+<span class="ruby-comment">#   [true, [4]]</span>
+<span class="ruby-comment">#   [false, [1, 5, 9]]</span>
+<span class="ruby-comment">#   [true, [2, 6]]</span>
+<span class="ruby-comment">#   [false, [5, 3, 5]]</span>
+</pre>
+
+<p>This method is especially useful for sorted series of elements. The
+following example counts words for each initial letter.</p>
+
+<pre class="ruby"><span class="ruby-identifier">open</span>(<span class="ruby-string">&quot;/usr/share/dict/words&quot;</span>, <span class="ruby-string">&quot;r:iso-8859-1&quot;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">chunk</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">ord</span> }.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">ch</span>, <span class="ruby-identifier">lines</span><span class="ruby-operator">|</span> <span class="ruby-identifier">p</span> [<span class="ruby-identifier">ch</span>.<span class="ruby-identifier">chr</span>, <span class="ruby-identifier">lines</span>.<span class="ruby-identifier">length</span>] }
+}
+<span class="ruby-comment">#=&gt; [&quot;\n&quot;, 1]</span>
+<span class="ruby-comment">#   [&quot;A&quot;, 1327]</span>
+<span class="ruby-comment">#   [&quot;B&quot;, 1372]</span>
+<span class="ruby-comment">#   [&quot;C&quot;, 1507]</span>
+<span class="ruby-comment">#   [&quot;D&quot;, 791]</span>
+<span class="ruby-comment">#   ...</span>
+</pre>
+
+<p>The following key values have special meaning:</p>
+<ul><li>
+<p><code>nil</code> and <code>:_separator</code> specifies that the elements
+should be dropped.</p>
+</li><li>
+<p><code>:_alone</code> specifies that the element should be chunked by
+itself.</p>
+</li></ul>
+
+<p>Any other symbols that begin with an underscore will raise an error:</p>
+
+<pre class="ruby"><span class="ruby-identifier">items</span>.<span class="ruby-identifier">chunk</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">item</span><span class="ruby-operator">|</span> :<span class="ruby-identifier">_underscore</span> }
+<span class="ruby-comment">#=&gt; RuntimeError: symbols beginning with an underscore are reserved</span>
+</pre>
+
+<p><code>nil</code> and <code>:_separator</code> can be used to ignore some
+elements.</p>
+
+<p>For example, the sequence of hyphens in svn log can be eliminated as
+follows:</p>
+
+<pre class="ruby"><span class="ruby-identifier">sep</span> = <span class="ruby-string">&quot;-&quot;</span><span class="ruby-operator">*</span><span class="ruby-value">72</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;\n&quot;</span>
+<span class="ruby-constant">IO</span>.<span class="ruby-identifier">popen</span>(<span class="ruby-string">&quot;svn log README&quot;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">chunk</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">line</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">sep</span> <span class="ruby-operator">||</span> <span class="ruby-keyword">nil</span>
+  }.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">_</span>, <span class="ruby-identifier">lines</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">pp</span> <span class="ruby-identifier">lines</span>
+  }
+}
+<span class="ruby-comment">#=&gt; [&quot;r20018 | knu | 2008-10-29 13:20:42 +0900 (Wed, 29 Oct 2008) | 2 lines\n&quot;,</span>
+<span class="ruby-comment">#    &quot;\n&quot;,</span>
+<span class="ruby-comment">#    &quot;* README, README.ja: Update the portability section.\n&quot;,</span>
+<span class="ruby-comment">#    &quot;\n&quot;]</span>
+<span class="ruby-comment">#   [&quot;r16725 | knu | 2008-05-31 23:34:23 +0900 (Sat, 31 May 2008) | 2 lines\n&quot;,</span>
+<span class="ruby-comment">#    &quot;\n&quot;,</span>
+<span class="ruby-comment">#    &quot;* README, README.ja: Add a note about default C flags.\n&quot;,</span>
+<span class="ruby-comment">#    &quot;\n&quot;]</span>
+<span class="ruby-comment">#   ...</span>
+</pre>
+
+<p>Paragraphs separated by empty lines can be parsed as follows:</p>
+
+<pre class="ruby"><span class="ruby-constant">File</span>.<span class="ruby-identifier">foreach</span>(<span class="ruby-string">&quot;README&quot;</span>).<span class="ruby-identifier">chunk</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span>
+  <span class="ruby-regexp">/\A\s*\z/</span> <span class="ruby-operator">!~</span> <span class="ruby-identifier">line</span> <span class="ruby-operator">||</span> <span class="ruby-keyword">nil</span>
+}.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">_</span>, <span class="ruby-identifier">lines</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">pp</span> <span class="ruby-identifier">lines</span>
+}
+</pre>
+
+<p><code>:_alone</code> can be used to force items into their own chunk. For
+example, you can put lines that contain a URL by themselves, and chunk the
+rest of the lines together, like this:</p>
+
+<pre class="ruby"><span class="ruby-identifier">pattern</span> = <span class="ruby-regexp">/http/</span>
+<span class="ruby-identifier">open</span>(<span class="ruby-identifier">filename</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">chunk</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span> <span class="ruby-identifier">line</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">pattern</span> <span class="ruby-operator">?</span> :<span class="ruby-identifier">_alone</span> <span class="ruby-operator">:</span> <span class="ruby-keyword">true</span> }.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>, <span class="ruby-identifier">lines</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">pp</span> <span class="ruby-identifier">lines</span>
+  }
+}
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="chunk-source">
+     			<pre>static VALUE
+enum_chunk(VALUE enumerable)
+{
+    VALUE enumerator;
+
+    if (!rb_block_given_p())
+        rb_raise(rb_eArgError, &quot;no block given&quot;);
+
+    enumerator = rb_obj_alloc(rb_cEnumerator);
+    rb_ivar_set(enumerator, rb_intern(&quot;chunk_enumerable&quot;), enumerable);
+    rb_ivar_set(enumerator, rb_intern(&quot;chunk_categorize&quot;), rb_block_proc());
+    rb_block_call(enumerator, idInitialize, 0, 0, chunk_i, enumerator);
+    return enumerator;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

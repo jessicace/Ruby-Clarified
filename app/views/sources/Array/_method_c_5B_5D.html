@@ -1,0 +1,40 @@
+<section id="method-c-5B-5D" class="method-detail ">
+		
+			<div class="method-heading">
+				<span class="method-name">[]</span>
+				<span class="method-args">(*args)</span>
+				
+					<span class="method-click-advice">click to toggle source</span>
+				
+			</div>
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns a new array populated with the given objects.</p>
+
+<pre class="ruby"><span class="ruby-constant">Array</span>.[]( <span class="ruby-value">1</span>, <span class="ruby-string">&#39;a&#39;</span>, <span class="ruby-regexp">/^A/</span> ) <span class="ruby-comment"># =&gt; [1, &quot;a&quot;, /^A/]</span>
+<span class="ruby-constant">Array</span>[ <span class="ruby-value">1</span>, <span class="ruby-string">&#39;a&#39;</span>, <span class="ruby-regexp">/^A/</span> ]    <span class="ruby-comment"># =&gt; [1, &quot;a&quot;, /^A/]</span>
+[ <span class="ruby-value">1</span>, <span class="ruby-string">&#39;a&#39;</span>, <span class="ruby-regexp">/^A/</span> ]         <span class="ruby-comment"># =&gt; [1, &quot;a&quot;, /^A/]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="5B-5D-source">
+     			<pre>static VALUE
+rb_ary_s_create(int argc, VALUE *argv, VALUE klass)
+{
+    VALUE ary = ary_new(klass, argc);
+    if (argc &gt; 0 &amp;&amp; argv) {
+        ary_memcpy(ary, 0, argc, argv);
+        ARY_SET_LEN(ary, argc);
+    }
+
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

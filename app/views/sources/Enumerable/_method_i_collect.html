@@ -1,0 +1,55 @@
+<section id="method-i-collect" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						collect { |obj| block } &rarr; array
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+				<div class="method-heading">
+    			<span class="method-callseq">
+						collect                 &rarr; an_enumerator
+          </span>
+
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Returns a new array with the results of running <em>block</em> once for
+every element in <em>enum</em>.</p>
+
+<p>If no block is given, an enumerator is returned instead.</p>
+
+<pre class="ruby">(<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">4</span>).<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">i</span><span class="ruby-operator">*</span><span class="ruby-identifier">i</span> }      <span class="ruby-comment">#=&gt; [1, 4, 9, 16]</span>
+(<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">4</span>).<span class="ruby-identifier">collect</span> { <span class="ruby-string">&quot;cat&quot;</span>  }   <span class="ruby-comment">#=&gt; [&quot;cat&quot;, &quot;cat&quot;, &quot;cat&quot;, &quot;cat&quot;]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="collect-source">
+     			<pre>static VALUE
+enum_collect(VALUE obj)
+{
+    VALUE ary;
+
+    RETURN_SIZED_ENUMERATOR(obj, 0, 0, enum_size);
+
+    ary = rb_ary_new();
+    rb_block_call(obj, id_each, 0, 0, collect_i, ary);
+
+    return ary;
+}</pre>
+    		</div>
+      
+		</div>
+</section>

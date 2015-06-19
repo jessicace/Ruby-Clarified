@@ -1,0 +1,49 @@
+<section id="method-i-3D-3D" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						ary == other_ary   &rarr;   bool
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Equality — Two arrays are equal if they contain the same number of elements
+and if each element is equal to (according to Object#==) the corresponding
+element in <code>other_ary</code>.</p>
+
+<pre class="ruby">[ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;c&quot;</span> ]    <span class="ruby-operator">==</span> [ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;c&quot;</span>, <span class="ruby-value">7</span> ]     <span class="ruby-comment">#=&gt; false</span>
+[ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;c&quot;</span>, <span class="ruby-value">7</span> ] <span class="ruby-operator">==</span> [ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;c&quot;</span>, <span class="ruby-value">7</span> ]     <span class="ruby-comment">#=&gt; true</span>
+[ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;c&quot;</span>, <span class="ruby-value">7</span> ] <span class="ruby-operator">==</span> [ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;d&quot;</span>, <span class="ruby-string">&quot;f&quot;</span> ]   <span class="ruby-comment">#=&gt; false</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="3D-3D-source">
+     			<pre>static VALUE
+rb_ary_equal(VALUE ary1, VALUE ary2)
+{
+    if (ary1 == ary2) return Qtrue;
+    if (!RB_TYPE_P(ary2, T_ARRAY)) {
+        if (!rb_respond_to(ary2, idTo_ary)) {
+            return Qfalse;
+        }
+        return rb_equal(ary2, ary1);
+    }
+    if (RARRAY_LEN(ary1) != RARRAY_LEN(ary2)) return Qfalse;
+    if (RARRAY_CONST_PTR(ary1) == RARRAY_CONST_PTR(ary2)) return Qtrue;
+    return rb_exec_recursive_paired(recursive_equal, ary1, ary2, ary2);
+}</pre>
+    		</div>
+      
+		</div>
+</section>

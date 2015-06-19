@@ -1,0 +1,38 @@
+<section id="method-i-reverse-21" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						reverse!   &rarr; ary
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Reverses <code>self</code> in place.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;b&quot;</span>, <span class="ruby-string">&quot;c&quot;</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">reverse!</span>       <span class="ruby-comment">#=&gt; [&quot;c&quot;, &quot;b&quot;, &quot;a&quot;]</span>
+<span class="ruby-identifier">a</span>                <span class="ruby-comment">#=&gt; [&quot;c&quot;, &quot;b&quot;, &quot;a&quot;]</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="reverse-21-source">
+     			<pre>static VALUE
+rb_ary_reverse_bang(VALUE ary)
+{
+    return rb_ary_reverse(ary);
+}</pre>
+    		</div>
+      
+		</div>
+</section>

@@ -1,0 +1,55 @@
+<section id="method-i-rassoc" class="method-detail ">
+		
+    	
+				<div class="method-heading">
+    			<span class="method-callseq">
+						rassoc(obj) &rarr; element_ary or nil
+          </span>
+
+					
+						<span class="method-click-advice">click to toggle source</span>
+					
+        </div>
+			
+		
+		
+		<div class="method-description">
+			
+    		<p>Searches through the array whose elements are also arrays.</p>
+
+<p>Compares <code>obj</code> with the second element of each contained array
+using <code>obj.==</code>.</p>
+
+<p>Returns the first contained array that matches <code>obj</code>.</p>
+
+<p>See also <a href="Array.html#method-i-assoc">#assoc</a>.</p>
+
+<pre class="ruby"><span class="ruby-identifier">a</span> = [ [ <span class="ruby-value">1</span>, <span class="ruby-string">&quot;one&quot;</span>], [<span class="ruby-value">2</span>, <span class="ruby-string">&quot;two&quot;</span>], [<span class="ruby-value">3</span>, <span class="ruby-string">&quot;three&quot;</span>], [<span class="ruby-string">&quot;ii&quot;</span>, <span class="ruby-string">&quot;two&quot;</span>] ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">rassoc</span>(<span class="ruby-string">&quot;two&quot;</span>)    <span class="ruby-comment">#=&gt; [2, &quot;two&quot;]</span>
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">rassoc</span>(<span class="ruby-string">&quot;four&quot;</span>)   <span class="ruby-comment">#=&gt; nil</span>
+</pre>
+      
+
+			
+					
+			
+      	<div class="method-source-code" id="rassoc-source">
+     			<pre>VALUE
+rb_ary_rassoc(VALUE ary, VALUE value)
+{
+    long i;
+    VALUE v;
+
+    for (i = 0; i &lt; RARRAY_LEN(ary); ++i) {
+        v = RARRAY_AREF(ary, i);
+        if (RB_TYPE_P(v, T_ARRAY) &amp;&amp;
+            RARRAY_LEN(v) &gt; 1 &amp;&amp;
+            rb_equal(RARRAY_AREF(v, 1), value))
+            return v;
+    }
+    return Qnil;
+}</pre>
+    		</div>
+      
+		</div>
+</section>
