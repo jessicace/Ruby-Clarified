@@ -26,9 +26,13 @@
     		<p>Sorts <code>self</code> in place.</p>
 
 <p>Comparisons for the sort will be done using the <code>&lt;=&gt;</code>
-operator, or using an optional code block.</p>
+operator, or using an optional code block. Arrays are sorted
+lexicographically- i.e., it compares the first value, then the second
+value, etc.</p>
 
-<p>This method generates two new objects during every comparison.</p>
+<p>The code block takes two parameters. It does a comparison for each element-
+this means that the method generates two new objects during every
+comparison.</p>
 
 <p>The block must implement a comparison between <code>a</code> and
 <code>b</code>.</p>

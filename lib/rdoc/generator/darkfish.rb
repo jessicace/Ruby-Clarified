@@ -102,6 +102,7 @@ class RDoc::Generator::Darkfish
     $stderr.puts(*msg)
   end
 
+
   ##
   # Directory where generated class HTML files live relative to the output
   # dir.
@@ -198,7 +199,6 @@ class RDoc::Generator::Darkfish
   def generate_method_files klass
     setup
 
-    puts "inside generate_method_files"
     template_file = @template_dir + 'method.html.erb'
     template_file = @template_dir + 'methodpage.html.erb' unless
       template_file.exist?
@@ -235,7 +235,6 @@ class RDoc::Generator::Darkfish
 
     @classes.each do |klass|
       current = klass
-      puts current
       generate_class klass, template_file
       generate_method_files klass
     end
@@ -270,20 +269,7 @@ class RDoc::Generator::Darkfish
     body_file.read
   end
 
-  ##
-  # Renders the ERb contained in +file_name+ relative to the template
-  # directory and returns the result based on the current context.
-
-  def render file_name
-    template_file = @template_dir + file_name
-
-    template = template_for template_file, false, RDoc::ERBPartial
-
-    template.filename = template_file.to_s
-
-    template.result @context
-  end
-
+  
   ##
   # Load and render the erb template in the given +template_file+ and write
   # it out to +out_file+.

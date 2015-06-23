@@ -73,11 +73,22 @@ rather than generating the two new <code>File</code> objects.</p>
 
 <p>This still generates many unnecessary <code>Time</code> objects.</p>
 
-<h3 id="method-i-sort-label-Sort+implementing+the+Schwartzian+Transform">Sort implementing the Schwartzian Transform<span><a href="#method-i-sort-label-Sort+implementing+the+Schwartzian+Transform">&para;</a> <a href="#top">&uarr;</a></span></h3>
+<h3 id="method-i-sort-label-Sort+partially+implementing+the+Schwartzian+Transform">Sort partially implementing the Schwartzian Transform<span><a href="#method-i-sort-label-Sort+partially+implementing+the+Schwartzian+Transform">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
 <pre class="ruby"><span class="ruby-identifier">sorted</span> = <span class="ruby-constant">Dir</span>[<span class="ruby-string">&quot;*&quot;</span>].<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> [<span class="ruby-identifier">test</span>(<span class="ruby-value">?M</span>, <span class="ruby-identifier">f</span>), <span class="ruby-identifier">f</span>]}.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>[<span class="ruby-value">1</span>] }
 <span class="ruby-identifier">sorted</span>   
 <span class="ruby-comment"># =&gt; [&quot;mon&quot;, &quot;tues&quot;, &quot;wed&quot;, &quot;thurs&quot;]</span>
+</pre>
+
+<h3 id="method-i-sort-label-Sort+showing+more+robust+Schwartzian+Transform">Sort showing more robust Schwartzian Transform<span><a href="#method-i-sort-label-Sort+showing+more+robust+Schwartzian+Transform">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<pre class="ruby"><span class="ruby-identifier">sorted_files</span> = <span class="ruby-constant">Dir</span>[<span class="ruby-string">&quot;*&quot;</span>].                         <span class="ruby-comment"># Get all files</span>
+<span class="ruby-identifier">collect</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> [<span class="ruby-identifier">f</span>, <span class="ruby-identifier">test</span>(<span class="ruby-value">?s</span>, <span class="ruby-identifier">f</span>), <span class="ruby-identifier">test</span>(<span class="ruby-value">?M</span>, <span class="ruby-identifier">f</span>)]}.   <span class="ruby-comment"># compute tuples of name, size, modtime</span>
+<span class="ruby-identifier">sort</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span><span class="ruby-operator">|</span>                    <span class="ruby-comment"># sort</span>
+<span class="ruby-identifier">a</span>[<span class="ruby-value">1</span>] <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">b</span>[<span class="ruby-value">1</span>] <span class="ruby-keyword">or</span>                 <span class="ruby-comment">#   -- by increasing size</span>
+<span class="ruby-identifier">b</span>[<span class="ruby-value">2</span>] <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">a</span>[<span class="ruby-value">2</span>] <span class="ruby-keyword">or</span>                 <span class="ruby-comment">#   -- by age descending</span>
+<span class="ruby-identifier">a</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">b</span>[<span class="ruby-value">0</span>]                    <span class="ruby-comment">#   -- by name</span>
+}.<span class="ruby-identifier">collect</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>[<span class="ruby-value">0</span>]}              <span class="ruby-comment"># extract original name</span>
 </pre>
       
 

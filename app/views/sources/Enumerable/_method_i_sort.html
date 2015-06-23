@@ -41,6 +41,20 @@ in turn calls <a href="Array.html#method-i-sort-21">Array#sort!</a>).</p>
 <pre class="ruby">(<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">10</span>).<span class="ruby-identifier">sort</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span><span class="ruby-operator">|</span> <span class="ruby-identifier">b</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">a</span> }
 <span class="ruby-comment"># =&gt; [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]</span>
 </pre>
+
+<h3 id="method-i-sort-label-Example+of+sorting+a+hash">Example of sorting a hash<span><a href="#method-i-sort-label-Example+of+sorting+a+hash">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<p>Note that this will return a nested, three-dimensional array, rather than a
+hash.</p>
+
+<pre>typical_fish_colors = { 
+&quot;clownfish&quot; =&gt; [&quot;orange&quot;,&quot;white&quot;,&quot;black&quot;],
+&quot;goldfish&quot; =&gt; [&quot;orange&quot;],
+&quot;angelfish&quot; =&gt; [&quot;black&quot;,&quot;white&quot;]
+}
+typical_fish_colors.sort
+# =&gt; [[&quot;angelfish&quot;, [&quot;black&quot;, &quot;white&quot;]], [&quot;clownfish&quot;, [&quot;orange&quot;, &quot;white&quot;, &quot;black&quot;]],
+  [&quot;goldfish&quot;, [&quot;orange&quot;]]]</pre>
       
 
 			

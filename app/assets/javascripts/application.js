@@ -24,7 +24,6 @@ $(document).ready(function() {
     });
     e.preventDefault();
   });
-
   $('.method-heading').click(function(e) {
     console.log(e);
     var target = e.target;
@@ -34,5 +33,13 @@ $(document).ready(function() {
     $(target).parents('.method-detail').find('.method-source-code').slideToggle();
   });
 
+    $('.method-description').click(function(e) {
+    console.log(e);
+    var target = e.target;
+    var codeSections = $(target).parents('.method-detail').find('.method-description-content');
+
+    console.log(target);
+    $(target).parents('.method-detail').find('.method-description-content').slideToggle();
+  });
 });
 
