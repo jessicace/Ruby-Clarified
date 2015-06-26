@@ -6,11 +6,16 @@
 	<h2>Sort</h2>
 	<%= render partial: 'sources/Array/method_i_sort_21' %>
 		
-	<%= link_to benchmarks_sort_url(id: 'sort_bang'), class: 'getBenchmark' do %>
+	<%= link_to benchmarks_sort_bang_url, class: 'getBenchmark' do %>
 		<h3>Benchmarks</h3>
 		<% end %>
 	<div id="output"></div>
 	<%= render partial: 'sources/Array/method_i_sort' %>
+	<%= link_to benchmarks_sort_url(id: 'sort'), class: 'getBenchmark' do %>
+		<h3>Benchmarks</h3>
+	<% end %>
+	<div id="output"></div>
+		
 	<%= render partial: 'sources/Enumerable/method_i_sort' %>
 	
 	<h2>Sort By</h2>

@@ -1,0 +1,130 @@
+// Place all the styles related to the sources controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+h1 span,
+h2 span,
+h3 span,
+h4 span,
+h5 span,
+h6 span {
+  position: relative;
+  display: none;
+  padding-left: 1em;
+  line-height: 0;
+  vertical-align: baseline;
+  font-size: 10px;
+}
+
+h1 span { top: -1.3em; }
+h2 span { top: -1.2em; }
+h3 span { top: -1.0em; }
+h4 span { top: -0.8em; }
+h5 span { top: -0.5em; }
+h6 span { top: -0.5em; }
+
+h1:hover span,
+h2:hover span,
+h3:hover span,
+h4:hover span,
+h5:hover span,
+h6:hover span {
+  display: inline;
+}
+
+:link,
+:visited {
+  color: #BC3E3E;
+  text-decoration: none;
+}
+
+:link:hover,
+:visited:hover {
+  border-bottom: 1px dotted #6C8C22;
+}
+
+
+/* @group Generic Classes */
+
+section {
+		display: block;
+		font-size: 16px;
+}
+
+section p {
+  margin: 0 0 0.5em;
+  line-height: 1.4em;
+}
+
+section pre {
+	margin: 1.2em 0.5em;
+  padding: 1em;
+  font-size: 0.8em;
+}
+
+/* section added */
+section .method-source-code {
+  display: none;
+}
+
+section .method-description .method-calls-super {
+		color: red;
+		font-weight: bold;
+}
+
+section .method-detail {
+		padding: 1em;
+		margin-bottom: 2.5em;
+}
+
+section .method-heading :link,
+section .method-heading :visited {
+  color: inherit;
+}
+
+
+section .method-alias .method-heading {
+  color: #666;
+}
+
+section .method-description,
+section .aliases {
+		margin-top: 0.75em;
+		color: white;
+}
+
+section .aliases {
+  padding-top: 4px;
+  font-style: italic;
+  cursor: default;
+}
+
+section .method-description ul {
+  margin-left: 1.5em;
+}
+
+section #attribute-method-details .method-detail:hover {
+  background-color: transparent;
+  cursor: default;
+}
+
+section .attribute-access-type {
+  text-transform: uppercase;
+  padding: 0 1em;
+}
+
+/* @group Source Code */
+
+
+
+.ruby-constant   { color: #7fffd4; background: transparent; }
+.ruby-keyword    { color: #00ffff; background: transparent; }
+.ruby-ivar       { color: #eedd82; background: transparent; }
+.ruby-operator   { color: #00ffee; background: transparent; }
+.ruby-identifier { color: #ffdead; background: transparent; }
+.ruby-node       { color: #ffa07a; background: transparent; }
+.ruby-comment    { color: #dc0000; background: transparent; }
+.ruby-regexp     { color: #ffa07a; background: transparent; }
+.ruby-value      { color: #7fffd4; background: transparent; }
+
+/* @end */

@@ -1,0 +1,2 @@
+class BenchmarksController < ApplicationController
+end

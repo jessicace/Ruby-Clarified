@@ -1,0 +1,5 @@
+<tr>
+	<th><%= data_row.label %></th>
+	<td><%= data_row.real %></td>
+	<td><%= data_row.stime %></td>
+</tr>

@@ -1,0 +1,2 @@
+class CodeSnippetsController < ApplicationController
+end
