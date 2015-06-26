@@ -17,14 +17,19 @@
 
 $(document).ready(function() {
   $('.getBenchmark').click(function(e) {
-    var target = e.target
+    var target = e.target;
+    var targetParent = $(e.target).parent();
+    var targetParentDiv = targetParent.next();
+    console.log($(target));
+    console.log(targetParent);
+    console.log(targetParentDiv);
     var url = $(this).attr('href');
-    console.log(target)
     $.get(url, function(data) {
-      $(e).next().html(data);
+      targetParentDiv.html(data);
     });
     e.preventDefault();
   });
+
   $('.method-heading').click(function(e) {
     console.log(e);
     var target = e.target;
