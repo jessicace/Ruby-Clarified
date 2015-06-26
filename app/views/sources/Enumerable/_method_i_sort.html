@@ -22,21 +22,38 @@
 		
 		
 		<div class="method-description">
-			
-    		<p>Returns an array containing the items in <em>enum</em> sorted, either
+			<div class="method-group">
+				<h3 class="method-group-label">Description</h3>
+				<div class="method-group-content">
+    			<p>
+						Returns an array containing the items in <em>enum</em> sorted, either
 according to their own <code>&lt;=&gt;</code> method, or by using the
 results of the supplied block.  It is equivalent to calling <a
 href="Array.html#method-i-sort">Array#sort</a>- it converts the enum to an
 array when calling <a href="Array.html#method-i-sort">Array#sort</a> (which
-in turn calls <a href="Array.html#method-i-sort-21">Array#sort!</a>).</p>
+						in turn calls <a href="Array.html#method-i-sort-21">Array#sort!</a>).
+					</p>
+				</div>
+			</div>
 
-<h3 id="method-i-sort-label-Example+of+enum-23sort+without+block">Example of enum#sort without block<span><a href="#method-i-sort-label-Example+of+enum-23sort+without+block">&para;</a> <a href="#top">&uarr;</a></span></h3>
+			<div class="method-group">
+				<h3 class="method-group-label">Examples</h3>
+				<div class="method-group-content">
+					<h3 id="method-i-sort-label-Example+of+enum-23sort+without+block">Example of enum#sort without block<span><a href="#method-i-sort-label-Example+of+enum-23sort+without+block">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
-<pre class="ruby"><span class="ruby-node">%w(rhea kea flea)</span>.<span class="ruby-identifier">sort</span>          
-<span class="ruby-comment"># =&gt; [&quot;flea&quot;, &quot;kea&quot;, &quot;rhea&quot;]</span>
-</pre>
+					<pre class="ruby">
+						<span class="ruby-node">%w(rhea kea flea)</span>.
+						<span class="ruby-identifier">sort</span>          
+						<span class="ruby-comment"># =&gt; [&quot;flea&quot;, &quot;kea&quot;, &quot;rhea&quot;]</span>
+					</pre>
 
-<h3 id="method-i-sort-label-Example+of+enum-23sort+with+block">Example of enum#sort with block<span><a href="#method-i-sort-label-Example+of+enum-23sort+with+block">&para;</a> <a href="#top">&uarr;</a></span></h3>
+					<h3 id="method-i-sort-label-Example+of+enum-23sort+with+block">
+						Example of enum#sort with block
+						<span>
+							<a href="#method-i-sort-label-Example+of+enum-23sort+with+block">&para;</a>
+							<a href="#top">&uarr;</a>
+						</span>
+					</h3>
 
 <pre class="ruby">(<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">10</span>).<span class="ruby-identifier">sort</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span><span class="ruby-operator">|</span> <span class="ruby-identifier">b</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">a</span> }
 <span class="ruby-comment"># =&gt; [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]</span>
@@ -55,7 +72,8 @@ hash.</p>
 typical_fish_colors.sort
 # =&gt; [[&quot;angelfish&quot;, [&quot;black&quot;, &quot;white&quot;]], [&quot;clownfish&quot;, [&quot;orange&quot;, &quot;white&quot;, &quot;black&quot;]],
   [&quot;goldfish&quot;, [&quot;orange&quot;]]]</pre>
-      
+				</div>
+			</div>
 
 			
 					

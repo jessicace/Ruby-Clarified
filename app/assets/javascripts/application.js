@@ -17,10 +17,11 @@
 
 $(document).ready(function() {
   $('.getBenchmark').click(function(e) {
+    var target = e.target
     var url = $(this).attr('href');
     console.log(url)
     $.get(url, function(data) {
-      $('#output').html(data);
+      $('.getBenchmark ~ #output').html(data);
     });
     e.preventDefault();
   });
@@ -33,13 +34,12 @@ $(document).ready(function() {
     $(target).parents('.method-detail').find('.method-source-code').slideToggle();
   });
 
-    $('.method-description').click(function(e) {
+  $('.method-group').click(function(e) {
     console.log(e);
     var target = e.target;
-    var codeSections = $(target).parents('.method-detail').find('.method-description-content');
-
     console.log(target);
-    $(target).parents('.method-detail').find('.method-description-content').slideToggle();
+    $(target).parents('.method-group').find('.method-group-content').slideToggle();
   });
+
 });
 

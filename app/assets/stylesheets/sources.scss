@@ -46,10 +46,6 @@ h6:hover span {
 
 /* @group Generic Classes */
 
-.initially-hidden {
-  display: none;
-}
-
 section {
 		display: block;
 		font-size: 16px;
@@ -61,7 +57,7 @@ section p {
 }
 
 section pre {
-		margin: 1.2em 0.5em;
+	margin: 1.2em 0.5em;
   padding: 1em;
   font-size: 0.8em;
 }
@@ -69,10 +65,6 @@ section pre {
 /* section added */
 section .method-source-code {
   display: none;
-}
-
-section .method-description-content {
-		display: none;
 }
 
 section .method-description .method-calls-super {
@@ -105,24 +97,7 @@ section .method-click-advice {
 		cursor: pointer;
 }
 
-section .method-description-click-advice {
-		position: absolute;
-		font-family: 'Times New Roman';
-		font-style: italic;
-		letter-spacing: 0.1em;
-		top: 2px;
-		right: 5px;
-		font-size: 12px;
-		color: white;
-		visibility: hidden;
-		padding-right: 20px;
-		line-height: 20px;
-		cursor: pointer;
-}
 
-section .method-description-header:hover .method-description-click-advice {
-		visibility: visible;
-}
 
 section .method-heading:hover .method-click-advice {
   visibility: visible;

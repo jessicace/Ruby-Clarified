@@ -1,6 +1,22 @@
+<pre>
+num_array = (1..10000).map { rand }
+</pre>
 <table>
 	<%= render partial: 'data_head' %>
 	<tbody>
 		<%= render partial: 'data_row', collection: @bms %>
 	</tbody>
 </table>
+
+<pre>
+ char_array = (1..10000).map { rand.to_s }
+</pre>
+<table>
+	<%= render partial: 'data_head' %>
+	<tbody>
+		<%= render partial: 'data_row', collection: @bms2 %>
+	</tbody>
+</table>
+
+
+
