@@ -17,14 +17,14 @@
 
 $(document).ready(function() {
   $('.getBenchmark').click(function(e) {
+    var target = e.target
     var url = $(this).attr('href');
     console.log(url)
     $.get(url, function(data) {
-      $('#output').html(data);
+      $('.getBenchmark ~ #output').html(data);
     });
     e.preventDefault();
   });
-
   $('.method-heading').click(function(e) {
     console.log(e);
     var target = e.target;
@@ -32,6 +32,13 @@ $(document).ready(function() {
 
     console.log(target);
     $(target).parents('.method-detail').find('.method-source-code').slideToggle();
+  });
+
+  $('.method-group').click(function(e) {
+    console.log(e);
+    var target = e.target;
+    console.log(target);
+    $(target).parents('.method-group').find('.method-group-content').slideToggle();
   });
 
 });

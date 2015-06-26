@@ -1,42 +1,50 @@
 <section id="method-i-sort" class="method-detail ">
-		
-    	
-				<div class="method-heading">
-    			<span class="method-callseq">
-						sort                   &rarr; new_array
-          </span>
-
+	
+	<div class="method-heading">
+    <span class="method-callseq">
+			sort                   &rarr; new_array
+    </span>
 					
-						<span class="method-click-advice">click to toggle source</span>
-					
-        </div>
+		<span class="method-click-advice">click to toggle source</span>	
+  </div>
 			
-				<div class="method-heading">
-    			<span class="method-callseq">
-						sort { |a, b| block }  &rarr; new_array
-          </span>
+	<div class="method-heading">
+    <span class="method-callseq">
+			sort { |a, b| block }  &rarr; new_array
+    </span>					
+  </div>
 
-					
-        </div>
-			
-		
-		
-		<div class="method-description">
-			
-    		<p><code>Array#sort</code> works in the same way as <code>Array#sort!</code>,
-however, it first creates a duplicate of the array, and returns the altered
-duplicate  rather than altering the array the method was called on.</p>
-
-<h3 id="method-i-sort-label-Default+sort">Default sort<span><a href="#method-i-sort-label-Default+sort">&para;</a> <a href="#top">&uarr;</a></span></h3>
-
-<pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;d&quot;</span>, <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;e&quot;</span>, <span class="ruby-string">&quot;c&quot;</span>, <span class="ruby-string">&quot;b&quot;</span> ]
-<span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span>                    
+	<div class="method-description">
+		<div class="method-group">
+			<h3 class="method-group-label">Description</h3>
+			<div class="method-group-content">		
+    		<p>
+					<code>Array#sort</code> works in the same way as <code>Array#sort!</code>,
+					however, it first creates a duplicate of the array, and returns the altered
+					duplicate  rather than altering the array the method was called on.
+				</p>
+			</div>
+		</div>
+		<div class="method-group">
+			<h3 class="method-group-label">Examples</h3>
+			<div class="method-group-content">
+				<h3 id="method-i-sort-label-Default+sort">
+					Default sort
+					<span>
+						<a href="#method-i-sort-label-Default+sort">&para;</a>
+						<a href="#top">&uarr;</a>
+					</span>
+				</h3>
+				
+				<pre class="ruby">
+<span class="ruby-identifier">a</span> = [<span class="ruby-string">&quot;d&quot;</span>,<span class="ruby-string">&quot;a&quot;</span>,<span class="ruby-string">&quot;e&quot;</span>,<span class="ruby-string">&quot;c&quot;</span>,<span class="ruby-string">&quot;b&quot;</span> ]
+<span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span>
 <span class="ruby-comment"># =&gt; [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;]</span>
 <span class="ruby-identifier">a</span>
 <span class="ruby-comment"># =&gt; [ &quot;d&quot;, &quot;a&quot;, &quot;e&quot;, &quot;c&quot;, &quot;b&quot; ]</span>
-</pre>
+				</pre>
 
-<h3 id="method-i-sort-label-sort+with+block">sort with block<span><a href="#method-i-sort-label-sort+with+block">&para;</a> <a href="#top">&uarr;</a></span></h3>
+				<h3 id="method-i-sort-label-sort+with+block">sort with block<span><a href="#method-i-sort-label-sort+with+block">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
 <pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;d&quot;</span>, <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;e&quot;</span>, <span class="ruby-string">&quot;c&quot;</span>, <span class="ruby-string">&quot;b&quot;</span> ]
 <span class="ruby-identifier">a</span>.<span class="ruby-identifier">sort</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">x</span>,<span class="ruby-identifier">y</span><span class="ruby-operator">|</span> <span class="ruby-identifier">y</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">x</span> }  
@@ -73,15 +81,48 @@ rather than generating the two new <code>File</code> objects.</p>
 
 <p>This still generates many unnecessary <code>Time</code> objects.</p>
 
-<h3 id="method-i-sort-label-Sort+implementing+the+Schwartzian+Transform">Sort implementing the Schwartzian Transform<span><a href="#method-i-sort-label-Sort+implementing+the+Schwartzian+Transform">&para;</a> <a href="#top">&uarr;</a></span></h3>
+<h3 id="method-i-sort-label-Sort+partially+implementing+the+Schwartzian+Transform">Sort partially implementing the Schwartzian Transform<span><a href="#method-i-sort-label-Sort+partially+implementing+the+Schwartzian+Transform">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
 <pre class="ruby"><span class="ruby-identifier">sorted</span> = <span class="ruby-constant">Dir</span>[<span class="ruby-string">&quot;*&quot;</span>].<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> [<span class="ruby-identifier">test</span>(<span class="ruby-value">?M</span>, <span class="ruby-identifier">f</span>), <span class="ruby-identifier">f</span>]}.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>[<span class="ruby-value">1</span>] }
 <span class="ruby-identifier">sorted</span>   
 <span class="ruby-comment"># =&gt; [&quot;mon&quot;, &quot;tues&quot;, &quot;wed&quot;, &quot;thurs&quot;]</span>
 </pre>
-      
 
-			
+<h3 id="method-i-sort-label-Sort+showing+more+robust+Schwartzian+Transform">Sort showing more robust Schwartzian Transform<span><a href="#method-i-sort-label-Sort+showing+more+robust+Schwartzian+Transform">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<pre class="ruby"><span class="ruby-identifier">sorted_files</span> = <span class="ruby-constant">Dir</span>[<span class="ruby-string">&quot;*&quot;</span>].                         <span class="ruby-comment"># Get all files</span>
+<span class="ruby-identifier">collect</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> [<span class="ruby-identifier">f</span>, <span class="ruby-identifier">test</span>(<span class="ruby-value">?s</span>, <span class="ruby-identifier">f</span>), <span class="ruby-identifier">test</span>(<span class="ruby-value">?M</span>, <span class="ruby-identifier">f</span>)]}.   <span class="ruby-comment"># compute tuples of name, size, modtime</span>
+<span class="ruby-identifier">sort</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span><span class="ruby-operator">|</span>                    <span class="ruby-comment"># sort</span>
+<span class="ruby-identifier">a</span>[<span class="ruby-value">1</span>] <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">b</span>[<span class="ruby-value">1</span>] <span class="ruby-keyword">or</span>                 <span class="ruby-comment">#   -- by increasing size</span>
+<span class="ruby-identifier">b</span>[<span class="ruby-value">2</span>] <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">a</span>[<span class="ruby-value">2</span>] <span class="ruby-keyword">or</span>                 <span class="ruby-comment">#   -- by age descending</span>
+<span class="ruby-identifier">a</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">b</span>[<span class="ruby-value">0</span>]                    <span class="ruby-comment">#   -- by name</span>
+}.<span class="ruby-identifier">collect</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>[<span class="ruby-value">0</span>]}              <span class="ruby-comment"># extract original name</span>
+</pre>
+      
+						</div>
+					</div>
+
+					<div class="method-group">
+						<h3 class="method-group-label">Benchmarks</h3>
+						<div class="method-group-content">
+							<pre class="ruby">
+2.2.2 :001 > require 'benchmark'<br>
+ => true <br>
+2.2.2 :002 > a = [ "d", "a", "e", "c", "b" ] <br>
+ => ["d", "a", "e", "c", "b"]  <br>
+2.2.2 :003 > Benchmark.measure { a.sort } <br>
+ => #<\Benchmark::Tms:0x007f850b846dd0 @label="", @real=1.7315003788098693e-05, @cstime=0.0, @cutime=0.0, @stime=0.0, @utime=0.0, @total=0.0>
+							</pre>
+
+							<pre>
+2.2.2 :004 > a = [ "d", "a", "e", "c", "b" ]
+ => ["d", "a", "e", "c", "b"] 
+2.2.2 :005 > Benchmark.measure { a.sort { |x,y| y <=> x } }
+ => # Benchmark::Tms:0x007f850c0cf6f0 @label="", @real=1.4192999515216798e-05, @cstime=0.0, @cutime=0.0, @stime=0.0, @utime=0.0, @total=0.0
+							</pre>
+							
+						</div>
+					</div>
 					
 			
       	<div class="method-source-code" id="sort-source">

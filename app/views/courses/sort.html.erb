@@ -1,7 +1,16 @@
 <article>
 	<h1>Sorting Methods</h1>
+	<p>
+		Ruby takes a number of different approaches to sorting in Ruby.
+	</p>
 	<h2>Sort</h2>
 	<%= render partial: 'sources/Array/method_i_sort_21' %>
+		
+	<%= link_to benchmarks_sort_url(id: 'sort_bang'), class: 'getBenchmark' do %>
+		<h3>Benchmarks</h3>
+		<% end %>
+	<div id="output">
+	</div>
 	<%= render partial: 'sources/Array/method_i_sort' %>
 	<%= render partial: 'sources/Enumerable/method_i_sort' %>
 	
@@ -9,8 +18,8 @@
 	<%= render partial: 'sources/Enumerable/method_i_sort_by'%>
 	<%= render partial: 'sources/Array/method_i_sort_by_21' %>
 
-	<h2>Benchmarks</h2>
-	<%= link_to "Show", benchmarks_sort_url, class: 'getBenchmark' %>
+	<h>Benchmarks</h2>
+	<%= link_to "Show", benchmarks_show_url, class: 'getBenchmark' %>
 	<div id="output">
 	</div>
 </article>

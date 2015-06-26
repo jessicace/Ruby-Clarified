@@ -1,47 +1,48 @@
 <section id="method-i-sort-21" class="method-detail ">
-		
-    	
-				<div class="method-heading">
-    			<span class="method-callseq">
+	<div class="method-heading">
+		<span class="method-callseq">
 						sort!                   &rarr; array
-          </span>
+    </span>
 
-					
-						<span class="method-click-advice">click to toggle source</span>
-					
-        </div>
-			
-				<div class="method-heading">
-    			<span class="method-callseq">
-						sort! { |a, b| block }  &rarr; array
-          </span>
+		<span class="method-click-advice">click to toggle source</span>
+		<span class="method-callseq">
+					sort! { |a, b| block }  &rarr; array
+		</span>
+  </div>
 
-					
-        </div>
-			
-		
-		
-		<div class="method-description">
-			
-    		<p>Sorts <code>self</code> in place.</p>
+	<div class="method-description">
+		<div class="method-group">
+			<h3 class="method-description-label">Description</h3>
+			<div class="method-group-content">
+				<p>Sorts <code>self</code> in place.</p>
+				<p>
+					Comparisons for the sort will be done using the <code>&lt;=&gt;</code>
+					operator, or using an optional code block. Arrays are sorted
+					lexicographically- i.e., it compares the first value, then the second
+					value, etc.
+				</p>
+				<p>
+					The code block takes two parameters. It does a comparison for each element-
+			this means that the method generates two new objects during every
+			comparison.
+				</p>
 
-<p>Comparisons for the sort will be done using the <code>&lt;=&gt;</code>
-operator, or using an optional code block.</p>
-
-<p>This method generates two new objects during every comparison.</p>
-
-<p>The block must implement a comparison between <code>a</code> and
-<code>b</code>.</p>
-<ul><li>
-<p>If a follows b, it returns <code>-1</code>.</p>
-</li><li>
-<p>If a and b are equivalent, it returns <code>0</code>.</p>
-</li><li>
-<p>If b follows a, it returns +<code>1</code>.</p>
-</li></ul>
-
-<h3 id="method-i-sort-21-label-Examples">Examples<span><a href="#method-i-sort-21-label-Examples">&para;</a> <a href="#top">&uarr;</a></span></h3>
-
+				<p>
+			The block must implement a comparison between <code>a</code> and
+			<code>b</code>.
+				</p>
+				<ul>
+					<li><p>If a follows b, it returns <code>-1</code>.</p></li>
+					<li><p>If a and b are equivalent, it returns <code>0</code>.</p></li>
+					<li><p>If b follows a, it returns +<code>1</code>.</p></li>
+				</ul>
+			</div>
+		</div>
+		<div class="method-group">
+			<h3 id="method-i-sort-21-label-Examples">
+			Examples
+			</h3>
+			<div class="method-group-content">
 <h4 id="method-i-sort-21-label-Default+sort-21">Default sort!<span><a href="#method-i-sort-21-label-Default+sort-21">&para;</a> <a href="#top">&uarr;</a></span></h4>
 
 <pre class="ruby"><span class="ruby-identifier">a</span> = [ <span class="ruby-string">&quot;d&quot;</span>, <span class="ruby-string">&quot;a&quot;</span>, <span class="ruby-string">&quot;e&quot;</span>, <span class="ruby-string">&quot;c&quot;</span>, <span class="ruby-string">&quot;b&quot;</span> ]
@@ -56,7 +57,8 @@ operator, or using an optional code block.</p>
 <span class="ruby-comment">#=&gt; [&quot;e&quot;, &quot;d&quot;, &quot;c&quot;, &quot;b&quot;, &quot;a&quot;]</span>
 </pre>
       
-
+			</div>
+		</div>
 			
 					
 			
