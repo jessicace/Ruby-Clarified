@@ -19,9 +19,9 @@ $(document).ready(function() {
   $('.getBenchmark').click(function(e) {
     var target = e.target
     var url = $(this).attr('href');
-    console.log(url)
+    console.log(target)
     $.get(url, function(data) {
-      $(target).next().html(data);
+      $(e).next().html(data);
     });
     e.preventDefault();
   });
