@@ -17,15 +17,10 @@
 
 $(document).ready(function() {
   $('.getBenchmark').click(function(e) {
-    var target = e.target;
-    var targetParent = $(e.target).parent();
-    var targetParentDiv = targetParent.next();
-    console.log($(target));
-    console.log(targetParent);
-    console.log(targetParentDiv);
+    var $output = $(e.target).parent().next();
     var url = $(this).attr('href');
     $.get(url, function(data) {
-      targetParentDiv.html(data);
+      $output.html(data);
     });
     e.preventDefault();
   });
