@@ -22,6 +22,7 @@ class BenchmarksController < ApplicationController
       bm.report("a.sort") { a.dup.sort }
       bm.report("a.sort { |x,y| x <=> y }") { a.dup.sort { |x,y| x <=> y } }
     end
+    render layout: false
   end
 end
 
