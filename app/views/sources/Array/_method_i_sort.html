@@ -102,29 +102,6 @@ rather than generating the two new <code>File</code> objects.</p>
 						</div>
 					</div>
 
-					<div class="method-group">
-						<h3 class="method-group-label">Benchmarks</h3>
-						<div class="method-group-content">
-							<pre class="ruby">
-2.2.2 :001 > require 'benchmark'<br>
- => true <br>
-2.2.2 :002 > a = [ "d", "a", "e", "c", "b" ] <br>
- => ["d", "a", "e", "c", "b"]  <br>
-2.2.2 :003 > Benchmark.measure { a.sort } <br>
- => #<\Benchmark::Tms:0x007f850b846dd0 @label="", @real=1.7315003788098693e-05, @cstime=0.0, @cutime=0.0, @stime=0.0, @utime=0.0, @total=0.0>
-							</pre>
-
-							<pre>
-2.2.2 :004 > a = [ "d", "a", "e", "c", "b" ]
- => ["d", "a", "e", "c", "b"] 
-2.2.2 :005 > Benchmark.measure { a.sort { |x,y| y <=> x } }
- => # Benchmark::Tms:0x007f850c0cf6f0 @label="", @real=1.4192999515216798e-05, @cstime=0.0, @cutime=0.0, @stime=0.0, @utime=0.0, @total=0.0
-							</pre>
-							
-						</div>
-					</div>
-					
-			
       	<div class="method-source-code" id="sort-source">
      			<pre>VALUE
 rb_ary_sort(VALUE ary)

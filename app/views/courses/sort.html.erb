@@ -9,8 +9,7 @@
 	<%= link_to benchmarks_sort_url(id: 'sort_bang'), class: 'getBenchmark' do %>
 		<h3>Benchmarks</h3>
 		<% end %>
-	<div id="output">
-	</div>
+	<div id="output"></div>
 	<%= render partial: 'sources/Array/method_i_sort' %>
 	<%= render partial: 'sources/Enumerable/method_i_sort' %>
 	
@@ -18,8 +17,4 @@
 	<%= render partial: 'sources/Enumerable/method_i_sort_by'%>
 	<%= render partial: 'sources/Array/method_i_sort_by_21' %>
 
-	<h>Benchmarks</h2>
-	<%= link_to "Show", benchmarks_show_url, class: 'getBenchmark' %>
-	<div id="output">
-	</div>
 </article>
