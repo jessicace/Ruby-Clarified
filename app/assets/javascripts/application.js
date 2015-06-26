@@ -21,7 +21,7 @@ $(document).ready(function() {
     var url = $(this).attr('href');
     console.log(url)
     $.get(url, function(data) {
-      $('.getBenchmark ~ #output').html(data);
+      $('.getBenchmark ~ .output').html(data);
     });
     e.preventDefault();
   });
